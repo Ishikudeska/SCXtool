@@ -107,6 +107,14 @@ if(NOT WIN32)
                    ${CMAKE_CURRENT_BINARY_DIR}/${APP_EXE_NAME}.desktop @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${APP_EXE_NAME}.desktop
             DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+    # The .desktop file's Icon= names this; app-small.svg is the 16-32 px design.
+    set(SC_ICON_DIR ${CMAKE_INSTALL_DATADIR}/icons/hicolor)
+    install(FILES ${PROJECT_SOURCE_DIR}/resources/icon/app.svg
+            DESTINATION ${SC_ICON_DIR}/scalable/apps RENAME ${APP_EXE_NAME}.svg)
+    foreach(_size 16x16 22x22 24x24 32x32)
+        install(FILES ${PROJECT_SOURCE_DIR}/resources/icon/app-small.svg
+                DESTINATION ${SC_ICON_DIR}/${_size}/apps RENAME ${APP_EXE_NAME}.svg)
+    endforeach()
     # zstd, zlib and pugixml are linked in statically, so their licenses ship.
     set(SC_LICENSE_DIR ${CMAKE_INSTALL_DATADIR}/licenses/${APP_EXE_NAME}
         CACHE STRING "Where the license files install (packages use their package name)")

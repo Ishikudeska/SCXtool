@@ -13,6 +13,7 @@ pkgbase = smart-citizen-plus-plus-git
 	makedepends = ninja
 	depends = qt6-base
 	depends = qt6-declarative
+	depends = hicolor-icon-theme
 	depends = gcc-libs
 	depends = glibc
 	provides = smart-citizen-plus-plus
