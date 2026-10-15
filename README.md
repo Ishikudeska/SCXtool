@@ -9,6 +9,27 @@ It is a native C++ and Qt application. There is no Python runtime to install and
 # ON AI USAGE:
  NOTICE, this repository was ***ORIGINALLY*** a fork of https://github.com/Osiris-DevWorks/smart-citizen. I have, after consideration, taken it OFF of that fork network. I use AI, to help me write commit messages. I'm sorry, but writing is NOT my goddamn strong suit and I need help with it.
 
+## Why move to C++?
+
+Well, for a few reasons:
+
+> 1. Python, while not terrible, is going to be slower at everything this application is trying to accomplish.
+> 2. C++ (IMO) can be modified and added to with minimal work, whereas the Python side takes quite some time for a new version.
+> 3. Cross-platform compatibility. This application was built using the C++ standard library (`std::`), meaning it can easily be run on any flavor of Linux you so choose!
+
+### How much faster is it?
+
+Smart Citizen++ takes about **37 seconds** to extract the game data and generate the enhanced text. The Python version takes about **3 minutes** to do the same work. That makes it **391% faster** (4.9 times as fast) overall:
+
+| Step | Smart Citizen (Python) | Smart Citizen++ | Faster by |
+|---|---|---|---|
+| Extract `global.ini` from `Data.p4k` | 23.30 s | 0.54 s | 4,215% (43.2×) |
+| Extract and convert the DataForge records | 125.65 s | 27.73 s | 353% (4.5×) |
+| Generate the enhancements | 31.1 s | 8.4 s | 270% (3.7×) |
+| **Total** | **180.05 s** | **36.67 s** | **391% (4.9×)** |
+
+Measured in October 2026 on the LIVE `Data.p4k` (157 GB), on a Windows PC with a 16-thread CPU, taking the median of three fresh runs of each app. Smart Citizen++ also does extra work in the DataForge step (a tag table and vehicle definitions) that the Python version doesn't.
+
 ## Documentation
 
 How to use Smart Citizen++, and how it works, is on the **[wiki](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki)**:
@@ -61,14 +82,6 @@ powershell -ExecutionPolicy Bypass -File packaging\package.ps1
 The installer step needs [Inno Setup 6](https://jrsoftware.org/isinfo.php) and is skipped if it is not installed.
 
 On other platforms, configure with CMake and point `CMAKE_PREFIX_PATH` at your Qt install. See the next sections for the state of Linux support.
-
-## Why?
-
-Well, for a few reasons:
-
-> 1. Python, while not terrible, is going to be slower at everything this application is trying to accomplish.
-> 2. C++ (IMO) can be modified and added to with minimal work, whereas the Python side takes quite some time for a new version.
-> 3. Cross-platform compatibility. This application was built using the C++ standard library (`std::`), meaning it can easily be run on any flavor of Linux you so choose!
 
 ## Linux and non-Windows platforms
 
