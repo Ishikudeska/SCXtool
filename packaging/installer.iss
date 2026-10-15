@@ -53,6 +53,7 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 WizardStyle=modern
 UninstallDisplayIcon={app}\{#AppExe}
+SetupIconFile=..\resources\icon\app.ico
 LicenseFile={#SourceDir}\LICENSE
 SetupLogging=yes
 CloseApplications=yes

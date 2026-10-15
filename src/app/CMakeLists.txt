@@ -8,8 +8,12 @@ if(WIN32)
     # breaks it. Compile the resource in its own object library with no include
     # directories and reference the manifest by absolute path.
     set(SC_APP_MANIFEST "${CMAKE_CURRENT_SOURCE_DIR}/app.manifest")
+    # Built from the SVGs beside it by tools/icon/build_ico.py.
+    set(SC_APP_ICON "${PROJECT_SOURCE_DIR}/resources/icon/app.ico")
     configure_file(app.rc.in ${CMAKE_CURRENT_BINARY_DIR}/app.rc @ONLY)
     add_library(scapp_resources OBJECT ${CMAKE_CURRENT_BINARY_DIR}/app.rc)
+    set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/app.rc
+        PROPERTIES OBJECT_DEPENDS "${SC_APP_MANIFEST};${SC_APP_ICON}")
     set_target_properties(scapp_resources PROPERTIES AUTOMOC OFF AUTOUIC OFF AUTORCC OFF)
     target_sources(scapp PRIVATE $<TARGET_OBJECTS:scapp_resources>)
 endif()
