@@ -18,7 +18,7 @@
 // The transform is idempotent (old tags are stripped first). Values use the
 // in-INI literal "\n" (backslash, n) line separator. No settings access:
 // callers pass the Tag Builder enclosings and the configured blueprints
-// header. Ports owned_items.py.
+// header.
 namespace core::blueprints {
 
 // (open, close) Tag Builder delimiters, e.g. ("[", "]").

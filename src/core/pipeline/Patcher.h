@@ -21,8 +21,7 @@ namespace core {
 // An edit only rewrites a value that still equals "expected", so a fix CIG
 // ships upstream turns the patch into a no-op instead of being overwritten;
 // an edit whose target already holds "set" counts as already applied.
-// Patched files are written back in unforge's format. Ports
-// dataforge_patcher.py.
+// Patched files are written back in unforge's format.
 struct PatchReport
 {
     int patchesSeen = 0;

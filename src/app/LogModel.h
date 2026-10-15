@@ -6,7 +6,7 @@
 #include <QtQml/qqmlregistration.h>
 
 // The Log page: the session's log lines (the last 2,000 at or above the
-// chosen level), live as they are logged. Ports log_tab.py.
+// chosen level), live as they are logged.
 class LogModel : public QAbstractListModel
 {
     Q_OBJECT

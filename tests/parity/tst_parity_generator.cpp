@@ -1,4 +1,4 @@
-// Enhancements generator parity against the original Python (plan P4): the
+// Enhancements generator parity against the original Python: the
 // nine *_enhancements.ini files must be byte-equal to what
 // scripts/generate_enhancements_ini.py writes from the same base.ini and
 // DataForge cache, for the app's default options and a customised set.

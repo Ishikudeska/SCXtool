@@ -15,9 +15,7 @@
 
 // The String Editor's table logic, without Qt widgets: columns, the
 // favourite/sort-order prefixes on ship names, filtering, grouped sorting
-// and the preview pane's HTML. Ports string_table_model.py,
-// ship_sort_prefix.py, entry_filter.py and the preview helpers of
-// main_window.py.
+// and the preview pane's HTML.
 namespace core::table {
 
 enum Column {

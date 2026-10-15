@@ -64,7 +64,6 @@ public:
     std::optional<NodeId> find(std::string_view path) const;
     // The items of every file at or beneath `id`, in tree order.
     void collectItems(NodeId id, std::vector<std::uint32_t> &out) const;
-    // The node built from item `index`.
     NodeId nodeOfItem(std::uint32_t index) const { return itemNodes_[index]; }
 
 private:

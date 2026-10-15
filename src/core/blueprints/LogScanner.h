@@ -18,8 +18,7 @@
 //
 // Only that SHUDEvent_OnNotification line counts; the UpdateNotificationItem
 // lines quoting the same text are UI echoes. Names come back raw, for the
-// owned-items normalizer to fold. No settings access. Ports
-// blueprint_log_scanner.py.
+// owned-items normalizer to fold. No settings access.
 namespace core::blueprints {
 
 // Blueprints did not exist before March 2026: older events and older log

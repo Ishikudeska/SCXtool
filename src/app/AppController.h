@@ -19,10 +19,9 @@
 #include <memory>
 
 // The app's state and every top-level action, exposed to QML as the `App`
-// singleton. Ports the orchestration in main_window.py: startup checks,
-// loading the strings table, applying to the game, backups, channel and
-// language switches, extraction and enhancement generation. Pages call in
-// here; nothing in QML touches files.
+// singleton: startup checks, loading the strings table, applying to the
+// game, backups, channel and language switches, extraction and enhancement
+// generation. Pages call in here; nothing in QML touches files.
 class AppController : public QObject
 {
     Q_OBJECT

@@ -16,8 +16,8 @@
 // "[CF|QDRV]") the enhancements generator puts on component, missile,
 // ship-weapon and commodity names, plus the mission-title route and title
 // shortening. Qt Core only, no settings access; shared by the generator and
-// the Enhancements page preview. Ports src/utils/tag_builder.py. The default
-// configs reproduce the pre-Tag-Builder output byte for byte.
+// the Enhancements page preview. The default configs reproduce the
+// pre-Tag-Builder output byte for byte.
 namespace core::tags {
 
 inline const QStringList kCategories = {QStringLiteral("components"), QStringLiteral("missiles"),

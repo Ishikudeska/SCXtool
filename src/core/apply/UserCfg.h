@@ -15,7 +15,7 @@ enum class UserCfgResult {
 // Makes Star Citizen's user.cfg in `channelDir` select `scLanguageId`
 // (e.g. "english", "german_(germany)"). SC's parser is lenient about spacing,
 // case and quotes, so any existing g_language line is recognised and
-// rewritten in place rather than duplicated. Ports ensure_user_cfg_language.
+// rewritten in place rather than duplicated.
 UserCfgResult ensureUserCfgLanguage(const QString &channelDir, const QString &scLanguageId);
 
 } // namespace core

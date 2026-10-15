@@ -11,8 +11,7 @@
 #include <optional>
 #include <tuple>
 
-// Progress and cancellation for work that fans out over threads. Ports
-// progress_sink.py and perf.py.
+// Progress and cancellation for work that fans out over threads.
 namespace core {
 
 // Workers call advance() from any thread; updates are coalesced into one

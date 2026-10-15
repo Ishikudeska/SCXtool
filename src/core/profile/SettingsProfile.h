@@ -21,7 +21,7 @@
 //
 // Caches and backups are left out (they regenerate or are history). Reads
 // Smart Citizen's own backups too, so its users can bring their setup
-// over. Ports settings_profile.py and AppSettings' export/import helpers.
+// over.
 namespace core::profile {
 
 // Raised when the on-disk layout changes in a way older readers can't take;

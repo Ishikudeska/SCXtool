@@ -16,8 +16,7 @@
 // missions an item drops from, and its type / class / size / grade. Bullet
 // names are joined to the items' own item_Name entries by normalized name;
 // each blueprint-bearing ..._Desc_NNN pairs with its ..._Title_NNN for the
-// mission name. Empty strings stand for Python's None. Ports
-// blueprint_meta.py.
+// mission name. Empty strings stand for Python's None.
 namespace core::blueprints {
 
 struct BlueprintItem

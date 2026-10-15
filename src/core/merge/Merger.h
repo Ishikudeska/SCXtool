@@ -14,8 +14,7 @@ namespace core {
 using SourceMap = std::map<QString, IniMap>;
 
 // Merges sources in hierarchy order (later wins), then `userOverrides` on
-// top, then syncs item_Name*/item_Desc* key variants. Ports
-// merge_sources_by_hierarchy.
+// top, then syncs item_Name*/item_Desc* key variants.
 IniMap mergeSourcesByHierarchy(const SourceMap &sources, const QStringList &hierarchy,
                                const IniMap *userOverrides = nullptr);
 

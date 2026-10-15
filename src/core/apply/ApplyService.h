@@ -49,10 +49,10 @@ struct ApplyOutcome
 // Every entry with a custom value, in table order.
 IniMap userOverridesFrom(const QList<StringEntry> &entries);
 
-// Writes the game's global.ini. Ports MainWindow.apply_to_game without the
-// UI: back up the current file (5 kept), merge the sources with the user's
-// overrides on top, stamp journals and the main-menu version line, write in
-// base.ini's line order with a BOM, and validate the result. A file that
+// Writes the game's global.ini: back up the current file (5 kept), merge the
+// sources with the user's overrides on top, stamp journals and the main-menu
+// version line, write in base.ini's line order with a BOM, and validate the
+// result. A file that
 // fails validation is removed and the backup put back. Finally user.cfg is
 // pointed at the selected language. The caller saves user.ini first, so a
 // failed game write never loses edits.

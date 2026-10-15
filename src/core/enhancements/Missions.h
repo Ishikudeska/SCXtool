@@ -15,8 +15,7 @@
 // Mission titles and descriptions: the MISSION DETAILS body (engagement,
 // difficulty, spawns, reputation, turrets), haul routes in titles, the
 // POTENTIAL BLUEPRINTS / ITEM REWARDS sections from contract generators,
-// and the Battaglia RS tags. Ports the mission half of
-// generate_enhancements_ini.py.
+// and the Battaglia RS tags.
 namespace core::enh {
 
 // An insertion-ordered map with QString keys (a Python dict).

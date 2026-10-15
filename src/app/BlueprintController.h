@@ -12,8 +12,7 @@ class AppController;
 // The Blueprint Tracker: blueprints the loaded missions can reward, split
 // into available and owned, with search and facet filters; owning one
 // weaves [Owned] into mission texts. Also scans the game's logs for
-// received blueprints and imports/exports the owned list. Ports
-// blueprint_tracker_tab.py and its main_window.py handlers.
+// received blueprints and imports/exports the owned list.
 class BlueprintController : public QObject
 {
     Q_OBJECT

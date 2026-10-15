@@ -15,7 +15,7 @@
 // A leaf shows "ht", else "at"; a blank leaf leaves the English text in
 // place, and a missing key shows the key itself. QML asks with
 // qsTr("dot.key") and C++ with i18n::tr("dot.key"); both reach the
-// JsonTranslator installed on the application. Ports i18n.py.
+// JsonTranslator installed on the application.
 namespace core::i18n {
 
 inline const QString kDefaultLanguage = QStringLiteral("english");
