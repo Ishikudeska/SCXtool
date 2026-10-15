@@ -21,17 +21,55 @@ QString currentName()
     return QString::fromUtf8(identity::kAppName);
 }
 
-bool moveDir(const QString &from, const QString &to, QStringList &log)
+// Moves what `to` lacks from `from` into it, recursing into folders both
+// have, and removes `from` once it is empty. Returns how many entries were
+// left behind because `to` already had them.
+int mergeInto(const QString &from, const QString &to, QStringList &log)
 {
-    if (from.isEmpty() || to.isEmpty() || !QFileInfo(from).isDir() || QFileInfo::exists(to))
-        return false;
-    QDir().mkpath(QFileInfo(to).absolutePath());
-    if (!QDir().rename(from, to)) {
-        log << QStringLiteral("Could not move %1 to %2").arg(from, to);
-        return false;
+    int kept = 0;
+    const QFileInfoList entries =
+        QDir(from).entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System);
+    for (const QFileInfo &entry : entries) {
+        const QString target = QDir(to).filePath(entry.fileName());
+        const QFileInfo existing(target);
+        if (!existing.exists()) {
+            if (!QDir().rename(entry.absoluteFilePath(), target)) {
+                log << QStringLiteral("Could not move %1 to %2").arg(entry.absoluteFilePath(), target);
+                ++kept;
+            }
+        } else if (entry.isDir() && existing.isDir() && !entry.isSymLink()) {
+            kept += mergeInto(entry.absoluteFilePath(), target, log);
+        } else {
+            ++kept;
+        }
     }
-    log << QStringLiteral("Moved %1 to %2").arg(from, to);
-    return true;
+    QDir().rmdir(from);
+    return kept;
+}
+
+// Moves `from` to `to`. When `to` already exists (a run of the new build
+// before this one, such as the test suite's smoke test, creates logs\), the
+// two are merged; nothing in `to` is ever overwritten.
+void moveDir(const QString &from, const QString &to, QStringList &log)
+{
+    if (from.isEmpty() || to.isEmpty() || !QFileInfo(from).isDir())
+        return;
+    if (!QFileInfo::exists(to)) {
+        QDir().mkpath(QFileInfo(to).absolutePath());
+        if (QDir().rename(from, to))
+            log << QStringLiteral("Moved %1 to %2").arg(from, to);
+        else
+            log << QStringLiteral("Could not move %1 to %2").arg(from, to);
+        return;
+    }
+    if (!QFileInfo(to).isDir())
+        return;
+    if (const int kept = mergeInto(from, to, log); kept == 0)
+        log << QStringLiteral("Moved %1 into %2").arg(from, to);
+    else
+        log << QStringLiteral("Moved %1 into %2; %3 entries it already had were left in the old folder")
+                   .arg(from, to)
+                   .arg(kept);
 }
 
 // "<parent>/<old name>" becomes "<parent>/<new name>"; anything else, empty.

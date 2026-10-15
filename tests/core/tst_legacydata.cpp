@@ -96,18 +96,44 @@ private slots:
         QVERIFY(QFileInfo::exists(QDir(customCache).filePath(QStringLiteral("x"))));
     }
 
-    void leavesFoldersAloneWhenTheNewOnesExist()
+    void mergesIntoAnExistingFolderWithoutOverwriting()
     {
         QTemporaryDir tmp;
         const LegacyDataLocations where = locationsIn(tmp);
-        touch(tmp.filePath(QStringLiteral("docs/") + kOld + QStringLiteral("/LIVE/user.ini")), "old");
-        touch(tmp.filePath(QStringLiteral("docs/") + kNew + QStringLiteral("/LIVE/user.ini")), "new");
+        const QString oldRoot = tmp.filePath(QStringLiteral("docs/") + kOld);
+        const QString newRoot = tmp.filePath(QStringLiteral("docs/") + kNew);
+        touch(oldRoot + QStringLiteral("/LIVE/user.ini"), "old");
+        touch(oldRoot + QStringLiteral("/LIVE/backups/user.ini.bak_1"), "backup");
+        touch(oldRoot + QStringLiteral("/PTU/user.ini"), "ptu");
+        touch(newRoot + QStringLiteral("/LIVE/user.ini"), "new");
+        touch(newRoot + QStringLiteral("/logs/app.log"), "log");
 
-        QVERIFY(migrateLegacyData(where).isEmpty());
-        QCOMPARE(readAll(tmp.filePath(QStringLiteral("docs/") + kOld + QStringLiteral("/LIVE/user.ini"))),
-                 QByteArray("old"));
-        QCOMPARE(readAll(tmp.filePath(QStringLiteral("docs/") + kNew + QStringLiteral("/LIVE/user.ini"))),
-                 QByteArray("new"));
+        QCOMPARE(migrateLegacyData(where).size(), 1);
+        QCOMPARE(readAll(newRoot + QStringLiteral("/LIVE/user.ini")), QByteArray("new"));
+        QCOMPARE(readAll(newRoot + QStringLiteral("/LIVE/backups/user.ini.bak_1")), QByteArray("backup"));
+        QCOMPARE(readAll(newRoot + QStringLiteral("/PTU/user.ini")), QByteArray("ptu"));
+        QCOMPARE(readAll(newRoot + QStringLiteral("/logs/app.log")), QByteArray("log"));
+        // The one clash stays behind; everything else has gone.
+        QCOMPARE(readAll(oldRoot + QStringLiteral("/LIVE/user.ini")), QByteArray("old"));
+        QVERIFY(!QFileInfo::exists(oldRoot + QStringLiteral("/LIVE/backups")));
+        QVERIFY(!QFileInfo::exists(oldRoot + QStringLiteral("/PTU")));
+    }
+
+    void mergesAwayAFolderOnlyTheLogsWereWrittenTo()
+    {
+        QTemporaryDir tmp;
+        const LegacyDataLocations where = locationsIn(tmp);
+        const QString oldRoot = tmp.filePath(QStringLiteral("docs/") + kOld);
+        const QString newRoot = tmp.filePath(QStringLiteral("docs/") + kNew);
+        touch(oldRoot + QStringLiteral("/LIVE/user.ini"), "edits");
+        touch(oldRoot + QStringLiteral("/logs/app.log"), "old log");
+        touch(newRoot + QStringLiteral("/logs/app.log"), "smoke test");
+
+        migrateLegacyData(where);
+        QCOMPARE(readAll(newRoot + QStringLiteral("/LIVE/user.ini")), QByteArray("edits"));
+        QCOMPARE(readAll(newRoot + QStringLiteral("/logs/app.log")), QByteArray("smoke test"));
+        QVERIFY(QFileInfo::exists(oldRoot + QStringLiteral("/logs/app.log")));
+        QVERIFY(!QFileInfo::exists(oldRoot + QStringLiteral("/LIVE")));
     }
 
     void skipsPortableBuilds()
