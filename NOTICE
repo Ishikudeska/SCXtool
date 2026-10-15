@@ -1,4 +1,4 @@
-Smart Citizen++
+SCXtool
 A C++/Qt port of Smart Citizen.
 
 This product is licensed under the Apache License, Version 2.0
@@ -60,9 +60,9 @@ Trademarks and game data
 
 Star Citizen and all associated game data, including Data.p4k, are the
 property of Cloud Imperium Rights LLC and Cloud Imperium Rights Ltd.
-Smart Citizen++ reads game files from your own licensed Star Citizen
+SCXtool reads game files from your own licensed Star Citizen
 installation and does not redistribute any RSI or CIG content.
 
-Smart Citizen++ is a community fan project and is not affiliated with,
+SCXtool is a community fan project and is not affiliated with,
 endorsed by, or sponsored by Cloud Imperium Games, Roberts Space
 Industries, or Osiris DevWorks.

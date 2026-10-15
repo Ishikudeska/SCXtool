@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-  <!-- Smart Citizen++ app icon, 48 px and up: a pilot's visor with HUD text across the glass.
+  <!-- SCXtool app icon, 48 px and up: a pilot's visor with HUD text across the glass.
        resources/icon/app-small.svg is the 16-32 px version; tools/icon/build_ico.py builds app.ico. -->
   <defs>
     <linearGradient id="shell" x1="0" y1="0" x2="0" y2="1">

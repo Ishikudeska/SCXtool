@@ -5,6 +5,7 @@
 namespace core::identity {
 
 inline constexpr const char *kAppName = "@APP_NAME@";
+inline constexpr const char *kLegacyAppName = "@APP_LEGACY_NAME@";
 inline constexpr const char *kOrgName = "@APP_ORG@";
 inline constexpr const char *kVersion = "@APP_VERSION@";
 inline constexpr const char *kUserModelId = "@APP_USER_MODEL_ID@";

@@ -1,6 +1,7 @@
 #include "AppController.h"
 #include "core/AppIdentity.h"
 #include "core/AppInfo.h"
+#include "core/LegacyData.h"
 #include "core/log/CrashHandler.h"
 #include "core/log/Log.h"
 
@@ -32,12 +33,20 @@ int main(int argc, char *argv[])
             screenshotPage = args[i + 2];
     }
 
+    // Before anything reads settings. Not under the smoke test, which runs
+    // against the real folders.
+    QStringList migrated;
+    if (!smokeTest && !qEnvironmentVariableIsSet("SCX_SETTINGS_FILE"))
+        migrated = core::migrateLegacyData(core::legacyDataLocations());
+
     AppController controller{AppController::MainInstance{}};
     const QString logsDir = controller.paths().logsDir();
     QDir().mkpath(logsDir);
     core::log::LogHub::instance().install(QDir(logsDir).filePath(QStringLiteral("app.log")),
                                           qEnvironmentVariableIsSet("SCX_DEBUG"));
     core::crash::install(logsDir);
+    for (const QString &line : std::as_const(migrated))
+        qInfo().noquote() << line;
 
     QQmlApplicationEngine engine;
     controller.setEngine(&engine);

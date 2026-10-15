@@ -35,6 +35,12 @@ sc_add_test(tst_core_settings
 )
 target_compile_definitions(tst_core_settings PRIVATE SC_SOURCE_DIR="${PROJECT_SOURCE_DIR}")
 
+sc_add_test(tst_core_legacydata
+    SOURCES tst_legacydata.cpp
+    LIBS sccore
+    LABELS unit core
+)
+
 # Builds P4K/DCB fixtures with the engine tests' builders.
 sc_add_test(tst_core_pipeline
     SOURCES tst_pipeline.cpp

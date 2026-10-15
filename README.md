@@ -1,8 +1,6 @@
-# Smart Citizen++
+# SCXtool
 
-A complete rewrite of Smart Citizen in C++.
-
-Smart Citizen++ is a localization toolkit for Star Citizen. It changes the text the game shows you, so ship, item and mission information you would normally look up on a wiki shows up in the game itself. It reads your installed `Data.p4k` directly, generates that text from the game's own data, merges it with any edits you make, and writes the result to the game with a backup first.
+SCXtool is the last tool for Star Citizen you'll ever need. It is a localization editor, blueprint tracker, mission database, loadout maker and config editor in one app, and it reads everything straight from your installed `Data.p4k`, so it always matches the build you are playing.
 
 It is a native C++ and Qt application. There is no Python runtime to install and no helper programs to run.
 
@@ -35,8 +33,8 @@ How each feature works is documented on the [wiki](https://github.com/Ishikudesk
 
 Windows builds are published on the [Releases](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/releases) page in two forms:
 
-- `SmartCitizenPlusPlus-<version>-Setup.exe`: an installer. Settings are stored in `%APPDATA%\Smart Citizen++\`, and data (edits, generated files, backups) in `Documents\Smart Citizen++\`.
-- `SmartCitizenPlusPlus-Portable-<version>.zip`: a portable build that keeps its settings and data next to the executable.
+- `SCXtool-<version>-Setup.exe`: an installer. Settings are stored in `%APPDATA%\SCXtool\`, and data (edits, generated files, backups) in `Documents\SCXtool\`.
+- `SCXtool-Portable-<version>.zip`: a portable build that keeps its settings and data next to the executable.
 
 The app is not code-signed yet, so Windows SmartScreen will warn that it is unrecognized. Choose **More info → Run anyway**, and only download builds from this repository's Releases page.
 
@@ -90,7 +88,7 @@ Run this as your normal user (not root):
 curl -fsSL https://raw.githubusercontent.com/Ishikudeska/Smart-Citizen-plus-plus/main/packaging/aur/install.sh | bash
 ```
 
-It builds a pacman package from [`packaging/aur/PKGBUILD`](packaging/aur/PKGBUILD) and installs it, asking for your password when it needs `sudo`. The app then shows up in your app menu as Smart Citizen++. Run the same command again to update to the latest version, and `sudo pacman -R smart-citizen-plus-plus-git` to remove it.
+It builds a pacman package from [`packaging/aur/PKGBUILD`](packaging/aur/PKGBUILD) and installs it, asking for your password when it needs `sudo`. The app then shows up in your app menu as SCXtool. Run the same command again to update to the latest version, and `sudo pacman -R scxtool-git` to remove it.
 
 If you would rather not pipe a script into your shell, do the same thing by hand:
 
@@ -114,11 +112,11 @@ sudo cmake --install build/linux-release
 
 ## Acknowledgements
 
-Smart Citizen++ stands on the shoulders of these projects and people.
+SCXtool stands on the shoulders of these projects and people.
 
 ### Smart Citizen
 
-This is a port of [**Smart Citizen**](https://github.com/Osiris-DevWorks/smart-citizen) by [**Osiris DevWorks**](https://github.com/Osiris-DevWorks). Its features, merge logic, settings formats and translations all come from the original Python app. Thank you to the Smart Citizen developers and contributors:
+SCXtool began as Smart Citizen++, a C++ rewrite of [**Smart Citizen**](https://github.com/Osiris-DevWorks/smart-citizen) by [**Osiris DevWorks**](https://github.com/Osiris-DevWorks). It has since grown into something more than a localization tool, with a mission database, loadout maker and more, hence the new name. Its localization features, merge logic, settings formats and translations all come from the original Python app. Thank you to the Smart Citizen developers and contributors:
 
 - [**Osiris DevWorks**](https://github.com/Osiris-DevWorks)
 - [**Stealrull**](https://github.com/Stealrull)
@@ -149,4 +147,4 @@ And the testers and the wider **Star Citizen community**, whose feedback shaped 
 
 ## License
 
-Smart Citizen++ is licensed under the **Apache License, Version 2.0**, the same as Smart Citizen. See [LICENSE](LICENSE), and [NOTICE](NOTICE) for the Smart Citizen and unp4k attributions and the Star Citizen / CIG trademark notice. Smart Citizen++ is a fan project and is not affiliated with Cloud Imperium Games, Roberts Space Industries, or Osiris DevWorks.
+SCXtool is licensed under the **Apache License, Version 2.0**, the same as Smart Citizen. See [LICENSE](LICENSE), and [NOTICE](NOTICE) for the Smart Citizen and unp4k attributions and the Star Citizen / CIG trademark notice. SCXtool is a fan project and is not affiliated with Cloud Imperium Games, Roberts Space Industries, or Osiris DevWorks.

@@ -1,6 +1,6 @@
 # Maintainer: Ishikudeska <83988568+Ishikudeska@users.noreply.github.com>
 
-pkgname=smart-citizen-plus-plus-git
+pkgname=scxtool-git
 pkgver=0.1.0.r0.g0000000
 pkgrel=1
 pkgdesc="Star Citizen localization toolkit: ship, item and mission details in the game's own text"
@@ -10,7 +10,9 @@ license=('Apache-2.0' 'BSD-3-Clause' 'Zlib' 'MIT')
 depends=('qt6-base' 'qt6-declarative' 'hicolor-icon-theme' 'gcc-libs' 'glibc')
 makedepends=('git' 'cmake' 'ninja')
 provides=("${pkgname%-git}")
-conflicts=("${pkgname%-git}")
+conflicts=("${pkgname%-git}" 'smart-citizen-plus-plus-git')
+# The package's name before the app was renamed from Smart Citizen++.
+replaces=('smart-citizen-plus-plus-git')
 # zstd, zlib and pugixml are built in statically, pinned to the same versions
 # and hashes as cmake/Dependencies.cmake, so the build never touches the network.
 source=("${pkgname%-git}::git+${url}.git"
