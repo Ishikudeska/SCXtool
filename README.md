@@ -176,6 +176,36 @@ Well, for a few reasons:
 
 Should work "out of the box". The application uses Qt as its backend for the UI, so your mileage will vary. If something doesn't work, please let me know by creating an issue.
 
+### Installing on Arch Linux
+
+Run this as your normal user (not root):
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/Ishikudeska/Smart-Citizen-plus-plus/main/packaging/aur/install.sh | bash
+```
+
+It builds a pacman package from [`packaging/aur/PKGBUILD`](packaging/aur/PKGBUILD) and installs it, asking for your password when it needs `sudo`. The app then shows up in your app menu as Smart Citizen++. Run the same command again to update to the latest version, and `sudo pacman -R smart-citizen-plus-plus-git` to remove it.
+
+If you would rather not pipe a script into your shell, do the same thing by hand:
+
+```sh
+git clone https://github.com/Ishikudeska/Smart-Citizen-plus-plus.git
+cd Smart-Citizen-plus-plus/packaging/aur
+makepkg -si
+```
+
+### Other distributions
+
+Install Qt 6.8 or newer (including Qt Declarative), CMake, Ninja and a C++23 compiler from your package manager, then:
+
+```sh
+git clone https://github.com/Ishikudeska/Smart-Citizen-plus-plus.git
+cd Smart-Citizen-plus-plus
+cmake --preset linux-release -DCMAKE_INSTALL_PREFIX=/usr/local -DAPP_UPDATE_REPO=
+cmake --build --preset linux-release
+sudo cmake --install build/linux-release
+```
+
 ## Acknowledgements
 
 Smart Citizen++ stands on the shoulders of these projects and people.
