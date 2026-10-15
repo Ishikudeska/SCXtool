@@ -282,9 +282,10 @@ private slots:
                 .size(),
             1);
         QVERIFY(onedrive::roots({}).isEmpty());
-        const auto profile = env({{"USERPROFILE", R"(C:\Users\aabou)"}});
+        // '/' so the path splits on every platform; the result uses native separators.
+        const auto profile = env({{"USERPROFILE", "C:/Users/aabou"}});
         QCOMPARE(onedrive::suggestLocalDataDir(QStringLiteral("Smart Citizen"), profile),
-                 QStringLiteral(R"(C:\Users\aabou\Documents\Smart Citizen)"));
+                 QDir::toNativeSeparators(QStringLiteral("C:/Users/aabou/Documents/Smart Citizen")));
     }
 };
 

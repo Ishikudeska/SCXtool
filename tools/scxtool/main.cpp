@@ -685,13 +685,10 @@ int cmdGameData(int argc, char **argv)
         std::fprintf(stderr, "error: %s\n", json.error().message.c_str());
         return 1;
     }
-    std::FILE *f = _wfopen(toPath(output.c_str()).c_str(), L"wb");
-    if (!f) {
-        std::fprintf(stderr, "error: cannot write %s\n", output.c_str());
+    if (auto written = io::writeFile(toPath(output.c_str()), std::string_view(*json)); !written) {
+        std::fprintf(stderr, "error: cannot write %s: %s\n", output.c_str(), written.error().message.c_str());
         return 1;
     }
-    std::fwrite(json->data(), 1, json->size(), f);
-    std::fclose(f);
     std::fprintf(stderr, "Wrote %s (%.1f KiB) in %.2fs\n", output.c_str(), json->size() / 1024.0,
                  secondsSince(start));
     return 0;
