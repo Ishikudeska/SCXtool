@@ -12,6 +12,11 @@
       "displayName": "Qt 6.12 MinGW 13.1",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/${presetName}",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
       "environment": {
         "SC_QT_DIR": "C:/Qt/6.12.0/mingw_64",
         "SC_MINGW_DIR": "C:/Qt/Tools/mingw1310_64",
