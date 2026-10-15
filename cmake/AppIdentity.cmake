@@ -10,7 +10,7 @@
 set(APP_NAME     "SCXtool")
 set(APP_ORG      "SCXtool")
 set(APP_EXE_NAME "SCXtool")
-set(APP_VERSION  "0.1.0")
+set(APP_VERSION  "0.5.0")
 set(APP_USER_MODEL_ID "SCXtool.App")
 # The app's former name. Its settings and data folders are moved to the
 # current name on first launch (src/core/LegacyData.cpp), and its stamps in
