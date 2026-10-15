@@ -22,3 +22,6 @@ compile_commands.json
 # Parity-test scratch output
 /tools/parity/.venv/
 /tools/parity/out/
+
+#smart-citizen parity version kept
+/smart-citizen-main/
