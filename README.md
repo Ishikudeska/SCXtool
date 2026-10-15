@@ -1,8 +1,8 @@
 # SCXtool
 
-A complete rewrite of Smart Citizen in C++.
+SCXtool is the last tool for Star Citizen you'll ever need. It is a localization editor, blueprint tracker, mission database, loadout maker, and config editor.
 
-Smart Citizen++ is a localization toolkit for Star Citizen. It changes the text the game shows you, so ship, item and mission information you would normally look up on a wiki shows up in the game itself. It reads your installed `Data.p4k` directly, generates that text from the game's own data, merges it with any edits you make, and writes the result to the game with a backup first.
+SCXtool is a localization toolkit for Star Citizen. It changes the text the game shows you, so ship, item and mission information you would normally look up on a wiki shows up in the game itself. It reads your installed `Data.p4k` directly, generates that text from the game's own data, merges it with any edits you make, and writes the result to the game with a backup first.
 
 It is a native C++ and Qt application. There is no Python runtime to install and no helper programs to run.
 
@@ -19,20 +19,20 @@ Well, for a few reasons:
 
 ### How much faster is it?
 
-Smart Citizen++ takes about **37 seconds** to extract the game data and generate the enhanced text. The Python version takes about **3 minutes** to do the same work. That makes it **391% faster** (4.9 times as fast) overall:
+SCXtool takes about **37 seconds** to extract the game data and generate the enhanced text. The Python version takes about **3 minutes** to do the same work. That makes it **391% faster** (4.9 times as fast) overall:
 
-| Step | Smart Citizen (Python) | Smart Citizen++ | Faster by |
+| Step | Smart Citizen (Python) | SCXtool | Faster by |
 |---|---|---|---|
 | Extract `global.ini` from `Data.p4k` | 23.30 s | 0.54 s | 4,215% (43.2×) |
 | Extract and convert the DataForge records | 125.65 s | 27.73 s | 353% (4.5×) |
 | Generate the enhancements | 31.1 s | 8.4 s | 270% (3.7×) |
 | **Total** | **180.05 s** | **36.67 s** | **391% (4.9×)** |
 
-Measured in October 2026 on the LIVE `Data.p4k` (157 GB), on a Windows PC with a 16-thread CPU, taking the median of three fresh runs of each app. Smart Citizen++ also does extra work in the DataForge step (a tag table and vehicle definitions) that the Python version doesn't.
+Measured in October 2026 on the LIVE `Data.p4k` (157 GB), on a Windows PC with a 16-thread CPU, taking the median of three fresh runs of each app. SCXtool also does extra work in the DataForge step (a tag table and vehicle definitions) that the Python version doesn't.
 
 ## Documentation
 
-How to use Smart Citizen++, and how it works, is on the **[wiki](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki)**:
+How to use SCXtool, and how it works, is on the **[wiki](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki)**:
 
 - [How It Works](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/How-It-Works)
 - [Simple and Advanced Mode](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/Simple-and-Advanced-Mode)
@@ -48,8 +48,8 @@ How to use Smart Citizen++, and how it works, is on the **[wiki](https://github.
 
 Windows builds are published on the [Releases](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/releases) page in two forms:
 
-- `SmartCitizenPlusPlus-<version>-Setup.exe`: an installer. Settings are stored in `%APPDATA%\Smart Citizen++\`, and data (edits, generated files, backups) in `Documents\Smart Citizen++\`.
-- `SmartCitizenPlusPlus-Portable-<version>.zip`: a portable build that keeps its settings and data next to the executable.
+- `SCXtool-<version>-Setup.exe`: an installer. Settings are stored in `%APPDATA%\SCXtool\`, and data (edits, generated files, backups) in `Documents\SCXtool\`.
+- `SCXtool-Portable-<version>.zip`: a portable build that keeps its settings and data next to the executable.
 
 The app is not code-signed yet, so Windows SmartScreen will warn that it is unrecognized. Choose **More info → Run anyway**, and only download builds from this repository's Releases page.
 
@@ -87,13 +87,21 @@ On other platforms, configure with CMake and point `CMAKE_PREFIX_PATH` at your Q
 
 Should work "out of the box". The application uses Qt as its backend for the UI, so your mileage will vary. If something doesn't work, please let me know by creating an issue.
 
+On Arch Linux and its derivatives, this builds and installs the `scxtool-git` package (run it again to update):
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/Ishikudeska/Smart-Citizen-plus-plus/main/packaging/aur/install.sh | bash
+```
+
+Remove it with `sudo pacman -R scxtool-git`.
+
 ## Acknowledgements
 
-Smart Citizen++ stands on the shoulders of these projects and people.
+SCXtool stands on the shoulders of these projects and people.
 
 ### Smart Citizen
 
-This is a port of [**Smart Citizen**](https://github.com/Osiris-DevWorks/smart-citizen) by [**Osiris DevWorks**](https://github.com/Osiris-DevWorks). Its features, merge logic, settings formats and translations all come from the original Python app. Thank you to the Smart Citizen developers and contributors:
+SCXtool originally began as a C++ rewrite of [**Smart Citizen**](https://github.com/Osiris-DevWorks/smart-citizen) by [**Osiris DevWorks**](https://github.com/Osiris-DevWorks), but evolved into something more. Thus the rename. Its features, merge logic, settings formats and translations all come from the original Python app. Thank you to the Smart Citizen developers and contributors:
 
 - [**Osiris DevWorks**](https://github.com/Osiris-DevWorks)
 - [**Stealrull**](https://github.com/Stealrull)
@@ -124,4 +132,4 @@ And the testers and the wider **Star Citizen community**, whose feedback shaped 
 
 ## License
 
-Smart Citizen++ is licensed under the **Apache License, Version 2.0**, the same as Smart Citizen. See [LICENSE](LICENSE), and [NOTICE](NOTICE) for the Smart Citizen and unp4k attributions and the Star Citizen / CIG trademark notice. Smart Citizen++ is a fan project and is not affiliated with Cloud Imperium Games, Roberts Space Industries, or Osiris DevWorks.
+SCXtool is licensed under the **Apache License, Version 2.0**, the same as Smart Citizen. See [LICENSE](LICENSE), and [NOTICE](NOTICE) for the Smart Citizen and unp4k attributions and the Star Citizen / CIG trademark notice. SCXtool is a fan project and is not affiliated with Cloud Imperium Games, Roberts Space Industries, or Osiris DevWorks.

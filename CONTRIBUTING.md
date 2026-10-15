@@ -1,4 +1,4 @@
-# Contributing to Smart Citizen++
+# Contributing to SCXtool
 
 Thanks for your interest in helping. Bug reports, fixes, new enhancements and translations are all welcome. This page covers how to get set up, what a change needs before it can be merged, and where things live in the code.
 
@@ -8,7 +8,7 @@ Open an issue using the **Bug report** or **Feature request** template.
 
 For bugs, please include:
 
-- Your OS, the Smart Citizen++ version, and the game channel (LIVE, PTU, EPTU, HOTFIX or TECH-PREVIEW).
+- Your OS, the SCXtool version, and the game channel (LIVE, PTU, EPTU, HOTFIX or TECH-PREVIEW).
 - Steps to reproduce the problem.
 - The app log. Open the **Log** tab, filter it if you like, and export it.
 
@@ -130,4 +130,4 @@ UI text lives in `resources/languages/<language>/ui.json`. English (`resources/l
 
 ## License
 
-Smart Citizen++ is licensed under the Apache License 2.0. By submitting a contribution, you agree that it is licensed under the same terms, as described in section 5 of the [LICENSE](LICENSE).
+SCXtool is licensed under the Apache License 2.0. By submitting a contribution, you agree that it is licensed under the same terms, as described in section 5 of the [LICENSE](LICENSE).
