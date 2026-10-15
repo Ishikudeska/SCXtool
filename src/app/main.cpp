@@ -1,4 +1,5 @@
 #include "AppController.h"
+#include "core/AppIdentity.h"
 #include "core/AppInfo.h"
 #include "core/log/CrashHandler.h"
 #include "core/log/Log.h"
@@ -17,6 +18,8 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
     core::applyIdentity();
+    // Matches the installed .desktop file, so Wayland shells pair the window with it.
+    QGuiApplication::setDesktopFileName(QString::fromLatin1(core::identity::kExeName));
     QQuickStyle::setStyle(QStringLiteral("Basic"));
 
     const QStringList args = QCoreApplication::arguments();

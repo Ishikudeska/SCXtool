@@ -94,7 +94,26 @@ sc_precompile(scapp <QQmlEngine> <QVariantList> <QVariantMap> <QtQml/qqmlregistr
 set_target_properties(scapp PROPERTIES QT_QMLCACHEGEN_ARGUMENTS "--only-bytecode")
 
 # ── install / deploy ──────────────────────────────────────────────────────
-# `cmake --install <build> --prefix <dir>` produces a runnable folder: the
+if(NOT WIN32)
+    # Linux and other Unix: a standard FHS layout against the system Qt, for
+    # distro packages (see packaging/aur/PKGBUILD).
+    include(GNUInstallDirs)
+    install(TARGETS scapp RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    configure_file(${PROJECT_SOURCE_DIR}/packaging/linux/app.desktop.in
+                   ${CMAKE_CURRENT_BINARY_DIR}/${APP_EXE_NAME}.desktop @ONLY)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${APP_EXE_NAME}.desktop
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+    # zstd, zlib and pugixml are linked in statically, so their licenses ship.
+    set(SC_LICENSE_DIR ${CMAKE_INSTALL_DATADIR}/licenses/${APP_EXE_NAME}
+        CACHE STRING "Where the license files install (packages use their package name)")
+    install(FILES ${PROJECT_SOURCE_DIR}/LICENSE ${PROJECT_SOURCE_DIR}/NOTICE DESTINATION ${SC_LICENSE_DIR})
+    install(FILES ${zstd_SOURCE_DIR}/LICENSE DESTINATION ${SC_LICENSE_DIR} RENAME zstd-BSD-3-Clause.txt)
+    install(FILES ${zlib_SOURCE_DIR}/LICENSE DESTINATION ${SC_LICENSE_DIR} RENAME zlib.txt)
+    install(FILES ${pugixml_SOURCE_DIR}/LICENSE.md DESTINATION ${SC_LICENSE_DIR} RENAME pugixml-MIT.txt)
+    return()
+endif()
+
+# Windows: `cmake --install <build> --prefix <dir>` produces a runnable folder: the
 # exe, the Qt DLLs, plugins and QML modules windeployqt picks (Qt stays as
 # DLLs, which keeps LGPL compliance simple), and the license files.
 install(TARGETS scapp RUNTIME DESTINATION .)
