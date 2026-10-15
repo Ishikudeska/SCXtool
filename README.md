@@ -1,4 +1,4 @@
-# Smart Citizen++
+# SCXtool
 
 A complete rewrite of Smart Citizen in C++.
 
