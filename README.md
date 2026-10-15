@@ -1,40 +1,55 @@
-# SCXtool
+# Smart Citizen++
 
-SCXtool is the last tool for Star Citizen you'll ever need. It is a localization editor, blueprint tracker, mission database, loadout maker and config editor in one app, and it reads everything straight from your installed `Data.p4k`, so it always matches the build you are playing.
+A complete rewrite of Smart Citizen in C++.
+
+Smart Citizen++ is a localization toolkit for Star Citizen. It changes the text the game shows you, so ship, item and mission information you would normally look up on a wiki shows up in the game itself. It reads your installed `Data.p4k` directly, generates that text from the game's own data, merges it with any edits you make, and writes the result to the game with a backup first.
 
 It is a native C++ and Qt application. There is no Python runtime to install and no helper programs to run.
 
 # ON AI USAGE:
  NOTICE, this repository was ***ORIGINALLY*** a fork of https://github.com/Osiris-DevWorks/smart-citizen. I have, after consideration, taken it OFF of that fork network. I use AI, to help me write commit messages. I'm sorry, but writing is NOT my goddamn strong suit and I need help with it.
 
-## What it does
+## Why move to C++?
 
-- **Generates enhanced game text** from the game's DataForge records: name tags and stat blocks on ships, components, weapons and missiles; mission details, rewards and hauling routes on contracts; mining and crafting information on commodities.
-- **Lets you edit any string in the game** in a searchable table with a live preview of how it will look in-game.
-- **Tracks the blueprints you own** by scanning your game logs, and marks them in mission blueprint lists.
-- **Browses and extracts `Data.p4k`**, including DataForge records as XML and a `game_data.json` export.
-- **Applies everything safely**: a backup before every write, a check of the written file, and automatic rollback if something goes wrong.
+Well, for a few reasons:
+
+> 1. Python, while not terrible, is going to be slower at everything this application is trying to accomplish.
+> 2. C++ (IMO) can be modified and added to with minimal work, whereas the Python side takes quite some time for a new version.
+> 3. Cross-platform compatibility. This application was built using the C++ standard library (`std::`), meaning it can easily be run on any flavor of Linux you so choose!
+
+### How much faster is it?
+
+Smart Citizen++ takes about **37 seconds** to extract the game data and generate the enhanced text. The Python version takes about **3 minutes** to do the same work. That makes it **391% faster** (4.9 times as fast) overall:
+
+| Step | Smart Citizen (Python) | Smart Citizen++ | Faster by |
+|---|---|---|---|
+| Extract `global.ini` from `Data.p4k` | 23.30 s | 0.54 s | 4,215% (43.2×) |
+| Extract and convert the DataForge records | 125.65 s | 27.73 s | 353% (4.5×) |
+| Generate the enhancements | 31.1 s | 8.4 s | 270% (3.7×) |
+| **Total** | **180.05 s** | **36.67 s** | **391% (4.9×)** |
+
+Measured in October 2026 on the LIVE `Data.p4k` (157 GB), on a Windows PC with a 16-thread CPU, taking the median of three fresh runs of each app. Smart Citizen++ also does extra work in the DataForge step (a tag table and vehicle definitions) that the Python version doesn't.
 
 ## Documentation
 
-How each feature works is documented on the [wiki](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki):
+How to use Smart Citizen++, and how it works, is on the **[wiki](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki)**:
 
-- [How it works](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/How-It-Works): extract, generate, merge and apply.
-- [Enhancements](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/Enhancements): name tags, stat blocks, mission details, hauling routes, mining and crafting.
+- [How It Works](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/How-It-Works)
+- [Simple and Advanced Mode](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/Simple-and-Advanced-Mode)
+- [Enhancements](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/Enhancements)
 - [String Editor](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/String-Editor)
 - [Blueprint Tracker](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/Blueprint-Tracker)
 - [P4K Explorer](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/P4K-Explorer)
 - [Languages](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/Languages)
-- [Simple and Advanced mode](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/Simple-and-Advanced-Mode)
-- [Safety and undo](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/Safety-and-Undo)
-- [Other features](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/Other-Features)
+- [Safety and Undo](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/Safety-and-Undo)
+- [Other Features](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/Other-Features)
 
 ## Download
 
 Windows builds are published on the [Releases](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/releases) page in two forms:
 
-- `SCXtool-<version>-Setup.exe`: an installer. Settings are stored in `%APPDATA%\SCXtool\`, and data (edits, generated files, backups) in `Documents\SCXtool\`.
-- `SCXtool-Portable-<version>.zip`: a portable build that keeps its settings and data next to the executable.
+- `SmartCitizenPlusPlus-<version>-Setup.exe`: an installer. Settings are stored in `%APPDATA%\Smart Citizen++\`, and data (edits, generated files, backups) in `Documents\Smart Citizen++\`.
+- `SmartCitizenPlusPlus-Portable-<version>.zip`: a portable build that keeps its settings and data next to the executable.
 
 The app is not code-signed yet, so Windows SmartScreen will warn that it is unrecognized. Choose **More info → Run anyway**, and only download builds from this repository's Releases page.
 
@@ -68,55 +83,17 @@ The installer step needs [Inno Setup 6](https://jrsoftware.org/isinfo.php) and i
 
 On other platforms, configure with CMake and point `CMAKE_PREFIX_PATH` at your Qt install. See the next sections for the state of Linux support.
 
-## Why?
-
-Well, for a few reasons:
-
-> 1. Python, while not terrible, is going to be slower at everything this application is trying to accomplish.
-> 2. C++ (IMO) can be modified and added to with minimal work, whereas the Python side takes quite some time for a new version.
-> 3. Cross-platform compatibility. This application was built using the C++ standard library (`std::`), meaning it can easily be run on any flavor of Linux you so choose!
-
 ## Linux and non-Windows platforms
 
 Should work "out of the box". The application uses Qt as its backend for the UI, so your mileage will vary. If something doesn't work, please let me know by creating an issue.
 
-### Installing on Arch Linux
-
-Run this as your normal user (not root):
-
-```sh
-curl -fsSL https://raw.githubusercontent.com/Ishikudeska/Smart-Citizen-plus-plus/main/packaging/aur/install.sh | bash
-```
-
-It builds a pacman package from [`packaging/aur/PKGBUILD`](packaging/aur/PKGBUILD) and installs it, asking for your password when it needs `sudo`. The app then shows up in your app menu as SCXtool. Run the same command again to update to the latest version, and `sudo pacman -R scxtool-git` to remove it.
-
-If you would rather not pipe a script into your shell, do the same thing by hand:
-
-```sh
-git clone https://github.com/Ishikudeska/Smart-Citizen-plus-plus.git
-cd Smart-Citizen-plus-plus/packaging/aur
-makepkg -si
-```
-
-### Other distributions
-
-Install Qt 6.8 or newer (including Qt Declarative), CMake, Ninja and a C++23 compiler from your package manager, then:
-
-```sh
-git clone https://github.com/Ishikudeska/Smart-Citizen-plus-plus.git
-cd Smart-Citizen-plus-plus
-cmake --preset linux-release -DCMAKE_INSTALL_PREFIX=/usr/local -DAPP_UPDATE_REPO=
-cmake --build --preset linux-release
-sudo cmake --install build/linux-release
-```
-
 ## Acknowledgements
 
-SCXtool stands on the shoulders of these projects and people.
+Smart Citizen++ stands on the shoulders of these projects and people.
 
 ### Smart Citizen
 
-SCXtool began as Smart Citizen++, a C++ rewrite of [**Smart Citizen**](https://github.com/Osiris-DevWorks/smart-citizen) by [**Osiris DevWorks**](https://github.com/Osiris-DevWorks). It has since grown into something more than a localization tool, with a mission database, loadout maker and more, hence the new name. Its localization features, merge logic, settings formats and translations all come from the original Python app. Thank you to the Smart Citizen developers and contributors:
+This is a port of [**Smart Citizen**](https://github.com/Osiris-DevWorks/smart-citizen) by [**Osiris DevWorks**](https://github.com/Osiris-DevWorks). Its features, merge logic, settings formats and translations all come from the original Python app. Thank you to the Smart Citizen developers and contributors:
 
 - [**Osiris DevWorks**](https://github.com/Osiris-DevWorks)
 - [**Stealrull**](https://github.com/Stealrull)
@@ -147,4 +124,4 @@ And the testers and the wider **Star Citizen community**, whose feedback shaped 
 
 ## License
 
-SCXtool is licensed under the **Apache License, Version 2.0**, the same as Smart Citizen. See [LICENSE](LICENSE), and [NOTICE](NOTICE) for the Smart Citizen and unp4k attributions and the Star Citizen / CIG trademark notice. SCXtool is a fan project and is not affiliated with Cloud Imperium Games, Roberts Space Industries, or Osiris DevWorks.
+Smart Citizen++ is licensed under the **Apache License, Version 2.0**, the same as Smart Citizen. See [LICENSE](LICENSE), and [NOTICE](NOTICE) for the Smart Citizen and unp4k attributions and the Star Citizen / CIG trademark notice. Smart Citizen++ is a fan project and is not affiliated with Cloud Imperium Games, Roberts Space Industries, or Osiris DevWorks.
