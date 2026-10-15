@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=@APP_NAME@
+GenericName=Star Citizen Localization Toolkit
+Comment=Show ship, item and mission details in Star Citizen's own text
+Exec=@APP_EXE_NAME@
+Icon=@APP_EXE_NAME@
+Terminal=false
+Categories=Game;
+Keywords=Star Citizen;localization;global.ini;p4k;
+StartupWMClass=@APP_EXE_NAME@

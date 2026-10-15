@@ -6,7 +6,6 @@
 
 // OneDrive can dehydrate or empty files it syncs, which has cost users their
 // user.ini (#172); the app warns when its data folder is inside OneDrive.
-// Ports onedrive.py.
 namespace core::onedrive {
 
 // OneDrive roots from %OneDrive%, %OneDriveConsumer%, %OneDriveCommercial%.

@@ -10,7 +10,7 @@
 // URL). Conditional GET from the cached copy's timestamp and ETag, so an
 // unchanged file costs one round trip; the file is replaced atomically, and
 // an HTML page (a github.com /blob/ link instead of a raw one) is refused
-// rather than saved as an INI. Ports updater.py.
+// rather than saved as an INI.
 namespace core::net {
 
 struct DownloadOptions

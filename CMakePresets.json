@@ -12,6 +12,11 @@
       "displayName": "Qt 6.12 MinGW 13.1",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/${presetName}",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
       "environment": {
         "SC_QT_DIR": "C:/Qt/6.12.0/mingw_64",
         "SC_MINGW_DIR": "C:/Qt/Tools/mingw1310_64",
@@ -53,6 +58,41 @@
         "SC_BUILD_TESTS": "OFF",
         "SC_BUILD_TOOLS": "OFF"
       }
+    },
+    {
+      "name": "linux-base",
+      "hidden": true,
+      "displayName": "Linux (system Qt, GCC)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      },
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "gcc",
+        "CMAKE_CXX_COMPILER": "g++",
+        "CMAKE_POLICY_VERSION_MINIMUM": "3.5"
+      }
+    },
+    {
+      "name": "linux-debug",
+      "displayName": "Linux Debug",
+      "inherits": "linux-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "linux-release",
+      "displayName": "Linux Release (app only)",
+      "inherits": "linux-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "SC_BUILD_TESTS": "OFF",
+        "SC_BUILD_TOOLS": "OFF"
+      }
     }
   ],
   "buildPresets": [
@@ -73,12 +113,33 @@
       "targets": [
         "scapp"
       ]
+    },
+    {
+      "name": "linux-debug",
+      "configurePreset": "linux-debug"
+    },
+    {
+      "name": "linux-release",
+      "configurePreset": "linux-release",
+      "targets": [
+        "scapp"
+      ]
     }
   ],
   "testPresets": [
     {
       "name": "mingw-debug",
       "configurePreset": "mingw-debug",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error"
+      }
+    },
+    {
+      "name": "linux-debug",
+      "configurePreset": "linux-debug",
       "output": {
         "outputOnFailure": true
       },

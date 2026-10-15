@@ -8,7 +8,6 @@
 // "<logs>/crash_YYYYMMDD_HHMMSS.log" (what happened plus the recent log
 // lines) and, on Windows, a minidump beside it; then the default handling
 // carries on. MinGW builds have no PDBs, which is why the log ring matters.
-// Ports crash_handler.py.
 namespace core::crash {
 
 // Once; later calls do nothing.

@@ -10,6 +10,8 @@ add_library(sccore STATIC
     Settings.cpp
     Paths.h
     Paths.cpp
+    LegacyData.h
+    LegacyData.cpp
     ScInstall.h
     ScInstall.cpp
     EnginePaths.h

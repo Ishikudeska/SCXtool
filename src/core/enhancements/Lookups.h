@@ -9,9 +9,9 @@
 
 #include <optional>
 
-// The lookups the generator builds before its category passes. Ports
-// build_ammo_lookup, build_scitem_lookups, build_controller_lookup,
-// build_armor_lookup and main()'s reputation / standings builders.
+// The lookups the generator builds before its category passes: ammo,
+// SCItem, controller and armor lookups, and the reputation / standings
+// tables.
 namespace core::enh {
 
 // ammoparams/<kind>: __ref (else file stem) -> record.

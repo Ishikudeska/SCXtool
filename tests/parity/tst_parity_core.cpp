@@ -1,4 +1,4 @@
-// Core parity against the original Python (plan P5): the applied
+// Core parity against the original Python: the applied
 // global.ini must be byte-equal to what Smart Citizen writes for the same
 // base.ini, enhancement INIs and user.ini.
 //

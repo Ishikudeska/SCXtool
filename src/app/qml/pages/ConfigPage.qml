@@ -334,7 +334,9 @@ Item {
         id: iniFileDialog
         title: qsTr("import_flow.select_ini_file_title")
         fileMode: FileDialog.OpenFile
-        nameFilters: [qsTr("import_flow.ini_file_filter")]
+        // The translations hold "A (*.ini);;B (*)", QFileDialog's one-string form;
+        // FileDialog wants one filter per entry, or Linux dialogs match nothing.
+        nameFilters: qsTr("import_flow.ini_file_filter").split(";;")
         onAccepted: importSourceField.text = App.urlToPath(selectedFile)
     }
 

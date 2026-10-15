@@ -12,7 +12,7 @@
 
 // The in-app update check: GitHub's public /releases/latest for the
 // configured repository (identity::kUpdateRepo), compared with this build's
-// version, and a download of the release's installer. Ports app_updater.py.
+// version, and a download of the release's installer.
 namespace core::net {
 
 using Version = std::array<int, 3>;

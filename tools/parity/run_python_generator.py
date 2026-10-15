@@ -1,4 +1,4 @@
-"""Run Smart Citizen's enhancements generator for parity checks (plan P4).
+"""Run Smart Citizen's enhancements generator for parity checks.
 
 Imports the original scripts/generate_enhancements_ini.py by path and calls
 main() the way EnhancementsGeneratorWorker does, with the options the app

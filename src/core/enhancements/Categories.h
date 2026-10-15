@@ -5,8 +5,7 @@
 #include <functional>
 
 // The per-category passes over entity records: components, missiles, ship
-// and FPS weapons, ships, medical consumables. Ports scan_entity_dir,
-// scan_spaceships, _mirror_scitem_siblings and the _run_gen_* functions.
+// and FPS weapons, ships, medical consumables.
 namespace core::enh {
 
 using EnhancementFn = std::function<QString(Node root)>;

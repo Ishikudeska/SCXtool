@@ -1,4 +1,4 @@
-"""Produce Smart Citizen's applied global.ini for a set of inputs (plan P5).
+"""Produce Smart Citizen's applied global.ini for a set of inputs.
 
 Runs the original Python code -- parse_ini_file, merge_sources_by_hierarchy,
 the journal/frontend stamps and merge_ini_files -- the way

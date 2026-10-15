@@ -7,7 +7,7 @@
 
 // "Export Loc-Pack": the applied global.ini, zipped on its own at the root,
 // for sharing; recipients drop it into their Localization folder whether or
-// not they use this app. Ports locpack_exporter.py.
+// not they use this app.
 namespace core {
 
 // "<App>-LocPack-<channel>-YYYYMMDD.zip": loc files are channel-specific.

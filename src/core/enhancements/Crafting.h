@@ -10,8 +10,7 @@
 #include <vector>
 
 // Commodities used in crafting ([CF|QDRV|...] name tags, BLUEPRINT DATA
-// and Locations sections) and the Mining Compendium journal. Ports
-// scan_crafting_blueprints and its helpers.
+// and Locations sections) and the Mining Compendium journal.
 namespace core::enh {
 
 QString normalizeCommodityName(const QString &raw);

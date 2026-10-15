@@ -7,8 +7,7 @@
 // The guided tour's steps and progress. Steps come from :/tutorial.json
 // (page, spotlight target, side, copy), with a language's
 // tutorial.<id>.title / .description overriding the copy. QML draws the
-// coach marks; this only sequences them. Ports TutorialTour and
-// MainWindow's tutorial bookkeeping.
+// coach marks; this only sequences them.
 class TutorialController : public QObject
 {
     Q_OBJECT

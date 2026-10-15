@@ -33,12 +33,11 @@ struct LoadedSources
 
 // Reads base.ini, the enabled enhancement INIs (combined into one
 // "enhancements" source, later files winning) and user.ini (values kept
-// verbatim). Ports load_sources_from_settings without the retired URL
-// sources and language-overlay files.
+// verbatim).
 LoadedSources loadSources(const SourceFiles &files);
 
 // The strings table: one entry per key in the merged base sources plus any
-// key only the user has, with status and category. Ports load_source_files.
+// key only the user has, with status and category.
 // `userOverrides` replaces the "user" source when given and non-empty.
 QList<StringEntry> buildEntries(const LoadedSources &loaded, const IniMap *userOverrides = nullptr);
 

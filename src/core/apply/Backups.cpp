@@ -40,6 +40,13 @@ QString GameFileBackups::backup(const QString &gameFile, QString *error, const Q
             *error = QStringLiteral("Cannot back up %1 to %2").arg(gameFile, target);
         return {};
     }
+    // QFile::copy keeps the modification time on Windows but not elsewhere;
+    // byAge() and list() rely on it.
+    QFile copy(target);
+    if (copy.open(QIODevice::ReadWrite)) {
+        copy.setFileTime(QFileInfo(gameFile).lastModified(), QFileDevice::FileModificationTime);
+        copy.close();
+    }
     return target;
 }
 

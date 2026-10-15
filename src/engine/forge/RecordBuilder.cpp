@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <cstring>
+#include <utility>
 
 namespace engine::forge {
 
@@ -474,12 +475,12 @@ void RecordBuilder::readArray(NodeId array, std::uint32_t property)
     const std::uint8_t *header = take(8);
     const std::uint32_t count = u32(header);
     const std::uint32_t first = u32(header + 4);
-    // The C# loop counter is a UInt16; MaxNodes stops it long before it wraps.
-    for (std::uint16_t i = 0; i < count; ++i) {
-        const NodeId child = readArrayValue(property, first, i);
+    // The C# loop counter is a UInt16, so the offset passed on wraps like it would.
+    for (std::uint32_t i = 0; i < count; ++i) {
+        const NodeId child = readArrayValue(property, first, static_cast<std::uint16_t>(i));
         if (child != kNone)
             tree_->appendChild(array, child);
-        if (i >= options_.maxNodes - 1)
+        if (std::cmp_greater_equal(i, options_.maxNodes - 1))
             break;
     }
 }

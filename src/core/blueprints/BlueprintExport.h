@@ -13,7 +13,7 @@
 // Owned blueprints as JSON or CSV, and reading them back. The JSON has the
 // shape of SCMDB's export (version / exportedAt / missions / blueprints[])
 // without SCMDB's own "tag" / "url" ids; "missions" stays empty since only
-// ownership is tracked. Ports blueprint_export.py.
+// ownership is tracked.
 namespace core::blueprints {
 
 // Items sorted case-insensitively, each under its tagged display name when

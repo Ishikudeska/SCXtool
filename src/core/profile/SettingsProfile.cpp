@@ -129,7 +129,9 @@ std::expected<ProfileContents, QString> readProfileZip(const QString &zipPath)
         return std::unexpected(QStringLiteral("Backup manifest is unreadable: %1").arg(error));
     const QJsonObject manifest = manifestDoc.object();
     const QString marker = manifest.value(QStringLiteral("app")).toString();
-    if (!manifestDoc.isObject() || (marker != appMarker() && marker != kSmartCitizenMarker))
+    const QString legacyMarker = QString::fromUtf8(identity::kLegacyAppName).remove(u' ');
+    if (!manifestDoc.isObject() ||
+        (marker != appMarker() && marker != legacyMarker && marker != kSmartCitizenMarker))
         return std::unexpected(QStringLiteral("This backup wasn't made by %1 or Smart Citizen.")
                                    .arg(QString::fromUtf8(identity::kAppName)));
 

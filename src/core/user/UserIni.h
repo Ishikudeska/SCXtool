@@ -16,8 +16,7 @@ namespace core {
 // (no BOM) with CRLF line ends and values kept verbatim. Before any write
 // that changes it, the current file is snapshotted into the channel's
 // backups folder as "user.ini.bak_YYYYMMDD_HHMMSS_ffffff" (newest 5 kept),
-// because it is the one file whose loss can't be regenerated (#172). Ports
-// user_ini_manager.py.
+// because it is the one file whose loss can't be regenerated (#172).
 class UserIni
 {
 public:
@@ -40,7 +39,6 @@ public:
     // went wrong at load (v1.3.0 data loss), so the write is refused.
     bool shouldAutosave(const QList<StringEntry> &entries) const;
 
-    // Snapshot management.
     QString backup(const QDateTime &now = QDateTime::currentDateTime()) const;
     QFileInfoList backups() const;                 // newest first
     bool restore(const QString &backupFile) const; // snapshots the current file first

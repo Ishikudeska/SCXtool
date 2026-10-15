@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- SCXtool app icon, 16-32 px: resources/icon/app.svg with thicker lines and two HUD bars. -->
+  <defs>
+    <linearGradient id="shell" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#55627a"/>
+      <stop offset="1" stop-color="#232b38"/>
+    </linearGradient>
+  </defs>
+  <path d="M128 10 C64 10 18 58 18 124 L18 168 C18 208 46 236 86 244 L170 244 C210 236 238 208 238 168 L238 124 C238 58 192 10 128 10 Z"
+        fill="url(#shell)" stroke="#0b0f15" stroke-width="12"/>
+  <path d="M40 100 C40 78 56 62 78 62 L178 62 C200 62 216 78 216 100 L216 148 C216 176 196 196 168 196 L88 196 C60 196 40 176 40 148 Z"
+        fill="#0a2540" stroke="#2fb8f0" stroke-width="10"/>
+  <rect x="66" y="94" width="64" height="26" rx="5" fill="#ffb347"/>
+  <rect x="66" y="138" width="124" height="24" rx="5" fill="#e8fbff"/>
+</svg>

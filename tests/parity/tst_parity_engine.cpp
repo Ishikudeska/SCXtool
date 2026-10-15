@@ -1,4 +1,4 @@
-// Engine parity against the original tools' output (plan P1-P3).
+// Engine parity against the original tools' output.
 //
 // Needs a real Star Citizen install and the Smart Citizen caches produced
 // from that same build:

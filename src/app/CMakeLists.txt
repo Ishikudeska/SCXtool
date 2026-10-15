@@ -8,8 +8,12 @@ if(WIN32)
     # breaks it. Compile the resource in its own object library with no include
     # directories and reference the manifest by absolute path.
     set(SC_APP_MANIFEST "${CMAKE_CURRENT_SOURCE_DIR}/app.manifest")
+    # Built from the SVGs beside it by tools/icon/build_ico.py.
+    set(SC_APP_ICON "${PROJECT_SOURCE_DIR}/resources/icon/app.ico")
     configure_file(app.rc.in ${CMAKE_CURRENT_BINARY_DIR}/app.rc @ONLY)
     add_library(scapp_resources OBJECT ${CMAKE_CURRENT_BINARY_DIR}/app.rc)
+    set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/app.rc
+        PROPERTIES OBJECT_DEPENDS "${SC_APP_MANIFEST};${SC_APP_ICON}")
     set_target_properties(scapp_resources PROPERTIES AUTOMOC OFF AUTOUIC OFF AUTORCC OFF)
     target_sources(scapp PRIVATE $<TARGET_OBJECTS:scapp_resources>)
 endif()
@@ -94,7 +98,34 @@ sc_precompile(scapp <QQmlEngine> <QVariantList> <QVariantMap> <QtQml/qqmlregistr
 set_target_properties(scapp PROPERTIES QT_QMLCACHEGEN_ARGUMENTS "--only-bytecode")
 
 # ── install / deploy ──────────────────────────────────────────────────────
-# `cmake --install <build> --prefix <dir>` produces a runnable folder: the
+if(NOT WIN32)
+    # Linux and other Unix: a standard FHS layout against the system Qt, for
+    # distro packages (see packaging/aur/PKGBUILD).
+    include(GNUInstallDirs)
+    install(TARGETS scapp RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    configure_file(${PROJECT_SOURCE_DIR}/packaging/linux/app.desktop.in
+                   ${CMAKE_CURRENT_BINARY_DIR}/${APP_EXE_NAME}.desktop @ONLY)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${APP_EXE_NAME}.desktop
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+    # The .desktop file's Icon= names this; app-small.svg is the 16-32 px design.
+    set(SC_ICON_DIR ${CMAKE_INSTALL_DATADIR}/icons/hicolor)
+    install(FILES ${PROJECT_SOURCE_DIR}/resources/icon/app.svg
+            DESTINATION ${SC_ICON_DIR}/scalable/apps RENAME ${APP_EXE_NAME}.svg)
+    foreach(_size 16x16 22x22 24x24 32x32)
+        install(FILES ${PROJECT_SOURCE_DIR}/resources/icon/app-small.svg
+                DESTINATION ${SC_ICON_DIR}/${_size}/apps RENAME ${APP_EXE_NAME}.svg)
+    endforeach()
+    # zstd, zlib and pugixml are linked in statically, so their licenses ship.
+    set(SC_LICENSE_DIR ${CMAKE_INSTALL_DATADIR}/licenses/${APP_EXE_NAME}
+        CACHE STRING "Where the license files install (packages use their package name)")
+    install(FILES ${PROJECT_SOURCE_DIR}/LICENSE ${PROJECT_SOURCE_DIR}/NOTICE DESTINATION ${SC_LICENSE_DIR})
+    install(FILES ${zstd_SOURCE_DIR}/LICENSE DESTINATION ${SC_LICENSE_DIR} RENAME zstd-BSD-3-Clause.txt)
+    install(FILES ${zlib_SOURCE_DIR}/LICENSE DESTINATION ${SC_LICENSE_DIR} RENAME zlib.txt)
+    install(FILES ${pugixml_SOURCE_DIR}/LICENSE.md DESTINATION ${SC_LICENSE_DIR} RENAME pugixml-MIT.txt)
+    return()
+endif()
+
+# Windows: `cmake --install <build> --prefix <dir>` produces a runnable folder: the
 # exe, the Qt DLLs, plugins and QML modules windeployqt picks (Qt stays as
 # DLLs, which keeps LGPL compliance simple), and the license files.
 install(TARGETS scapp RUNTIME DESTINATION .)

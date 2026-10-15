@@ -9,7 +9,6 @@ class AppController;
 
 // The Config page: game install and data folders, user.ini tools (import,
 // reset, restore a snapshot, preview), settings backups and preferences.
-// Ports config_tab.py plus the matching handlers in main_window.py.
 class ConfigController : public QObject
 {
     Q_OBJECT

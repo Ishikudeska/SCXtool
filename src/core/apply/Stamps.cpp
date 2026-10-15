@@ -1,5 +1,6 @@
 #include "core/apply/Stamps.h"
 
+#include "core/AppIdentity.h"
 #include "core/model/StringEntry.h"
 #include "core/text/PyText.h"
 
@@ -11,10 +12,12 @@ namespace {
 
 constexpr auto kUnicode = QRegularExpression::UseUnicodePropertiesOption;
 
-// Earlier stamps from this app or from Smart Citizen.
+// Earlier stamps from this app, from it under its former name, or from Smart Citizen.
 QString stampedBy(const QString &appName)
 {
-    return QStringLiteral("(?:Smart Citizen|%1)").arg(QRegularExpression::escape(appName));
+    return QStringLiteral("(?:Smart Citizen|%1|%2)")
+        .arg(QRegularExpression::escape(QString::fromUtf8(identity::kLegacyAppName)),
+             QRegularExpression::escape(appName));
 }
 
 } // namespace

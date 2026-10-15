@@ -20,10 +20,10 @@
   #define AppVersion "0.0.0"
 #endif
 #ifndef AppName
-  #define AppName "Smart Citizen++"
+  #define AppName "SCXtool"
 #endif
 #ifndef AppExeName
-  #define AppExeName "SmartCitizenPlusPlus"
+  #define AppExeName "SCXtool"
 #endif
 #ifndef SourceDir
   #define SourceDir "..\dist\" + AppExeName
@@ -53,6 +53,7 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 WizardStyle=modern
 UninstallDisplayIcon={app}\{#AppExe}
+SetupIconFile=..\resources\icon\app.ico
 LicenseFile={#SourceDir}\LICENSE
 SetupLogging=yes
 CloseApplications=yes
