@@ -32,21 +32,21 @@ Measured in October 2026 on the LIVE `Data.p4k` (157 GB), on a Windows PC with a
 
 ## Documentation
 
-How to use SCXtool, and how it works, is on the **[wiki](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki)**:
+How to use SCXtool, and how it works, is on the **[wiki](https://github.com/Ishikudeska/SCXtool/wiki)**:
 
-- [How It Works](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/How-It-Works)
-- [Simple and Advanced Mode](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/Simple-and-Advanced-Mode)
-- [Enhancements](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/Enhancements)
-- [String Editor](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/String-Editor)
-- [Blueprint Tracker](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/Blueprint-Tracker)
-- [P4K Explorer](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/P4K-Explorer)
-- [Languages](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/Languages)
-- [Safety and Undo](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/Safety-and-Undo)
-- [Other Features](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/wiki/Other-Features)
+- [How It Works](https://github.com/Ishikudeska/SCXtool/wiki/How-It-Works)
+- [Simple and Advanced Mode](https://github.com/Ishikudeska/SCXtool/wiki/Simple-and-Advanced-Mode)
+- [Enhancements](https://github.com/Ishikudeska/SCXtool/wiki/Enhancements)
+- [String Editor](https://github.com/Ishikudeska/SCXtool/wiki/String-Editor)
+- [Blueprint Tracker](https://github.com/Ishikudeska/SCXtool/wiki/Blueprint-Tracker)
+- [P4K Explorer](https://github.com/Ishikudeska/SCXtool/wiki/P4K-Explorer)
+- [Languages](https://github.com/Ishikudeska/SCXtool/wiki/Languages)
+- [Safety and Undo](https://github.com/Ishikudeska/SCXtool/wiki/Safety-and-Undo)
+- [Other Features](https://github.com/Ishikudeska/SCXtool/wiki/Other-Features)
 
 ## Download
 
-Windows builds are published on the [Releases](https://github.com/Ishikudeska/Smart-Citizen-plus-plus/releases) page in two forms:
+Windows builds are published on the [Releases](https://github.com/Ishikudeska/SCXtool/releases) page in two forms:
 
 - `SCXtool-<version>-Setup.exe`: an installer. Settings are stored in `%APPDATA%\SCXtool\`, and data (edits, generated files, backups) in `Documents\SCXtool\`.
 - `SCXtool-Portable-<version>.zip`: a portable build that keeps its settings and data next to the executable.
@@ -90,7 +90,7 @@ Should work "out of the box". The application uses Qt as its backend for the UI,
 On Arch Linux and its derivatives, this builds and installs the `scxtool-git` package (run it again to update):
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/Ishikudeska/Smart-Citizen-plus-plus/main/packaging/aur/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Ishikudeska/SCXtool/main/packaging/aur/install.sh | bash
 ```
 
 Remove it with `sudo pacman -R scxtool-git`.

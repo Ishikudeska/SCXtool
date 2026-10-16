@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-repo="https://github.com/Ishikudeska/Smart-Citizen-plus-plus"
+repo="https://github.com/Ishikudeska/SCXtool"
 branch="${SC_BRANCH:-main}"
 
 if [[ $EUID -eq 0 ]]; then

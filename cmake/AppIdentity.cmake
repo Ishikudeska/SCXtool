@@ -4,7 +4,7 @@ set(APP_EXE_NAME "SCXtool")
 set(APP_VERSION  "0.5.0")
 set(APP_USER_MODEL_ID "SCXtool.App")
 set(APP_LEGACY_NAME "Smart Citizen++")
-set(APP_UPDATE_REPO "Ishikudeska/Smart-Citizen-plus-plus" CACHE STRING "GitHub owner/repo for the update check")
+set(APP_UPDATE_REPO "Ishikudeska/SCXtool" CACHE STRING "GitHub owner/repo for the update check")
 
 option(APP_PORTABLE "Portable build: keep settings and data next to the executable" OFF)
 
