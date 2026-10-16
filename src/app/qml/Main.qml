@@ -45,6 +45,7 @@ ApplicationWindow {
         { id: "blueprints", title: qsTr("tabs.blueprint_tracker") },
         { id: "missions", title: qsTr("tabs.missions") },
         { id: "loadout", title: qsTr("tabs.loadout") },
+        { id: "gamesettings", title: qsTr("tabs.game_settings") },
         { id: "explorer", title: qsTr("scx.tab_explorer") },
         { id: "log", title: qsTr("tabs.log") },
         { id: "about", title: qsTr("tabs.about") },
@@ -212,6 +213,7 @@ ApplicationWindow {
         BlueprintsPage {}
         MissionsPage { active: window.page === "missions" }
         LoadoutPage { active: window.page === "loadout" }
+        GameSettingsPage { active: window.page === "gamesettings" }
         ExplorerPage { active: window.page === "explorer"; revealPath: window.explorerPath }
         LogPage {}
         DocsPage { document: "ABOUT" }

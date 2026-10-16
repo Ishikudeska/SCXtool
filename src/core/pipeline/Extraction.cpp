@@ -222,6 +222,62 @@ engine::Result<std::size_t> writeTagTable(const engine::forge::DataForge &forge,
     return tags.size();
 }
 
+const QStringList &gameConfigEntries()
+{
+    static const QStringList entries = {
+        QStringLiteral("Data/Libs/Config/Profiles/default/attributes.xml"),
+        QStringLiteral("Data/Libs/Config/defaultProfile.xml"),
+        QStringLiteral("Data/Libs/Config/keybinding_localization.xml"),
+    };
+    return entries;
+}
+
+QString gameConfigDir(const QString &cacheDir)
+{
+    return QDir(cacheDir).filePath(QStringLiteral("config"));
+}
+
+engine::Result<std::size_t> extractGameConfig(const engine::p4k::Archive &archive, const QString &cacheDir)
+{
+    const QString dir = gameConfigDir(cacheDir);
+    SC_TRY(engine::io::createDirectories(fsPath(dir)));
+    std::size_t written = 0;
+    for (const QString &entry : gameConfigEntries()) {
+        const auto index = archive.find(entry.toStdString());
+        if (!index)
+            return fail(Errc::NotFound, entry.toStdString() + " is not in " + archive.path().string());
+        auto bytes = archive.read(*index);
+        if (!bytes)
+            return std::unexpected(bytes.error());
+        const QString path = QDir(dir).filePath(QFileInfo(entry).fileName());
+        if (engine::cryxml::isCryXml(*bytes)) {
+            auto text = engine::cryxml::toXml(*bytes);
+            if (!text)
+                return std::unexpected(text.error());
+            SC_TRY(engine::io::writeFile(fsPath(path), std::string_view(*text)));
+        } else {
+            SC_TRY(engine::io::writeFile(fsPath(path), *bytes));
+        }
+        ++written;
+    }
+    if (const auto stamp = P4kStamp::of(QString::fromStdU16String(archive.path().u16string())))
+        stamp->write(QDir(dir).filePath(kP4kStampName));
+    return written;
+}
+
+bool gameConfigIsFresh(const QString &p4kPath, const QString &cacheDir)
+{
+    const QString dir = gameConfigDir(cacheDir);
+    const auto current = P4kStamp::of(p4kPath);
+    const auto stamped = P4kStamp::read(QDir(dir).filePath(kP4kStampName));
+    if (!current || !stamped || current->size != stamped->size)
+        return false;
+    for (const QString &entry : gameConfigEntries())
+        if (!QFileInfo::exists(QDir(dir).filePath(QFileInfo(entry).fileName())))
+            return false;
+    return true;
+}
+
 engine::Result<void> extractBaseIni(const engine::p4k::Archive &archive, const QString &baseIniPath)
 {
     const auto index = archive.find("Data/Localization/english/global.ini");
@@ -318,6 +374,11 @@ engine::Result<DataForgeExtraction> extractDataForge(const engine::p4k::Archive 
 
     DataForgeExtraction result;
     result.records = stats->written;
+    report(QStringLiteral("Reading game settings definitions"), 0, 1);
+    if (auto config = extractGameConfig(archive, cacheDir))
+        result.configFiles = *config;
+    else
+        result.configError = QString::fromStdString(config.error().message);
     report(QStringLiteral("Applying data patches"), 0, 1);
     result.patches = applyPatches(patchRoot, dataForgeRecordsDir(cacheDir));
 

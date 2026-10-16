@@ -124,6 +124,17 @@ add_library(sccore STATIC
     loadout/Loadout.cpp
     loadout/Performance.h
     loadout/Performance.cpp
+
+    gamesettings/GameProfile.h
+    gamesettings/GameProfile.cpp
+    gamesettings/Attributes.h
+    gamesettings/Attributes.cpp
+    gamesettings/SettingsCatalog.h
+    gamesettings/SettingsCatalog.cpp
+    gamesettings/Bindings.h
+    gamesettings/Bindings.cpp
+    gamesettings/ActionMapsFile.h
+    gamesettings/ActionMapsFile.cpp
 )
 
 target_include_directories(sccore PUBLIC

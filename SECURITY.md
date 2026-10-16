@@ -52,11 +52,12 @@ This section is here so reporters and users know what the app is expected to do.
 **Files it writes:**
 
 - The game's `global.ini` for the selected channel and language, and the `g_language` line in that channel's `user.cfg`. It takes a backup of the existing `global.ini` before every write.
+- From the Game Settings tab, and only when you click **Save to Game** or restore a backup: the channel's `attributes.xml` (game options) and `actionmaps.xml` (keybinds and controller options), in `<channel>/user/client/0/Profiles/default/`. It backs up each file before writing it, refuses to write while the game is running, and checks the written file afterwards.
 - Its own settings (`%APPDATA%\SCXtool\` for the installer, next to the executable for the portable build).
 - Its own data, such as edits, generated files and backups (`Documents\SCXtool\` for the installer, next to the executable for the portable build).
 - Files you explicitly export or extract, written where you choose.
 
-It reads `Data.p4k` and the game's logs, and never modifies them. It doesn't touch game logic or connect to CIG's servers.
+It reads `Data.p4k` and the game's logs, and never modifies them. It doesn't touch game logic or connect to CIG's servers. While the Game Settings tab is open, it checks every few seconds whether `StarCitizen.exe` is running, by reading the program name of each running process (on Linux, the first argument in `/proc/<pid>/cmdline`); it doesn't read or touch the game's memory.
 
 **Network connections:**
 
