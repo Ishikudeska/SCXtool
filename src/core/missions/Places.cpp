@@ -16,8 +16,6 @@ using enh::Node;
 using enh::qs;
 using enh::XmlDoc;
 
-// ── tags ───────────────────────────────────────────────────────────────
-
 TagTable TagTable::load(const QString &path)
 {
     QFile file(path);
@@ -74,8 +72,6 @@ QStringList TagTable::children(const QString &guid) const
     return children_.value(guid);
 }
 
-// ── localization ───────────────────────────────────────────────────────
-
 LocText::LocText(const IniMap &loc) : loc_(loc)
 {
     lower_.reserve(loc.size());
@@ -93,14 +89,11 @@ QString LocText::operator()(QStringView ref) const
     const QString *value = loc_.find(key);
     if (!value)
         value = lower_.value(key.toLower());
-    // CIG's placeholders, "<= PLACEHOLDER =>" and "< / NOT AVAILABLE / >".
     static const QRegularExpression slashed(QStringLiteral(R"(^<\s*/.*/\s*>$)"));
     if (!value || enh::isPlaceholderText(*value) || slashed.match(*value).hasMatch())
         return {};
     return *value;
 }
-
-// ── searches ───────────────────────────────────────────────────────────
 
 QString LocationSearch::key() const
 {
@@ -128,7 +121,6 @@ QStringList LocationSearch::positiveTags() const
 
 namespace {
 
-// Tag references under `node` at `path`, without null GUIDs.
 QStringList refsAt(Node node, const char *path)
 {
     QStringList out;
@@ -138,7 +130,7 @@ QStringList refsAt(Node node, const char *path)
     return out;
 }
 
-} // namespace
+}
 
 LocationSearch parseLocationSearch(Node value)
 {
@@ -177,8 +169,6 @@ bool matchesGeneral(const LocationSearch &search, const QSet<QString> &tags)
     });
 }
 
-// ── places ─────────────────────────────────────────────────────────────
-
 PlaceIndex PlaceIndex::build(const enh::RecordStore &store, const TagTable &tags, const LocText &loc)
 {
     PlaceIndex index;
@@ -189,9 +179,9 @@ PlaceIndex PlaceIndex::build(const enh::RecordStore &store, const TagTable &tags
     struct Row
     {
         Place place;
-        std::array<QSet<QString>, kTagTypes> tags; // by TagType
-        QString stem;                              // the record's file name, without .xml
-        QStringList strings;                       // its name strings' keys
+        std::array<QSet<QString>, kTagTypes> tags;
+        QString stem;
+        QStringList strings;
     };
     std::vector<Row> rows;
     for (const auto files = store.rglob(dir); const QString &file : files) {
@@ -233,8 +223,6 @@ PlaceIndex PlaceIndex::build(const enh::RecordStore &store, const TagTable &tags
         rows.push_back(std::move(row));
     }
 
-    // Star systems are the children of a "System" tag; the tree has more than
-    // one, so take the one the templates use most.
     QHash<QString, int> systemRoots;
     for (const Row &row : rows)
         for (const QString &tag : row.tags[0])
@@ -245,7 +233,6 @@ PlaceIndex PlaceIndex::build(const enh::RecordStore &store, const TagTable &tags
         if (systemsRoot.isEmpty() || it.value() > systemRoots.value(systemsRoot) ||
             (it.value() == systemRoots.value(systemsRoot) && it.key() < systemsRoot))
             systemsRoot = it.key();
-    // That subtree's tags by lower-cased name ("stanton4a"), shallowest first.
     QHash<QString, QString> locationTags;
     for (QStringList level = tags.children(systemsRoot); !level.isEmpty();) {
         QStringList next;
@@ -292,7 +279,6 @@ PlaceIndex PlaceIndex::build(const enh::RecordStore &store, const TagTable &tags
             row.place.system = *std::min_element(systems.cbegin(), systems.cend());
     }
 
-    // By name, ignoring leading quotes and the like ("Buckets" sorts under B).
     const auto sortName = [](const QString &name) {
         qsizetype i = 0;
         while (i < name.size() && !name[i].isLetterOrNumber())
@@ -332,7 +318,6 @@ std::vector<int> PlaceIndex::match(const LocationSearch &search) const
         const auto &placeTags = tags_[std::size_t(condition.type)];
         std::vector<char> any(std::size_t(n), 0);
         for (const TagTerm &term : condition.terms) {
-            // Walk the rarest positive tag's places; every place without one.
             const std::vector<int> *candidates = nullptr;
             bool impossible = false;
             for (const QString &tag : term.positive) {
@@ -388,4 +373,4 @@ QStringList PlaceIndex::systems() const
     return out;
 }
 
-} // namespace core::missions
+}

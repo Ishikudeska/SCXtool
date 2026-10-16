@@ -19,11 +19,11 @@ constexpr QByteArrayView kUtf8Bom("\xEF\xBB\xBF");
 QStringList sortedSample(const QSet<QString> &keys, qsizetype limit)
 {
     QStringList sorted(keys.cbegin(), keys.cend());
-    std::sort(sorted.begin(), sorted.end()); // Python sorts by code point; so does QString's operator<
+    std::sort(sorted.begin(), sorted.end());
     return sorted.mid(0, limit);
 }
 
-} // namespace
+}
 
 QByteArray renderGameFile(const QString &baseIniText, const IniMap &merged)
 {
@@ -31,7 +31,6 @@ QByteArray renderGameFile(const QString &baseIniText, const IniMap &merged)
     source.replace(QStringLiteral("\r\n"), QStringLiteral("\n"));
     source.replace(u'\r', u'\n');
     QStringList lines = source.split(u'\n');
-    // A trailing newline yields one empty last element, which is not a line.
     const bool trailingNewline = !lines.isEmpty() && lines.last().isEmpty();
     if (trailingNewline)
         lines.removeLast();
@@ -83,7 +82,7 @@ QString validateGameFile(const QString &writtenPath, const QSet<QString> &stockK
 {
     QFile file(writtenPath);
     if (!file.open(QIODevice::ReadOnly))
-        return {}; // can't check; the caller already wrote it successfully
+        return {};
     const bool hasBom = file.read(3) == kUtf8Bom;
     file.close();
 
@@ -121,4 +120,4 @@ QString validateGameFile(const QString &writtenPath, const QSet<QString> &stockK
     return lines.join(u'\n');
 }
 
-} // namespace core
+}

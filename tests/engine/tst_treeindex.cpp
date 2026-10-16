@@ -35,20 +35,17 @@ private slots:
         QCOMPARE(childNames(*t, t->root()), (QStringList{"Data", "Root.ini"}));
         const auto data = t->find("data");
         QVERIFY(data);
-        // Folders first ("Libs" and "libs" merge into the first spelling), then files.
         QCOMPARE(childNames(*t, *data), (QStringList{"C", "Libs", "Objects", "a.TXT", "b.txt"}));
         const auto libs = t->find("DATA\\LIBS");
         QVERIFY(libs);
         QCOMPARE(childNames(*t, *libs), (QStringList{"x.xml", "y.xml"}));
 
-        // Rows and parents line up.
         for (std::uint32_t r = 0; r < t->node(*data).childCount; ++r) {
             const auto c = t->child(*data, r);
             QCOMPARE(t->node(c).row, r);
             QCOMPARE(t->node(c).parent, *data);
         }
 
-        // Totals roll up; the folder entry adds nothing.
         QCOMPARE(t->node(t->root()).files, 6u);
         QCOMPARE(t->node(*libs).size, std::uint64_t(20 + 40));
         QCOMPARE(t->node(*libs).packed, std::uint64_t(2 + 4));

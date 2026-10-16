@@ -41,7 +41,6 @@ sc_add_test(tst_core_legacydata
     LABELS unit core
 )
 
-# Builds P4K/DCB fixtures with the engine tests' builders.
 sc_add_test(tst_core_pipeline
     SOURCES tst_pipeline.cpp
     LIBS sccore libzstd_static zlibstatic
@@ -68,7 +67,6 @@ sc_add_test(tst_core_loadout
     LABELS unit core
 )
 
-# The Kraken parity case reads Smart Citizen's own test fixture.
 sc_add_test(tst_core_blueprints
     SOURCES tst_blueprints.cpp
     LIBS sccore
@@ -90,7 +88,6 @@ sc_add_test(tst_core_services
 )
 target_compile_definitions(tst_core_services PRIVATE SC_SOURCE_DIR="${PROJECT_SOURCE_DIR}")
 
-# Replays tests/fixtures/generator_calls.json (tools/parity/gen_generator_fixtures.py).
 sc_add_test(tst_core_generator
     SOURCES tst_generator.cpp
     LIBS sccore

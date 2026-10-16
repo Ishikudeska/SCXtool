@@ -1,13 +1,3 @@
-// Core parity against the original Python: the applied
-// global.ini must be byte-equal to what Smart Citizen writes for the same
-// base.ini, enhancement INIs and user.ini.
-//
-//   SCX_SC_CACHE  folder holding Smart Citizen's base.ini and enhancement
-//                 INIs, default %USERPROFILE%\Documents\Smart Citizen\LIVE\cache
-//                 (its user.ini is taken from the parent folder)
-// Needs the reference checkout ("Smart Citizen CPLusPLus/", git-ignored) and
-// a Python with PyQt6; skips otherwise.
-
 #include "core/apply/ApplyService.h"
 #include "core/merge/SourceLoader.h"
 #include "core/model/Enhancements.h"

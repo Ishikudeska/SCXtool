@@ -37,8 +37,6 @@ bool equalsIgnoreCase(std::string_view a, std::string_view b)
            std::equal(a.begin(), a.end(), b.begin(), [](char x, char y) { return (x | 0x20) == (y | 0x20); });
 }
 
-// Decodes one UTF-8 code point at `s[i]`, advancing `i`; malformed bytes
-// decode as themselves.
 char32_t decodeAt(std::string_view s, std::size_t &i)
 {
     const auto b = static_cast<unsigned char>(s[i]);
@@ -52,7 +50,6 @@ char32_t decodeAt(std::string_view s, std::size_t &i)
     return c;
 }
 
-// UTF-8 to UTF-16 code units.
 std::u16string toUtf16(std::string_view s)
 {
     std::u16string out;
@@ -69,14 +66,13 @@ std::u16string toUtf16(std::string_view s)
     return out;
 }
 
-// icu.dll (Windows 10 1903+), the library .NET's globalization uses.
 struct Icu
 {
     using Open = void *(*)(const char *, int *);
     using StrColl = int (*)(const void *, const char16_t *, std::int32_t, const char16_t *, std::int32_t);
     StrColl strcoll = nullptr;
     void *collator = nullptr;
-    std::mutex mutex; // a UCollator isn't safe for concurrent use
+    std::mutex mutex;
 
     Icu()
     {
@@ -102,7 +98,7 @@ Icu &icu()
     return instance;
 }
 
-} // namespace
+}
 
 std::optional<double> parseDouble(std::string_view s)
 {
@@ -119,7 +115,6 @@ std::optional<double> parseDouble(std::string_view s)
         return std::nan("");
     if (equalsIgnoreCase(body, "Infinity") || body == "\xE2\x88\x9E")
         return negative ? -HUGE_VAL : HUGE_VAL;
-    // digits [. digits] [e [sign] digits], at least one mantissa digit
     std::size_t i = 0, mantissa = 0;
     while (i < body.size() && body[i] >= '0' && body[i] <= '9')
         ++i, ++mantissa;
@@ -150,7 +145,7 @@ std::optional<double> parseDouble(std::string_view s)
     const auto [ptr, ec] = std::from_chars(text.data(), text.data() + text.size(), value);
     if (ptr != text.data() + text.size() || (ec != std::errc() && ec != std::errc::result_out_of_range))
         return std::nullopt;
-    if (ec == std::errc::result_out_of_range) // .NET Core 3.0+: overflow to infinity, underflow to zero
+    if (ec == std::errc::result_out_of_range)
         value = std::strtod(text.c_str(), nullptr);
     return negative ? -value : value;
 }
@@ -187,7 +182,7 @@ double round(double value, int decimals)
     if (std::abs(value) < 1e16) {
         const double p = kPower10[decimals];
         value *= p;
-        value = std::nearbyint(value); // the default rounding mode: half to even
+        value = std::nearbyint(value);
         value /= p;
     }
     return value;
@@ -203,7 +198,6 @@ bool isWhiteSpace(char32_t c)
 std::string_view trimEnd(std::string_view s)
 {
     while (!s.empty()) {
-        // Step back to the start of the last code point.
         std::size_t start = s.size() - 1;
         while (start > 0 && (static_cast<unsigned char>(s[start]) & 0xC0) == 0x80)
             --start;
@@ -249,7 +243,7 @@ int compareCulture(std::string_view a, std::string_view b)
                 c = static_cast<char16_t>(c + 32);
     if (const int c = la.compare(lb))
         return c < 0 ? -1 : 1;
-    const int c = ub.compare(ua); // lower case first, as ICU's tertiary level
+    const int c = ub.compare(ua);
     return c < 0 ? -1 : c > 0 ? 1 : 0;
 }
 
@@ -272,4 +266,4 @@ std::string utcNowRoundTrip()
     return buf;
 }
 
-} // namespace engine::gamedata::dotnet
+}

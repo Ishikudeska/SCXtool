@@ -12,12 +12,6 @@ class xml_node;
 
 namespace engine::xml {
 
-// Small arena DOM with System.Xml.XmlDocument's append semantics, so ports of
-// .NET code that build XML node by node produce the same document.
-//
-// Nodes are created detached and appended later; a node that is never
-// appended is simply never written. Strings are copied into the tree.
-// string_views returned by accessors are invalidated by the next mutation.
 class XmlTree
 {
 public:
@@ -33,10 +27,7 @@ public:
     NodeId createCData(std::string_view text);
     void appendChild(NodeId parent, NodeId child);
 
-    // XmlAttributeCollection.Append: an existing attribute with the same name
-    // is removed first, so the new one always ends up last.
     void appendAttribute(NodeId element, std::string_view name, std::string_view value);
-    // XmlElement.SetAttribute: an existing value is replaced in place.
     void setAttribute(NodeId element, std::string_view name, std::string_view value);
 
     bool hasContent(NodeId node) const
@@ -58,11 +49,8 @@ public:
 
     std::size_t nodeCount() const { return nodes_.size(); }
 
-    // Copies `node` and its subtree under `parent` (e.g. a pugi::xml_document).
     void copyTo(NodeId node, pugi::xml_node parent) const;
 
-    // Copies a pugixml element and its subtree into this tree (elements,
-    // attributes and CDATA/text content) and returns the new node, detached.
     NodeId copyFrom(pugi::xml_node node);
 
 private:
@@ -98,4 +86,4 @@ private:
     std::string pool_;
 };
 
-} // namespace engine::xml
+}

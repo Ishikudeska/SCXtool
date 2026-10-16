@@ -56,8 +56,6 @@ void appendAttributeValue(std::string &out, std::string_view value)
     }
 }
 
-// NewLineHandling.Replace turns \r\n, \r and \n into CRLF inside CDATA, and
-// "]]>" has to be split across two sections.
 void appendCData(std::string &out, std::string_view text)
 {
     out += "<![CDATA[";
@@ -98,8 +96,6 @@ void writeElement(const XmlTree &tree, XmlTree::NodeId node, int depth, bool par
     }
     out.push_back('>');
 
-    // The root never inherits mixed content; deeper elements inherit their
-    // parent's state at the time they start.
     bool mixed = depth == 0 ? false : parentMixed;
     for (auto c = tree.firstChild(node); c != XmlTree::kNone; c = tree.nextSibling(c)) {
         if (tree.kind(c) == XmlTree::Kind::CData) {
@@ -125,8 +121,6 @@ bool isNameChar(unsigned char c)
     return (c >= 0xC0 && c <= 0xD6) || (c >= 0xD8 && c <= 0xF6) || c >= 0xF8;
 }
 
-// XmlDocument.CheckName: every character must be an NCName character. It
-// does not check the first character specially.
 std::optional<std::string> checkPart(std::string_view part)
 {
     for (const char ch : part) {
@@ -145,7 +139,7 @@ std::optional<std::string> checkPart(std::string_view part)
     return std::nullopt;
 }
 
-} // namespace
+}
 
 void writeDotNet(const XmlTree &tree, XmlTree::NodeId root, std::string &out)
 {
@@ -167,8 +161,6 @@ void appendLatin1AsUtf8(std::string &out, std::string_view latin1)
 
 std::optional<std::string> dotNetNameError(std::string_view latin1)
 {
-    // XmlNode.SplitName: a colon that is neither first nor last separates a
-    // prefix; otherwise the whole name is the local name.
     std::string_view prefix;
     std::string_view local = latin1;
     if (const auto colon = latin1.find(':');
@@ -185,4 +177,4 @@ std::optional<std::string> dotNetNameError(std::string_view latin1)
     return std::nullopt;
 }
 
-} // namespace engine::xml
+}

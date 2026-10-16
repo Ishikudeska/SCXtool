@@ -77,7 +77,6 @@ void PromptService::answer(int button, bool checked, int choice)
     emit currentChanged();
     if (callback)
         callback(button, checked, choice);
-    // Let QML close the dialog before the next one opens.
     QTimer::singleShot(0, this, [this] {
         if (current_.isEmpty())
             showNext();

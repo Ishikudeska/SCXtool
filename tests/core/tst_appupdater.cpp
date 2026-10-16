@@ -12,7 +12,6 @@
 
 using namespace core::net;
 
-// Mirrors tests/test_app_updater.py's cases for the pure helpers.
 class TestAppUpdater : public QObject
 {
     Q_OBJECT
@@ -36,7 +35,6 @@ private slots:
         QVERIFY(isNewer(QStringLiteral("2.10.0"), QStringLiteral("2.9.9")));
         QVERIFY(!isNewer(QStringLiteral("2.3.1"), QStringLiteral("2.3.1")));
         QVERIFY(!isNewer(QStringLiteral("2.3.0"), QStringLiteral("2.3.1")));
-        // Garbage on either side never prompts.
         QVERIFY(!isNewer(QStringLiteral("nightly"), QStringLiteral("2.3.1")));
         QVERIFY(!isNewer(QStringLiteral("3.0.0"), QStringLiteral("dev")));
     }
@@ -68,7 +66,6 @@ private slots:
         QVERIFY(!pickInstallerAsset(QJsonArray{asset("SCX-1.0-Setup.exe", "", 1)}, QStringLiteral("SCX")));
         QVERIFY(!pickInstallerAsset(QJsonArray{QJsonValue(3)}, QStringLiteral("SCX")));
         QVERIFY(!pickInstallerAsset(QJsonArray{}, QStringLiteral("SCX")));
-        // Never an installer that cannot be verified, or one fetched in the clear.
         QVERIFY(!pickInstallerAsset(QJsonArray{asset("SCX-1.0-Setup.exe", "http://x/s.exe", 1)},
                                     QStringLiteral("SCX")));
         QVERIFY(!pickInstallerAsset(QJsonArray{asset("SCX-1.0-Setup.exe", "https://x/s.exe", 1, QString(""))},
@@ -81,7 +78,6 @@ private slots:
             QStringLiteral("SCX")));
     }
 
-    // The download is kept only when its size and SHA-256 match the release.
     void verifiesDownloadedInstaller()
     {
         QTemporaryDir dir;
@@ -113,7 +109,7 @@ private slots:
             QVERIFY(!message.isEmpty());
             QVERIFY(!QFileInfo::exists(target));
             QVERIFY(!QFileInfo::exists(target + QStringLiteral(".part")));
-            QFile::copy(source, target); // restore for the next case
+            QFile::copy(source, target);
         };
         InstallerAsset wrongHash = asset;
         wrongHash.sha256 = QByteArray(64, 'a');
@@ -134,8 +130,6 @@ private slots:
         QCOMPARE(checkForUpdate(QString(), QStringLiteral("1.0.0")).status, UpdateCheck::Status::Disabled);
     }
 
-    // Opt-in (SCX_NETWORK_TESTS=1): the configured repository answers. A repo
-    // with no release yet counts as up to date.
     void liveRepository()
     {
         if (qEnvironmentVariable("SCX_NETWORK_TESTS") != u"1")

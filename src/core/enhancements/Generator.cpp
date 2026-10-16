@@ -25,8 +25,6 @@ namespace core::enh {
 
 namespace {
 
-// Earnable ships whose loc key doesn't tell them from the pledge version
-// (exec-hangar PYX, Wikelo WIK). Empty entries are placeholders.
 constexpr std::pair<const char *, const char *> kEarnableShipNames[] = {
     {"vehicle_NameANVL_Hornet_F7A_Mk2_PYAM_Exec", "Anvil F7A Hornet Mk II PYX"},
     {"vehicle_NameDRAK_Cutlass_Black_PYAM_Exec", "Drake Cutlass Black PYX"},
@@ -69,7 +67,6 @@ constexpr std::pair<const char *, const char *> kEarnableShipNames[] = {
     {"vehicle_NameRSI_Zeus_ES_Collector_Indust", "RSI Zeus Mk II ES WIK Work"},
 };
 
-// write_ini: sorted by key, '\n' written as CRLF, UTF-8 without BOM.
 bool writeSorted(const QString &path, const Loc &entries)
 {
     QList<Loc::Entry> sorted = entries.entries();
@@ -83,7 +80,7 @@ bool writeSorted(const QString &path, const Loc &entries)
     return writeIniFile(path, ordered);
 }
 
-} // namespace
+}
 
 QString outputFileName(const QString &category)
 {
@@ -220,7 +217,6 @@ generateEnhancements(const GeneratorOptions &options, ProgressSink *progress, co
     ctx.statsPrepend = options.statsPrepend;
     ctx.rsOreNameAnnotations = options.rsOreNameAnnotations;
 
-    // Wave 1: independent lookups.
     {
         QList<QFuture<void>> jobs;
         if (needAmmo) {
@@ -258,7 +254,6 @@ generateEnhancements(const GeneratorOptions &options, ProgressSink *progress, co
     if (cancelled())
         return std::unexpected(QStringLiteral("Cancelled"));
 
-    // Wave 2: the categories.
     Loc outComponents, outMissiles, outShipWeapons, outFpsWeapons, outShips, outMissions, outCommodities,
         outJournal, outMedical;
     {
@@ -294,7 +289,6 @@ generateEnhancements(const GeneratorOptions &options, ProgressSink *progress, co
     if (cancelled())
         return std::unexpected(QStringLiteral("Cancelled"));
 
-    // Workarounds for CIG loc-pointer bugs the game reads straight from the p4k.
     if (!options.patchesDir.isEmpty()) {
         const QList<LocstringWorkaround> workarounds = loadLocstringWorkarounds(options.patchesDir);
         if (!workarounds.isEmpty()) {
@@ -338,4 +332,4 @@ generateEnhancements(const GeneratorOptions &options, ProgressSink *progress, co
     return result;
 }
 
-} // namespace core::enh
+}

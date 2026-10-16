@@ -4,7 +4,6 @@
 
 namespace engine {
 
-// Versions of the third-party libraries linked into the engine.
 struct LibraryVersions
 {
     std::string zstd;
@@ -14,4 +13,4 @@ struct LibraryVersions
 
 LibraryVersions libraryVersions();
 
-} // namespace engine
+}

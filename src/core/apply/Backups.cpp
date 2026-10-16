@@ -12,11 +12,10 @@ constexpr QLatin1StringView kPrefix("global.ini.bak_");
 
 QFileInfoList byAge(const QString &dir)
 {
-    // Oldest first.
     return QDir(dir).entryInfoList({kPrefix + u'*'}, QDir::Files, QDir::Time | QDir::Reversed);
 }
 
-} // namespace
+}
 
 QString GameFileBackups::backup(const QString &gameFile, QString *error, const QDateTime &now) const
 {
@@ -34,14 +33,12 @@ QString GameFileBackups::backup(const QString &gameFile, QString *error, const Q
     }
 
     const QString target = QDir(dir_).filePath(kPrefix + now.toString(QStringLiteral("yyyyMMdd_HHmmss")));
-    QFile::remove(target); // a second apply in the same second replaces the first copy
+    QFile::remove(target);
     if (!QFile::copy(gameFile, target)) {
         if (error)
             *error = QStringLiteral("Cannot back up %1 to %2").arg(gameFile, target);
         return {};
     }
-    // QFile::copy keeps the modification time on Windows but not elsewhere;
-    // byAge() and list() rely on it.
     QFile copy(target);
     if (copy.open(QIODevice::ReadWrite)) {
         copy.setFileTime(QFileInfo(gameFile).lastModified(), QFileDevice::FileModificationTime);
@@ -65,4 +62,4 @@ QString GameFileBackups::restore(const QString &backupFile, const QString &gameF
     return {};
 }
 
-} // namespace core
+}

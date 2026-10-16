@@ -104,7 +104,7 @@ EditOutcome applyEdit(pugi::xml_node root, const QJsonObject &edit)
     return EditOutcome::NoMatch;
 }
 
-} // namespace
+}
 
 QString PatchReport::summary() const
 {
@@ -148,7 +148,7 @@ PatchReport applyPatches(const QString &patchRoot, const QString &recordsRoot)
             report.errors << QStringLiteral("cannot read %1").arg(target);
             continue;
         }
-        file = engine::io::RandomAccessFile(); // close before rewriting
+        file = engine::io::RandomAccessFile();
 
         pugi::xml_document doc;
         if (!doc.load_buffer(bytes.data(), bytes.size())) {
@@ -231,4 +231,4 @@ int applyLocstringWorkarounds(IniMap &entries, const QList<LocstringWorkaround> 
     return applied;
 }
 
-} // namespace core
+}

@@ -9,13 +9,12 @@ namespace {
 
 struct Step
 {
-    bool descendant = false; // reached through "//"
-    std::string_view tag;    // "*" matches any element
-    std::string_view attr;   // predicate [@attr] / [@attr='value']
+    bool descendant = false;
+    std::string_view tag;
+    std::string_view attr;
     std::optional<std::string_view> value;
 };
 
-// ".//a/b[@x='y']" -> steps. Only the forms the generator uses.
 std::vector<Step> compile(std::string_view path)
 {
     std::vector<Step> steps;
@@ -37,7 +36,7 @@ std::vector<Step> compile(std::string_view path)
         Step step;
         step.descendant = descendant;
         if (const std::size_t open = part.find('['); open != std::string_view::npos) {
-            std::string_view pred = part.substr(open + 1, part.size() - open - 2); // @attr='v'
+            std::string_view pred = part.substr(open + 1, part.size() - open - 2);
             part = part.substr(0, open);
             pred.remove_prefix(1);
             if (const std::size_t eq = pred.find('='); eq != std::string_view::npos) {
@@ -75,7 +74,6 @@ bool matches(Node n, const Step &step)
     return !step.value || std::string_view(a.value()) == *step.value;
 }
 
-// Runs the steps from `context`; `visit` returns false to stop early.
 template <class Visit> bool select(Node context, const std::vector<Step> &steps, std::size_t i, Visit &visit)
 {
     if (i == steps.size())
@@ -96,7 +94,7 @@ template <class Visit> bool select(Node context, const std::vector<Step> &steps,
     return true;
 }
 
-} // namespace
+}
 
 XmlDoc XmlDoc::load(const QString &path)
 {
@@ -217,4 +215,4 @@ std::optional<std::string_view> attrOf(Node root, std::string_view tagName, cons
     return el ? get(el, attr) : std::nullopt;
 }
 
-} // namespace core::enh
+}

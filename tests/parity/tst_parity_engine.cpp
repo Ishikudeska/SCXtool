@@ -1,16 +1,3 @@
-// Engine parity against the original tools' output.
-//
-// Needs a real Star Citizen install and the Smart Citizen caches produced
-// from that same build:
-//   SCX_P4K          path to Data.p4k (required; every test skips without it)
-//   SCX_BASE_INI     unp4k's global.ini output, default
-//                    %USERPROFILE%\Documents\Smart Citizen\LIVE\cache\base.ini
-//   SCX_FORGE_CACHE  unforge's XML tree, default
-//                    %LOCALAPPDATA%\Smart Citizen\LIVE\cache\dataforge\raw
-//   SCX_PARITY_FULL  =1 to decode every entry in P2 (reads ~158 GB)
-// After a game patch the caches are stale until Smart Citizen regenerates
-// them, and P1/P3 fail until then.
-
 #include "engine/Parallel.h"
 #include "engine/forge/DataForge.h"
 #include "engine/forge/RecordBuilder.h"
@@ -47,7 +34,6 @@ std::optional<std::string> readText(const std::filesystem::path &path)
     return bytes;
 }
 
-// The subtrees Smart Citizen caches (DATAFORGE_KEEP_SUBPATHS).
 const char *const kKeepSubpaths[] = {
     "entities/scitem",
     "entities/spaceships",
@@ -73,7 +59,7 @@ bool kept(std::string_view path)
     });
 }
 
-} // namespace
+}
 
 class TestParityEngine : public QObject
 {
@@ -92,7 +78,6 @@ private slots:
         archive_ = *archive;
     }
 
-    // P1: global.ini equals unp4k's extraction byte for byte.
     void p1BaseIni()
     {
         const auto expectedPath =
@@ -110,8 +95,6 @@ private slots:
                            [](std::uint8_t a, char b) { return a == static_cast<std::uint8_t>(b); }));
     }
 
-    // P2: entries decode to their recorded size and their stored bytes
-    // match CIG's SHA-256. Every encrypted entry plus a sample by default.
     void p2Entries()
     {
         const bool full = qEnvironmentVariable("SCX_PARITY_FULL") == "1";
@@ -154,7 +137,6 @@ private slots:
         QCOMPARE(failures.size(), std::size_t(0));
     }
 
-    // P3: every record unforge cached is reproduced byte for byte.
     void p3DataForge()
     {
         const auto cacheRoot =
@@ -193,10 +175,9 @@ private slots:
                         cacheRoot / std::filesystem::path(std::u8string(
                                         reinterpret_cast<const char8_t *>(path.data()), path.size())));
                     if (expected && expected->starts_with("<?xml")) {
-                        patched.fetch_add(1); // rewritten by Smart Citizen's patcher (lxml)
+                        patched.fetch_add(1);
                         return;
                     }
-                    // unforge's JIT sometimes adds one stack frame to the error text.
                     static constexpr std::string_view kExtraFrame =
                         "&#xD;&#xA;   at unforge.DataForge.ReadDataMappingAtIndex(Int64 index)";
                     for (auto p = expected ? expected->find(kExtraFrame) : std::string::npos;
@@ -221,7 +202,6 @@ private slots:
             },
             nullptr, nullptr);
 
-        // Records the cache should hold but doesn't.
         std::sort(cached.begin(), cached.end());
         forge::RecordBuilder builder(*df);
         xml::XmlTree tree;

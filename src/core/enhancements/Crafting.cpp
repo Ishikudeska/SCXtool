@@ -19,29 +19,49 @@ namespace {
 
 const QSet<QString> &collectionItemKeys()
 {
-    // Collection-mission objectives (#97).
-    // clang-format off
     static const QSet<QString> keys = {
-        QStringLiteral("Mission_Item_0183"), QStringLiteral("Mission_Item_0184"), QStringLiteral("Mission_Item_0186"),
-        QStringLiteral("Mission_Item_0191"), QStringLiteral("Mission_Item_0192"), QStringLiteral("Mission_Item_0195"),
-        QStringLiteral("Mission_Item_0214"), QStringLiteral("harvestable_Armillaria"),
-        QStringLiteral("items_commodities_amiantpod"), QStringLiteral("items_commodities_amioshiplague"),
-        QStringLiteral("items_commodities_beradom"), QStringLiteral("items_commodities_carinite"),
-        QStringLiteral("items_commodities_carinite_pure"), QStringLiteral("items_commodities_carinite_raw"),
-        QStringLiteral("items_commodities_compboard"), QStringLiteral("items_commodities_decaripod"),
-        QStringLiteral("items_commodities_degnousroot"), QStringLiteral("items_commodities_dopple"),
-        QStringLiteral("items_commodities_feynmaline"), QStringLiteral("items_commodities_flareweedstalk"),
-        QStringLiteral("items_commodities_fotiascrub"), QStringLiteral("items_commodities_freeze"),
-        QStringLiteral("items_commodities_glacosite"), QStringLiteral("items_commodities_glow"),
-        QStringLiteral("items_commodities_goldenmedmon"), QStringLiteral("items_commodities_heartofthewoods"),
-        QStringLiteral("items_commodities_jaclium"), QStringLiteral("items_commodities_jaclium_ore"),
-        QStringLiteral("items_commodities_janalite"), QStringLiteral("items_commodities_kopionhorn_irradiated"),
-        QStringLiteral("items_commodities_mala"), QStringLiteral("items_commodities_marokgem"),
-        QStringLiteral("items_commodities_pingala"), QStringLiteral("items_commodities_pitambu"),
-        QStringLiteral("items_commodities_prota"), QStringLiteral("items_commodities_rantadung"),
-        QStringLiteral("items_commodities_revenantpod"), QStringLiteral("items_commodities_sadaryx"),
-        QStringLiteral("items_commodities_saldynium"), QStringLiteral("items_commodities_saldynium_ore"),
-        QStringLiteral("items_commodities_stonebugshell"), QStringLiteral("items_commodities_sunsetberry"),
+        QStringLiteral("Mission_Item_0183"),
+        QStringLiteral("Mission_Item_0184"),
+        QStringLiteral("Mission_Item_0186"),
+        QStringLiteral("Mission_Item_0191"),
+        QStringLiteral("Mission_Item_0192"),
+        QStringLiteral("Mission_Item_0195"),
+        QStringLiteral("Mission_Item_0214"),
+        QStringLiteral("harvestable_Armillaria"),
+        QStringLiteral("items_commodities_amiantpod"),
+        QStringLiteral("items_commodities_amioshiplague"),
+        QStringLiteral("items_commodities_beradom"),
+        QStringLiteral("items_commodities_carinite"),
+        QStringLiteral("items_commodities_carinite_pure"),
+        QStringLiteral("items_commodities_carinite_raw"),
+        QStringLiteral("items_commodities_compboard"),
+        QStringLiteral("items_commodities_decaripod"),
+        QStringLiteral("items_commodities_degnousroot"),
+        QStringLiteral("items_commodities_dopple"),
+        QStringLiteral("items_commodities_feynmaline"),
+        QStringLiteral("items_commodities_flareweedstalk"),
+        QStringLiteral("items_commodities_fotiascrub"),
+        QStringLiteral("items_commodities_freeze"),
+        QStringLiteral("items_commodities_glacosite"),
+        QStringLiteral("items_commodities_glow"),
+        QStringLiteral("items_commodities_goldenmedmon"),
+        QStringLiteral("items_commodities_heartofthewoods"),
+        QStringLiteral("items_commodities_jaclium"),
+        QStringLiteral("items_commodities_jaclium_ore"),
+        QStringLiteral("items_commodities_janalite"),
+        QStringLiteral("items_commodities_kopionhorn_irradiated"),
+        QStringLiteral("items_commodities_mala"),
+        QStringLiteral("items_commodities_marokgem"),
+        QStringLiteral("items_commodities_pingala"),
+        QStringLiteral("items_commodities_pitambu"),
+        QStringLiteral("items_commodities_prota"),
+        QStringLiteral("items_commodities_rantadung"),
+        QStringLiteral("items_commodities_revenantpod"),
+        QStringLiteral("items_commodities_sadaryx"),
+        QStringLiteral("items_commodities_saldynium"),
+        QStringLiteral("items_commodities_saldynium_ore"),
+        QStringLiteral("items_commodities_stonebugshell"),
+        QStringLiteral("items_commodities_sunsetberry"),
         QStringLiteral("items_commodities_valakkaregg_irradiated"),
         QStringLiteral("items_commodities_valakkarfang_adult"),
         QStringLiteral("items_commodities_valakkarfang_adult_irradiated"),
@@ -54,10 +74,10 @@ const QSet<QString> &collectionItemKeys()
         QStringLiteral("items_commodities_valakkarpearl_apex_irradiated_tier3"),
         QStringLiteral("items_commodities_valakkarpearl_apex_irradiated_tier4"),
         QStringLiteral("items_commodities_valakkarpearl_apex_irradiated_tier5"),
-        QStringLiteral("items_commodities_wuotanseed"), QStringLiteral("items_commodities_yormandi_eye"),
+        QStringLiteral("items_commodities_wuotanseed"),
+        QStringLiteral("items_commodities_yormandi_eye"),
         QStringLiteral("items_commodities_zip"),
     };
-    // clang-format on
     return keys;
 }
 
@@ -72,14 +92,12 @@ QStringList pySorted(QStringList list)
     return list;
 }
 
-// sorted(..., key=str.lower), stable.
 void sortCaseless(QStringList &list)
 {
     std::stable_sort(list.begin(), list.end(),
                      [](const QString &a, const QString &b) { return py::less(a.toLower(), b.toLower()); });
 }
 
-// Windows Path ordering: lower-cased components, compared as lists.
 bool pathLess(const QString &a, const QString &b)
 {
     const QStringList pa = a.toLower().split(u'/');
@@ -87,7 +105,7 @@ bool pathLess(const QString &a, const QString &b)
     return std::lexicographical_compare(pa.begin(), pa.end(), pb.begin(), pb.end(), pyLess);
 }
 
-} // namespace
+}
 
 QHash<QString, QStringList> parseCompendiumLocations(const QString &content)
 {
@@ -164,7 +182,7 @@ QString placeCommodityTag(const QString &base, const QString &tag, const tags::T
     return tags::joinTag(base, tag, config.placement);
 }
 
-} // namespace
+}
 
 QString normalizeCommodityName(const QString &raw)
 {
@@ -376,7 +394,7 @@ QString commodityTag(const tags::TagConfig *config, bool crafting, bool collecti
         values.insert(QStringLiteral("label"), QStringLiteral("Crafting"));
     if (!usageKeys.isEmpty()) {
         QStringList shown = usageKeys;
-        constexpr int kMaxCodes = 4; // longer tags overflow the Fabricator (#208)
+        constexpr int kMaxCodes = 4;
         if (shown.size() > kMaxCodes) {
             const qsizetype overflow = shown.size() - kMaxCodes;
             shown = shown.first(kMaxCodes);
@@ -406,7 +424,6 @@ std::pair<Loc, Loc> generateCommodityJournal(const Context &ctx)
         return {};
     const QString nullUuid = qs(kNullUuid);
 
-    // Material UUIDs: CraftingCost_Resource@resource and CraftingCost_Item@entityClass.
     const auto materialUuid = [&](Node el) -> QString {
         const std::string_view pt = polyType(el);
         QString uid;
@@ -429,7 +446,6 @@ std::pair<Loc, Loc> generateCommodityJournal(const Context &ctx)
         });
     }
 
-    // UUID -> commodity, by finding the UUID in carryable records.
     QHash<QString, QString> uuidNames;
     if (store.dirExists(carryables) && !uuids.isEmpty()) {
         static const QRegularExpression stemRe = py::re(QStringLiteral(
@@ -456,7 +472,6 @@ std::pair<Loc, Loc> generateCommodityJournal(const Context &ctx)
         }
     }
 
-    // Commodity -> (category, crafted item) for every blueprint.
     OrderedMap<std::vector<std::pair<QString, QString>>> commodityItems;
     QStringList bpFiles = store.indexRglob(bpDir);
     std::stable_sort(bpFiles.begin(), bpFiles.end(), pathLess);
@@ -542,7 +557,6 @@ std::pair<Loc, Loc> generateCommodityJournal(const Context &ctx)
     if (!skipped.isEmpty())
         qCWarning(lcEnh) << "Crafting:" << skipped.size() << "commodities had no matching loc keys";
 
-    // Collection objectives that aren't crafting materials.
     for (const QString &nameKey : collectionItemKeys()) {
         if (out.contains(nameKey))
             continue;
@@ -553,7 +567,6 @@ std::pair<Loc, Loc> generateCommodityJournal(const Context &ctx)
             out.insert(nameKey, placeCommodityTag(baseName, tag, cfg));
     }
 
-    // The Mining Compendium, restructured per mineral.
     Loc journal;
     const QString titleKey = QStringLiteral("Journal_General_Mining_Compendium_Title");
     const QString contentKey = QStringLiteral("Journal_General_Mining_Compendium_Content");
@@ -578,7 +591,7 @@ std::pair<Loc, Loc> generateCommodityJournal(const Context &ctx)
             }
             for (const QString &k : keys)
                 if (!mineralCrafting.contains(k))
-                    mineralCrafting.insert(k, condensed); // first writer wins
+                    mineralCrafting.insert(k, condensed);
         }
 
         static const QHash<QString, QString> oreAliases = {
@@ -596,7 +609,6 @@ std::pair<Loc, Loc> generateCommodityJournal(const Context &ctx)
             QStringList block = {QStringLiteral("<EM3>%1</EM3>").arg(name), QString()};
             const QString oreKey = oreAliases.value(name.toLower(), name.toLower());
             const std::vector<int> steps = rsValueSteps(oreKey);
-            // The flat base value only (MINEABLE_RS_VALUES), not the steps.
             if (const QString rsTag = formatRsTag({oreKey}); !rsTag.isEmpty()) {
                 const QString value = rsTag.mid(4, rsTag.size() - 5);
                 block << QStringLiteral("Base Resource Signature: <EM4>%1</EM4>").arg(value) << QString();
@@ -619,4 +631,4 @@ std::pair<Loc, Loc> generateCommodityJournal(const Context &ctx)
     return {out, journal};
 }
 
-} // namespace core::enh
+}

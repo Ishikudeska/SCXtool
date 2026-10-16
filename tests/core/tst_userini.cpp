@@ -1,7 +1,3 @@
-// Ports test_user_ini_backups.py, test_user_ini_reset.py,
-// test_user_ini_autosave_guard.py, test_user_data_dir_migration.py and
-// test_favorite_prefix_whitespace.py.
-
 #include "core/user/UserIni.h"
 
 #include <QDir>
@@ -40,7 +36,7 @@ StringEntry entry(const char *key, const char *original, const char *custom)
     return e;
 }
 
-} // namespace
+}
 
 class TestUserIni : public QObject
 {
@@ -53,9 +49,9 @@ private slots:
         const UserIni ini(dir.filePath(QStringLiteral("LIVE/user.ini")));
         const QList<StringEntry> entries = {
             entry("b_key", "Orig", "Edited"),
-            entry("same", "Same", "Same"),                 // not an edit
-            entry("none", "Value", ""),                    // not an edit
-            entry("vehicle_NameX", "Cutlass", " Cutlass"), // space favourite prefix (#100)
+            entry("same", "Same", "Same"),
+            entry("none", "Value", ""),
+            entry("vehicle_NameX", "Cutlass", " Cutlass"),
         };
         QCOMPARE(ini.save(entries).value_or(-1), 2);
         QCOMPARE(readAll(ini.path()), QByteArray("b_key=Edited\r\nvehicle_NameX= Cutlass\r\n"));
@@ -70,7 +66,7 @@ private slots:
         m.insert(QStringLiteral("k"), QStringLiteral("v"));
         QVERIFY(ini.save(m));
         QVERIFY(ini.backups().isEmpty());
-        QVERIFY(ini.save(m)); // same content, CRLF on disk vs LF in memory
+        QVERIFY(ini.save(m));
         QVERIFY(ini.backups().isEmpty());
         m.insert(QStringLiteral("k"), QStringLiteral("changed"));
         QVERIFY(ini.save(m));
@@ -103,9 +99,9 @@ private slots:
     {
         QTemporaryDir dir;
         const UserIni ini(dir.filePath(QStringLiteral("user.ini")));
-        QVERIFY(ini.backup().isEmpty()); // missing
+        QVERIFY(ini.backup().isEmpty());
         writeFile(ini.path(), "");
-        QVERIFY(ini.backup().isEmpty()); // empty
+        QVERIFY(ini.backup().isEmpty());
         writeFile(ini.path(), "a=1\r\n");
 
         const QDateTime t0(QDate(2026, 3, 1), QTime(10, 0, 0));
@@ -116,7 +112,6 @@ private slots:
         QVERIFY(list.first().fileName().startsWith(QStringLiteral("user.ini.bak_20260301_100006_")));
         QVERIFY(list.last().fileName().startsWith(QStringLiteral("user.ini.bak_20260301_100002_")));
 
-        // Same timestamp twice: the second gets a suffix instead of clobbering.
         const QString again1 = ini.backup(t0.addSecs(6));
         QVERIFY(again1.endsWith(QStringLiteral("-2")));
     }
@@ -130,7 +125,6 @@ private slots:
         writeFile(ini.path(), "v=new\r\n");
         QVERIFY(ini.restore(oldBackup));
         QCOMPARE(readAll(ini.path()), QByteArray("v=old\r\n"));
-        // The pre-restore state was snapshotted.
         bool found = false;
         for (const QFileInfo &b : ini.backups())
             found = found || readAll(b.absoluteFilePath()) == "v=new\r\n";
@@ -141,7 +135,7 @@ private slots:
     {
         QTemporaryDir dir;
         const UserIni ini(dir.filePath(QStringLiteral("user.ini")));
-        QVERIFY(ini.reset().isEmpty()); // absent
+        QVERIFY(ini.reset().isEmpty());
 
         const QDateTime now(QDate(2026, 5, 6), QTime(7, 8, 9));
         writeFile(ini.path(), "a=1\r\n");
@@ -165,11 +159,11 @@ private slots:
         const UserIni ini(dir.filePath(QStringLiteral("user.ini")));
         const QList<StringEntry> untouched = {entry("a", "x", ""), entry("b", "y", "y")};
         const QList<StringEntry> edited = {entry("a", "x", "z")};
-        QVERIFY(ini.shouldAutosave(untouched)); // nothing on disk
+        QVERIFY(ini.shouldAutosave(untouched));
         writeFile(ini.path(), "");
-        QVERIFY(ini.shouldAutosave(untouched)); // empty on disk
+        QVERIFY(ini.shouldAutosave(untouched));
         writeFile(ini.path(), "a=z\r\n");
-        QVERIFY(!ini.shouldAutosave(untouched)); // would truncate real edits
+        QVERIFY(!ini.shouldAutosave(untouched));
         QVERIFY(!ini.shouldAutosave({}));
         QVERIFY(ini.shouldAutosave(edited));
     }
@@ -185,7 +179,6 @@ private slots:
                                       dir.filePath(QStringLiteral("global.ini"))),
                  2);
         QCOMPARE(readAll(ini.path()), QByteArray("b= *Two\r\nnew=x\r\n"));
-        // Never over an existing user.ini.
         QCOMPARE(ini.generateFromDiff(dir.filePath(QStringLiteral("base.ini")),
                                       dir.filePath(QStringLiteral("global.ini"))),
                  0);
@@ -203,7 +196,7 @@ private slots:
         QCOMPARE(migrateUserDataDir(oldRoot, newRoot), 1);
         QCOMPARE(readAll(newRoot + QStringLiteral("/LIVE/user.ini")), QByteArray("already here"));
         QCOMPARE(readAll(newRoot + QStringLiteral("/LIVE/cache/base.ini")), QByteArray("base"));
-        QVERIFY(QFileInfo::exists(oldRoot + QStringLiteral("/LIVE/cache/base.ini"))); // copy keeps originals
+        QVERIFY(QFileInfo::exists(oldRoot + QStringLiteral("/LIVE/cache/base.ini")));
 
         QCOMPARE(migrateUserDataDir(oldRoot, oldRoot), 0);
         QCOMPARE(migrateUserDataDir(dir.filePath(QStringLiteral("missing")), newRoot), 0);
@@ -219,9 +212,8 @@ private slots:
         writeFile(newRoot + QStringLiteral("/LIVE/user.ini"), "new");
 
         QCOMPARE(migrateUserDataDir(oldRoot, newRoot, true), 1);
-        QVERIFY(!QFileInfo::exists(oldRoot + QStringLiteral("/LIVE/cache"))); // emptied dir pruned
-        QCOMPARE(readAll(oldRoot + QStringLiteral("/LIVE/user.ini")),
-                 QByteArray("old")); // conflict left in place
+        QVERIFY(!QFileInfo::exists(oldRoot + QStringLiteral("/LIVE/cache")));
+        QCOMPARE(readAll(oldRoot + QStringLiteral("/LIVE/user.ini")), QByteArray("old"));
         QCOMPARE(readAll(newRoot + QStringLiteral("/LIVE/cache/base.ini")), QByteArray("base"));
     }
 

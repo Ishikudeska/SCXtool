@@ -35,14 +35,13 @@ std::string sha256Hex(std::string_view text)
         Sha256::hash(std::span(reinterpret_cast<const std::uint8_t *>(text.data()), text.size())));
 }
 
-} // namespace
+}
 
 class TestCrypto : public QObject
 {
     Q_OBJECT
 
 private slots:
-    // FIPS-197 appendix C.1.
     void aesBlockVector()
     {
         const auto key = fromHex("000102030405060708090a0b0c0d0e0f");
@@ -56,7 +55,6 @@ private slots:
         QCOMPARE(toHex(back), std::string("00112233445566778899aabbccddeeff"));
     }
 
-    // NIST SP 800-38A F.2.1/F.2.2, decrypted in two chunks to exercise IV chaining.
     void aesCbcVector()
     {
         const auto key = fromHex("2b7e151628aed2a6abf7158809cf4f3c");
@@ -79,7 +77,6 @@ private slots:
         QCOMPARE(toHex(data), plainHex);
     }
 
-    // FIPS 180-4 examples.
     void sha256Vectors()
     {
         QCOMPARE(sha256Hex(""),

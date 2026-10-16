@@ -90,7 +90,6 @@ QVariant P4kTreeModel::data(const QModelIndex &index, int role) const
         return QString::fromUtf8(n.name.data(), static_cast<qsizetype>(n.name.size()));
     case ColSize:
     case ColPacked:
-        // Records (and folders holding only records) have no stored size.
         if (folder ? n.size == 0 && n.files > 0 : data_->isRecord(n.item))
             return QString();
         return formatSize(index.column() == ColSize ? n.size : n.packed);

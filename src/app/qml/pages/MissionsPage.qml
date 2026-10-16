@@ -4,15 +4,12 @@ import QtQuick.Controls.Basic
 import QtQuick.Layouts
 import ScApp
 
-// Missions: every mission and contract in the game data with its payout and
-// the places it can send you, searchable and filtered, with details beside.
 Item {
     id: page
 
-    // True while the page is showing: the catalog loads on first show.
     property bool active: false
-    property int selected: -1 // a mission index, -1 for none
-    property var info: ({})   // missions.details(selected)
+    property int selected: -1
+    property var info: ({})
 
     function select(mission) {
         selected = mission
@@ -25,7 +22,6 @@ Item {
         onCatalogChanged: page.select(-1)
     }
 
-    // "Any" followed by the facet's values.
     component FacetCombo: RowLayout {
         id: facet
         property string label
@@ -42,7 +38,6 @@ Item {
         }
     }
 
-    // A label and its value in the details; hidden when the value is empty.
     component Field: RowLayout {
         id: field
         property string label
@@ -70,7 +65,6 @@ Item {
         topPadding: 6
     }
 
-    // A titled, selectable list; hidden when empty.
     component RewardList: ColumnLayout {
         id: rewardList
         property string title
@@ -101,7 +95,6 @@ Item {
         Label { text: qsTr("missions.title"); color: Theme.title; font.pixelSize: 20; font.bold: true }
         Label { text: qsTr("missions.desc"); color: Theme.dim; wrapMode: Text.WordWrap; Layout.fillWidth: true }
 
-        // ── what's missing ──
         RowLayout {
             Layout.fillWidth: true
             spacing: 10
@@ -123,7 +116,6 @@ Item {
             }
         }
 
-        // ── filters ──
         TextField {
             id: searchField
             objectName: "missionsSearch"
@@ -184,13 +176,11 @@ Item {
             color: Theme.placeholder
         }
 
-        // ── list and details ──
         RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
             spacing: 8
 
-            // List and details share the width 2:3.
             Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
@@ -244,7 +234,6 @@ Item {
                                     elide: Text.ElideRight
                                 }
                             }
-                            // Rewards blueprints.
                             Rectangle {
                                 visible: row.modelData.blueprints
                                 implicitWidth: badge.implicitWidth + 8

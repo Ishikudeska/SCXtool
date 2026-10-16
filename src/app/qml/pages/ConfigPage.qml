@@ -5,8 +5,6 @@ import QtQuick.Dialogs
 import QtQuick.Layouts
 import ScApp
 
-// The Config page: the game install, channel and language, data folders,
-// Data.p4k extraction, user.ini tools, settings backups and appearance.
 Item {
     id: page
 
@@ -42,7 +40,6 @@ Item {
                 Layout.fillWidth: true
             }
 
-            // ── Star Citizen ──
             Section {
                 Layout.fillWidth: true
                 title: qsTr("config.star_citizen_group")
@@ -115,7 +112,6 @@ Item {
                 }
             }
 
-            // ── Data.p4k ──
             Section {
                 Layout.fillWidth: true
                 objectName: "configP4k"
@@ -149,7 +145,6 @@ Item {
                 }
             }
 
-            // ── data folders ──
             Section {
                 Layout.fillWidth: true
                 objectName: "configData"
@@ -205,7 +200,6 @@ Item {
                 }
             }
 
-            // ── user.ini tools ──
             Section {
                 Layout.fillWidth: true
                 objectName: "configTools"
@@ -228,7 +222,6 @@ Item {
                 }
             }
 
-            // ── settings backup ──
             Section {
                 Layout.fillWidth: true
                 title: qsTr("config.backup_group")
@@ -248,7 +241,6 @@ Item {
                 }
             }
 
-            // ── appearance ──
             Section {
                 Layout.fillWidth: true
                 objectName: "configAppearance"
@@ -334,13 +326,10 @@ Item {
         id: iniFileDialog
         title: qsTr("import_flow.select_ini_file_title")
         fileMode: FileDialog.OpenFile
-        // The translations hold "A (*.ini);;B (*)", QFileDialog's one-string form;
-        // FileDialog wants one filter per entry, or Linux dialogs match nothing.
         nameFilters: qsTr("import_flow.ini_file_filter").split(";;")
         onAccepted: importSourceField.text = App.urlToPath(selectedFile)
     }
 
-    // Import INI: a file or a URL.
     Popup {
         id: importSource
         anchors.centerIn: Overlay.overlay
@@ -377,7 +366,6 @@ Item {
         }
     }
 
-    // Import INI conflicts: one resolution per key.
     Popup {
         id: conflictDialog
         anchors.centerIn: Overlay.overlay
@@ -466,7 +454,6 @@ Item {
         }
     }
 
-    // Map Language File: per-language base.ini URLs.
     Popup {
         id: languageSources
         anchors.centerIn: Overlay.overlay

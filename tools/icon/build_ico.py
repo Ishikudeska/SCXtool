@@ -1,12 +1,3 @@
-"""Build resources/icon/app.ico from the icon SVGs.
-
-    python tools/icon/build_ico.py [--preview <dir>]
-
-Sizes up to 32 px are drawn from app-small.svg, larger ones from app.svg.
-Each size is stored as a PNG inside the .ico (Windows Vista and later).
---preview also writes every size as a PNG to <dir> for checking by eye.
-Dev-only; needs PyQt6.
-"""
 import argparse
 import struct
 import sys
@@ -45,7 +36,7 @@ def write_ico(path: Path, images: list[tuple[int, bytes]]) -> None:
     offset = len(header) + 16 * len(images)
     entries, blobs = b"", b""
     for size, png in images:
-        dim = 0 if size >= 256 else size  # 0 means 256
+        dim = 0 if size >= 256 else size
         entries += struct.pack("<BBBBHHII", dim, dim, 0, 0, 1, 32, len(png), offset)
         blobs += png
         offset += len(png)
@@ -56,7 +47,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--preview", type=Path)
     args = ap.parse_args()
-    app = QGuiApplication(sys.argv[:1])  # QPainter needs an application object
+    app = QGuiApplication(sys.argv[:1])
     images = []
     for size in SIZES:
         svg = ICON_DIR / ("app-small.svg" if size <= SMALL_MAX else "app.svg")

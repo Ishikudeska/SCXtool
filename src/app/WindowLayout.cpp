@@ -18,7 +18,7 @@ QString text(const char *key)
     return core::i18n::tr(key);
 }
 
-} // namespace
+}
 
 WindowLayout::WindowLayout(QObject *parent) : QObject(parent)
 {}
@@ -30,8 +30,6 @@ AppController &WindowLayout::app() const
 
 QVariantMap WindowLayout::windowGeometry() const
 {
-    // "x,y,width,height,maximized"; anything else (e.g. Smart Citizen's
-    // saveGeometry() bytes) reads as never saved.
     const QStringList parts = app().settings().value(kWindowGeometryKey).toString().split(u',');
     if (parts.size() != 5)
         return {};
@@ -64,7 +62,6 @@ void WindowLayout::saveWindowGeometry(const QVariantMap &g)
 
 QVariantList WindowLayout::columnWidths() const
 {
-    // A JSON list, as Smart Citizen stores it; malformed reads as never set.
     const QJsonDocument doc =
         QJsonDocument::fromJson(app().settings().value(kColumnWidthsKey).toString().toUtf8());
     QVariantList out;

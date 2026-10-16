@@ -21,14 +21,12 @@ const QRegularExpression &keyRe()
 
 const QRegularExpression &valueRe()
 {
-    // The pattern contains `)"`, so the raw string needs its own delimiter.
     static const QRegularExpression re(
         QStringLiteral(R"re(^\s*g_language\s*=\s*"?([^";\r\n]+?)"?\s*(?:[;#].*)?$)re"),
         QRegularExpression::CaseInsensitiveOption);
     return re;
 }
 
-// str.splitlines() for the line breaks a .cfg realistically contains.
 QStringList splitLines(const QString &text)
 {
     QStringList lines;
@@ -56,7 +54,7 @@ bool writeLines(const QString &path, const QStringList &lines)
     return file.commit();
 }
 
-} // namespace
+}
 
 UserCfgResult ensureUserCfgLanguage(const QString &channelDir, const QString &scLanguageId)
 {
@@ -94,4 +92,4 @@ UserCfgResult ensureUserCfgLanguage(const QString &channelDir, const QString &sc
     return writeLines(path, lines) ? UserCfgResult::Added : UserCfgResult::Failed;
 }
 
-} // namespace core
+}

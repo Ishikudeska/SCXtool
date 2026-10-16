@@ -1,7 +1,3 @@
-// The ship loadout catalog over a small DataForge cache and vehicle XMLs
-// written by the test: a ship with variants, the items it carries, and what
-// the loadout adds up to.
-
 #include "core/loadout/Catalog.h"
 #include "core/loadout/Loadout.h"
 #include "core/loadout/Performance.h"
@@ -36,7 +32,6 @@ QByteArray guid(int n)
 
 const QByteArray kAcme = guid(900);
 
-// An item record: AttachDef, then `components`.
 QByteArray item(const char *id, int ref, const char *type, const char *subType, int size,
                 const QByteArray &components, const char *attachExtra = "")
 {
@@ -187,9 +182,6 @@ QByteArray shipRecord(const char *id, int ref, const char *name, const char *mod
            id + ">\n";
 }
 
-// The stock loadout: the nose entry names a gun but references the gimbal
-// that holds its child entry; the wing entry names a gun and references a
-// missile, which doesn't fit; the rack overrides one of its missiles.
 QByteArray stockLoadout(const char *wingGun = "GUN_S3")
 {
     return entries(entry("hardpoint_nose", "GUN_S3", guid(1), entry("hardpoint_class_2", "LASER_S3")) +
@@ -359,7 +351,6 @@ struct Fixture
         const QString spaceships = records + QStringLiteral("/entities/spaceships/");
         writeFile(spaceships + QStringLiteral("acme_dart.xml"),
                   shipRecord("ACME_Dart", 801, "ship_test", "", stockLoadout()));
-        // Same name and loadout: a copy that goes. Same name, other loadout: a variant that stays.
         writeFile(spaceships + QStringLiteral("acme_dart_showroom.xml"),
                   shipRecord("ACME_Dart_Showroom", 802, "ship_test", "", stockLoadout()));
         writeFile(spaceships + QStringLiteral("acme_dart_ballistic.xml"),
@@ -402,7 +393,6 @@ struct Fixture
                 "<Modification name=\"Rebuilt\" patchFile=\"Modifications/ACME_Dart_Rebuilt\">"
                 "<Elems><Elem idRef=\"modNewMain\" name=\"mass\" value=\"1500\" /></Elems></Modification>"
                 "</Modifications></Vehicle>");
-        // Replaces the whole <Vehicle>, as the Vanguard Sentinel's patch does.
         writeFile(vehicles + QStringLiteral("/modifications/acme_dart_rebuilt.xml"),
                   "<Modifications><Vehicle name=\"ACME_Dart\" size=\"4\" id=\"modVehicle\"><Parts>"
                   "<Part name=\"ACME_Dart\" class=\"Animated\" mass=\"1000\" id=\"modNewMain\"><Parts>"
@@ -436,7 +426,7 @@ bool near(double a, double b, double tolerance = 1e-6)
     return std::abs(a - b) <= tolerance * std::max(1.0, std::abs(b));
 }
 
-} // namespace
+}
 
 class TestLoadout : public QObject
 {
@@ -460,7 +450,6 @@ private slots:
         QStringList names;
         for (const Ship &s : f.catalog.ships)
             names << s.name;
-        // The AI copy is filtered, the showroom copy merged, the ballistic one kept apart.
         QCOMPARE(names,
                  QStringList({QStringLiteral("Acme Dart"), QStringLiteral("Acme Dart (Ballistic)"),
                               QStringLiteral("Acme Dart Rebuilt"), QStringLiteral("Acme Dart Variant")}));
@@ -476,7 +465,7 @@ private slots:
         QCOMPARE(base.length, 20.0);
         QCOMPARE(base.mass, 20000.0);
         QCOMPARE(base.hullHp(), 3500.0);
-        QCOMPARE(base.vitalHp(), 3000.0); // the nose and body, not the wing under the body
+        QCOMPARE(base.vitalHp(), 3000.0);
         QVERIFY(base.portTags.contains(QStringLiteral("ACME_Base")));
         QVERIFY(base.portTags.contains(QStringLiteral("ACME_Record")));
         QCOMPARE(base.powerPools.size(), std::size_t(2));
@@ -488,15 +477,15 @@ private slots:
                                [&](const Port &p) { return p.name == QLatin1StringView(name); });
         };
         QVERIFY(hasPort(base, "hardpoint_extra"));
-        QVERIFY(hasPort(base, "hardpoint_lifesupport")); // declared in the record, not the vehicle XML
+        QVERIFY(hasPort(base, "hardpoint_lifesupport"));
 
         const Ship &variant = f.ship("ACME_Dart_Variant");
-        QCOMPARE(variant.mass, 25000.0);               // an Elem set the main part's mass
-        QVERIFY(!hasPort(variant, "hardpoint_extra")); // and skipped a port
+        QCOMPARE(variant.mass, 25000.0);
+        QVERIFY(!hasPort(variant, "hardpoint_extra"));
 
         const Ship &rebuilt = f.ship("ACME_Dart_Rebuilt");
-        QCOMPARE(rebuilt.size, 4);      // its patch file replaced the whole <Vehicle>
-        QCOMPARE(rebuilt.mass, 1500.0); // then its Elem applied to the new part
+        QCOMPARE(rebuilt.size, 4);
+        QCOMPARE(rebuilt.mass, 1500.0);
         QCOMPARE(rebuilt.hullHp(), 300.0);
         QVERIFY(hasPort(rebuilt, "hardpoint_nose"));
         QVERIFY(!hasPort(rebuilt, "hardpoint_rack"));
@@ -505,7 +494,7 @@ private slots:
     void readsItems()
     {
         const Fixture f;
-        QVERIFY(!f.catalog.item(QStringLiteral("SEAT"))); // not a loadout item type
+        QVERIFY(!f.catalog.item(QStringLiteral("SEAT")));
         const Item *gun = f.catalog.item(QStringLiteral("gun_s3"));
         QVERIFY(gun);
         QCOMPARE(gun->name, QStringLiteral("Pew Gun"));
@@ -522,17 +511,16 @@ private slots:
         QCOMPARE(w.range, 2000.0);
         QCOMPARE(w.penetration, 3.0);
         QCOMPARE(w.ammo, 1000);
-        QCOMPARE(w.timeToOverheat(), 5.0); // 50 heat at 10 shots of 1 a second
-        QCOMPARE(w.sustainedDps(), 100.0); // 5 s firing, 5 s locked out
+        QCOMPARE(w.timeToOverheat(), 5.0);
+        QCOMPARE(w.sustainedDps(), 100.0);
 
         const WeaponStats &laser = *f.catalog.item(QStringLiteral("LASER_S3"))->weapon;
-        QCOMPARE(laser.fireRate, 120.0); // from the sequence's fire action
+        QCOMPARE(laser.fireRate, 120.0);
         QVERIFY(laser.regenerates);
         QCOMPARE(laser.ammo, 10);
         QCOMPARE(laser.burstDps(), 100.0);
-        // 10 shots of 50 over 5 s emptying + 1 s delay + 5 s refilling at 2 a second.
         QVERIFY(near(laser.sustainedDps(), 500.0 / 11));
-        QVERIFY(near(laser.sustainedDps(0.5), 500.0 / 16)); // refilling at half power
+        QVERIFY(near(laser.sustainedDps(0.5), 500.0 / 16));
 
         const Item *cooler = f.catalog.item(QStringLiteral("COOLER_S1"));
         QCOMPARE(cooler->itemClass, QStringLiteral("Civilian"));
@@ -548,7 +536,7 @@ private slots:
         QCOMPARE(qd.speed, 1e8);
         QCOMPARE(qd.spoolTime, 5.0);
         QCOMPARE(qd.splineSpeed, 500000.0);
-        QCOMPARE(qd.fuelPerGm, 0.005); // the travelling state's 5 micro units: 5 mSCU a gigametre
+        QCOMPARE(qd.fuelPerGm, 0.005);
 
         const ShieldStats &shield = *f.catalog.item(QStringLiteral("SHIELD_S1"))->shield;
         QCOMPARE(shield.hp, 1000.0);
@@ -573,18 +561,14 @@ private slots:
     {
         const Fixture f;
         const Loadout l(f.catalog, f.ship("ACME_Dart"));
-        // The nose entry's reference holds its child entry: the gimbal wins
-        // over the named gun, and the child replaces the gimbal's own gun.
         QCOMPARE(itemAt(l, "hardpoint_nose"), QStringLiteral("GIMBAL_S3"));
         QCOMPARE(itemAt(l, "hardpoint_nose/hardpoint_class_2"), QStringLiteral("LASER_S3"));
-        // The wing's reference is a missile, which doesn't fit: the named gun.
         QCOMPARE(itemAt(l, "hardpoint_wing"), QStringLiteral("GUN_S3"));
-        // The rack keeps its own first missile and takes the ship's second.
         QCOMPARE(itemAt(l, "hardpoint_rack/missile_01_attach"), QStringLiteral("MISSILE_S2"));
         QCOMPARE(itemAt(l, "hardpoint_rack/missile_02_attach"), QStringLiteral("MISSILE_B_S2"));
         QCOMPARE(itemAt(l, "hardpoint_lifesupport"), QStringLiteral("LIFE_S1"));
         QCOMPARE(itemAt(l, "hardpoint_extra"), QString());
-        QVERIFY(!l.find(QStringLiteral("hardpoint_seat"))); // its item isn't in the catalog
+        QVERIFY(!l.find(QStringLiteral("hardpoint_seat")));
         QVERIFY(!l.find(QStringLiteral("hardpoint_nose/nothing")));
 
         const Loadout ballistic(f.catalog, f.ship("ACME_Dart_Ballistic"));
@@ -598,25 +582,23 @@ private slots:
         QStringList ids;
         for (const Item *i : l.compatible(QStringLiteral("hardpoint_nose")))
             ids << i->id;
-        // Size 3 guns and gimbals by name; not the size 2 gun, missiles or racks.
         QCOMPARE(ids, QStringList({QStringLiteral("GUN_S3"), QStringLiteral("GIMBAL_S3"),
                                    QStringLiteral("LASER_S3")}));
         ids.clear();
         for (const Item *i : l.compatible(QStringLiteral("hardpoint_quantum_drive")))
             ids << i->id;
-        QCOMPARE(ids, QStringList({QStringLiteral("QD_S1")})); // an UNDEFINED subtype goes in a QDrive port
+        QCOMPARE(ids, QStringList({QStringLiteral("QD_S1")}));
 
-        QVERIFY(!l.setItem(QStringLiteral("hardpoint_nose"), QStringLiteral("GUN_S2"))); // too small
-        QVERIFY(!l.setItem(QStringLiteral("hardpoint_armor"), QString()));               // not editable
+        QVERIFY(!l.setItem(QStringLiteral("hardpoint_nose"), QStringLiteral("GUN_S2")));
+        QVERIFY(!l.setItem(QStringLiteral("hardpoint_armor"), QString()));
         QVERIFY(!l.setItem(QStringLiteral("hardpoint_nose"), QStringLiteral("NO_SUCH_ITEM")));
         QVERIFY(l.setItem(QStringLiteral("hardpoint_nose"), QStringLiteral("GUN_S3")));
         QVERIFY(l.find(QStringLiteral("hardpoint_nose"))->children.empty());
         QVERIFY(l.setItem(QStringLiteral("hardpoint_nose"), QStringLiteral("GIMBAL_S3")));
-        QCOMPARE(itemAt(l, "hardpoint_nose/hardpoint_class_2"), QStringLiteral("GUN_S3")); // the gimbal's own
+        QCOMPARE(itemAt(l, "hardpoint_nose/hardpoint_class_2"), QStringLiteral("GUN_S3"));
         QVERIFY(l.setItem(QStringLiteral("hardpoint_rack/missile_01_attach"), QString()));
         QCOMPARE(itemAt(l, "hardpoint_rack/missile_01_attach"), QString());
 
-        // A saved loadout comes back the same on the stock ship.
         const auto saved = l.entries();
         Loadout restored(f.catalog, f.ship("ACME_Dart"));
         QCOMPARE(restored.apply(saved), 0);
@@ -624,7 +606,6 @@ private slots:
         QCOMPARE(itemAt(restored, "hardpoint_nose/hardpoint_class_2"), QStringLiteral("GUN_S3"));
         QVERIFY(!restored.changes().isEmpty());
         QVERIFY(Loadout(f.catalog, f.ship("ACME_Dart")).changes().isEmpty());
-        // Entries for slots that are gone are skipped.
         QCOMPARE(restored.apply({{QStringLiteral("hardpoint_gone"), QStringLiteral("GUN_S3")}}), 1);
     }
 
@@ -639,14 +620,12 @@ private slots:
                     return c;
             qFatal("no consumer %s", qPrintable(key));
         };
-        // 12 pips: cooler 1, shields 1 + 1, life support 1, weapons 2 of 4,
-        // engines 2 of 4; then weapons to 4 and engines to 4 (12).
         QCOMPARE(find(cs, QStringLiteral("weapons")).max, 4);
         QCOMPARE(find(cs, QStringLiteral("weapons")).pips, 4);
         QCOMPARE(find(cs, QStringLiteral("hardpoint_controller_flight")).pips, 4);
         QCOMPARE(find(cs, QStringLiteral("hardpoint_cooler")).pips, 1);
         QCOMPARE(find(cs, QStringLiteral("hardpoint_cooler")).min, 1);
-        QCOMPARE(find(cs, QStringLiteral("hardpoint_quantum_drive")).pips, 0); // SCM mode
+        QCOMPARE(find(cs, QStringLiteral("hardpoint_quantum_drive")).pips, 0);
         QCOMPARE(find(cs, QStringLiteral("hardpoint_quantum_drive")).min, 2);
 
         Totals t = computeTotals(l, cs);
@@ -663,7 +642,7 @@ private slots:
         cs = consumers(l, plan);
         t = computeTotals(l, cs);
         QCOMPARE(t.coolantOutput, 30.0);
-        QCOMPARE(t.shieldHp, 1000.0); // an unpowered generator holds nothing
+        QCOMPARE(t.shieldHp, 1000.0);
         QCOMPARE(t.weaponEfficiency, 0.5);
 
         PowerPlan nav;
@@ -681,8 +660,8 @@ private slots:
         const Totals t = computeTotals(l, consumers(l, {}));
         QCOMPARE(t.weapons.size(), std::size_t(2));
         QCOMPARE(t.pilot.guns, 2);
-        QCOMPARE(t.alpha, 70.0);     // laser 50 + gun 20
-        QCOMPARE(t.burstDps, 300.0); // 100 + 200
+        QCOMPARE(t.alpha, 70.0);
+        QCOMPARE(t.burstDps, 300.0);
         QVERIFY(near(t.sustainedDps, 500.0 / 11 + 100));
         QCOMPARE(t.burstByType.physical, 200.0);
         QCOMPARE(t.missiles, 2);
@@ -697,7 +676,7 @@ private slots:
         QVERIFY(t.loadedMass > t.hullMass);
         QVERIFY(near(t.accelForward, 2.6e6 / t.loadedMass));
         QCOMPARE(t.quantumFuel, 0.5);
-        QCOMPARE(t.quantumRange, 100.0); // 0.5 SCU at 5 mSCU a gigametre
+        QCOMPARE(t.quantumRange, 100.0);
         QVERIFY(t.em > 0);
         QVERIFY(t.ir > 0);
     }
@@ -709,11 +688,8 @@ private slots:
         qd.stageOneAccel = 1e6;
         qd.stageTwoAccel = 2e6;
         QCOMPARE(quantumTravelTime(qd, 0), 0.0);
-        // Ramp: 50 s to half speed (1.25e9 m), 25 s more to full (1.875e9 m),
-        // each way: 150 s and 6.25e9 m; the rest at full speed.
         QVERIFY(near(quantumTravelTime(qd, 6.25e9), 150.0));
         QVERIFY(near(quantumTravelTime(qd, 16.25e9), 250.0));
-        // Too short to reach half speed: accelerate and brake at stage one.
         QVERIFY(near(quantumTravelTime(qd, 2e9), 2 * std::sqrt(2 * 1e9 / 1e6)));
         QVERIFY(quantumTravelTime(qd, 4e9) < quantumTravelTime(qd, 6e9));
     }
@@ -724,15 +700,10 @@ private slots:
         const Loadout l(f.catalog, f.ship("ACME_Dart"));
         const Totals t = computeTotals(l, consumers(l, {}));
         const Engagement e = engage(t, t);
-        // The gun's 20 physical glances off 25 deflection; the laser doesn't.
         QCOMPARE(e.deflected, 1);
-        // Shields: the laser's energy is fully absorbed and not resisted,
-        // the gun's physical 40% absorbed, 20% of that resisted.
         const double laser = 500.0 / 11;
         const double shieldRate = laser + 100 * 0.4 * 0.8;
         QVERIFY(near(e.shieldTime, 2000 / shieldRate));
-        // Nothing bleeds through while they're up (the laser is all
-        // absorbed, the gun deflected); then the laser at half through armor.
         QVERIFY(near(e.killTime, e.shieldTime + 3000 / (laser * 0.5)));
     }
 };

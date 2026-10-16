@@ -1,11 +1,4 @@
 #!/usr/bin/env bash
-# Builds and installs SCXtool on Arch Linux (and derivatives) from the
-# PKGBUILD in this repository, the same way an AUR helper would:
-#
-#   curl -fsSL https://raw.githubusercontent.com/Ishikudeska/Smart-Citizen-plus-plus/main/packaging/aur/install.sh | bash
-#
-# Run it again to update to the latest commit. Remove with:
-#   sudo pacman -R scxtool-git
 set -euo pipefail
 
 repo="https://github.com/Ishikudeska/Smart-Citizen-plus-plus"
@@ -26,9 +19,6 @@ sudo pacman -S --needed --noconfirm base-devel git
 workdir=$(mktemp -d)
 trap 'rm -rf "$workdir"' EXIT
 
-# The app was called Smart Citizen++ before; its package conflicts with this
-# one, and pacman would decline to swap it under --noconfirm. Its data is
-# left alone and moved to the new name when SCXtool first starts.
 if pacman -Q smart-citizen-plus-plus-git >/dev/null 2>&1; then
     echo ":: Removing the old smart-citizen-plus-plus-git package"
     sudo pacman -R --noconfirm smart-citizen-plus-plus-git

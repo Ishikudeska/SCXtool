@@ -23,7 +23,6 @@ QString etagPath(const QString &dest)
     return dest + QStringLiteral(".etag");
 }
 
-// RFC 7231 IMF-fixdate, always in English.
 QByteArray httpDate(const QDateTime &when)
 {
     return QLocale::c().toString(when.toUTC(), QStringLiteral("ddd, dd MMM yyyy HH:mm:ss 'GMT'")).toLatin1();
@@ -34,7 +33,7 @@ DownloadResult failed(int status, const QString &error)
     return {DownloadResult::Status::Failed, status, 0, error};
 }
 
-} // namespace
+}
 
 QByteArray userAgent()
 {
@@ -123,4 +122,4 @@ DownloadResult downloadIfChanged(const QUrl &url, const QString &dest, DownloadO
     return {DownloadResult::Status::Downloaded, status, body.size(), QString()};
 }
 
-} // namespace core::net
+}

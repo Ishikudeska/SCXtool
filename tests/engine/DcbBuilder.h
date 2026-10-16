@@ -1,7 +1,5 @@
 #pragma once
 
-// Builds small DataForge (.dcb, version 8) files for tests.
-
 #include "engine/forge/DataForge.h"
 
 #include <cstring>
@@ -17,7 +15,6 @@ using engine::forge::DataType;
 using engine::forge::GuidBytes;
 using engine::forge::Pool;
 
-// Bytes of one struct instance, appended in property order.
 struct Inst
 {
     std::vector<std::uint8_t> b;
@@ -82,7 +79,6 @@ public:
             {name, static_cast<std::uint16_t>(type), static_cast<std::uint8_t>(conversion), index});
     }
 
-    // Returns the instance's variant index.
     std::uint16_t addInstance(std::uint32_t structIndex, const Inst &inst)
     {
         structs_[structIndex].instances.push_back(inst.b);
@@ -97,7 +93,6 @@ public:
 
     std::uint32_t text(const std::string &s) { return intern(text_, textOffsets_, s); }
 
-    // Appends pool entries and returns the index of the first.
     std::uint32_t addPool(Pool pool, const std::vector<Inst> &entries)
     {
         auto &p = pools_[static_cast<int>(pool)];
@@ -115,7 +110,6 @@ public:
         std::map<std::string, std::uint32_t> blobOffsets{{"", 0}};
         std::string text = text_;
 
-        // Properties laid out struct by struct.
         struct Prop
         {
             std::uint32_t nameOffset;
@@ -140,8 +134,6 @@ public:
                 out.push_back(static_cast<std::uint8_t>(v >> (8 * i)));
         };
 
-        // Record names, paths and teams go into the string tables first so the
-        // header can carry their final lengths.
         struct Rec
         {
             std::uint32_t name, path, team;
@@ -155,7 +147,6 @@ public:
         for (const auto &s : structs_)
             structNames.push_back(intern(blob, blobOffsets, s.name));
 
-        // Header.
         put16(0);
         put16(0);
         put32(8);
@@ -191,7 +182,6 @@ public:
         put32(static_cast<std::uint32_t>(text.size()));
         put32(static_cast<std::uint32_t>(blob.size()));
 
-        // Struct definitions, with record sizes from their flattened properties.
         for (std::size_t i = 0; i < structs_.size(); ++i) {
             put32(structNames[i]);
             put32(structs_[i].parent);
@@ -329,4 +319,4 @@ private:
     PoolData pools_[static_cast<int>(Pool::Count)];
 };
 
-} // namespace testing
+}

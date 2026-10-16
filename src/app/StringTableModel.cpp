@@ -34,7 +34,7 @@ const char *const kHeaderKeys[] = {
     "strings_tab.col_custom_value",  "strings_tab.col_status", "strings_tab.col_owned",
 };
 
-} // namespace
+}
 
 StringTableModel::StringTableModel(QObject *parent) : QAbstractTableModel(parent)
 {

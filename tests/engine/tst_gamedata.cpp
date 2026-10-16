@@ -1,7 +1,3 @@
-// game_data.json export (port of sc.gamedata): the .NET behaviours it leans
-// on, the JSON writer's exact layout, and the passes end to end over a small
-// set of synthetic records.
-
 #include "engine/gamedata/DotNet.h"
 #include "engine/gamedata/GameData.h"
 #include "engine/gamedata/Json.h"
@@ -21,8 +17,6 @@ using namespace engine::gamedata;
 
 namespace {
 
-// Records as (path, XML) pairs; built through pugixml into the XmlTree the
-// extractor walks.
 RecordSource records(std::vector<std::pair<std::string, std::string>> items)
 {
     RecordSource source;
@@ -49,7 +43,7 @@ std::string path(const char *rest)
     return std::string(kRecords) + rest;
 }
 
-} // namespace
+}
 
 class TestGameData : public QObject
 {
@@ -90,21 +84,18 @@ private slots:
 
     void ordersLikeTheInvariantCulture()
     {
-        QVERIFY(dotnet::compareCulture("apple", "Banana") < 0); // case-insensitive first
-        QVERIFY(dotnet::compareCulture("a", "A") < 0);          // then lower case first
+        QVERIFY(dotnet::compareCulture("apple", "Banana") < 0);
+        QVERIFY(dotnet::compareCulture("a", "A") < 0);
         QVERIFY(dotnet::compareCulture("'Arrow'", "9-Series") < 0);
         QVERIFY(dotnet::compareCulture("Gladius", "Gladius") == 0);
         QVERIFY(dotnet::compareOrdinal("B", "a") < 0);
 #ifdef _WIN32
-        // CLDR root puts '_' before '-' (ASCII has them the other way round):
-        // proof the system ICU is in use, as it is for .NET.
         QVERIFY(dotnet::compareCulture("_a", "-a") < 0);
 #endif
     }
 
     void introSortMatchesInsertionSortWhenSmall()
     {
-        // Up to 16 items List.Sort is an insertion sort, so stable.
         std::vector<std::pair<int, int>> items = {{2, 0}, {1, 1}, {2, 2}, {1, 3}, {0, 4}, {2, 5}};
         dotnet::introSort(items, [](const auto &a, const auto &b) { return a.first - b.first; });
         const std::vector<std::pair<int, int>> expected = {{0, 4}, {1, 1}, {1, 3}, {2, 0}, {2, 2}, {2, 5}};
@@ -267,7 +258,7 @@ private slots:
         QCOMPARE(gun[u"name"].toString(), QStringLiteral("Test Repeater"));
         QCOMPARE(gun[u"range"].toDouble(), 2004.0);
         QCOMPARE(gun[u"dps_burst"].toDouble(), 291.7);
-        QCOMPARE(gun[u"base_penetration_distance"].toDouble(), 0.18); // 0.175 * 100 is exactly 17.5: to even
+        QCOMPARE(gun[u"base_penetration_distance"].toDouble(), 0.18);
         QCOMPARE(gun[u"shots_to_overheat"].toInt(), 20);
         QCOMPARE(gun[u"time_to_overheat"].toDouble(), 3.429);
         QVERIFY(!gun.contains(u"magazine_capacity"));
@@ -285,9 +276,9 @@ private slots:
         QCOMPARE(armor[u"resistance"].toObject()[u"energy"].toDouble(), 1.0);
 
         const QJsonArray vehicles = root[u"vehicles"].toArray();
-        QCOMPARE(vehicles.size(), 1); // the _PU_Pirate variant is dropped
+        QCOMPARE(vehicles.size(), 1);
         const QJsonObject ship = vehicles[0].toObject();
-        QCOMPARE(ship[u"name"].toString(), QStringLiteral("Test Ship")); // "Testco" isn't in the id
+        QCOMPARE(ship[u"name"].toString(), QStringLiteral("Test Ship"));
         QCOMPARE(ship[u"armor_id"].toString(), QStringLiteral("ARMR_TEST_Ship"));
         QCOMPARE(ship[u"career"].toString(), QStringLiteral("Combat"));
         QCOMPARE(ship[u"length"].toDouble(), 21.0);
@@ -302,10 +293,10 @@ private slots:
 
         const QJsonArray slotList = ship[u"slots"].toArray();
         QCOMPARE(slotList.size(), 2);
-        const QJsonObject rack = slotList[0].toObject(); // size 2 sorts first
+        const QJsonObject rack = slotList[0].toObject();
         QCOMPARE(rack[u"kind"].toString(), QStringLiteral("missile_rack"));
         QCOMPARE(rack[u"label"].toString(), QStringLiteral("missilerack left"));
-        QCOMPARE(rack[u"stock_rack_id"].toString(), QStringLiteral("MRCK_S02_TEST_Dual")); // resolved by guid
+        QCOMPARE(rack[u"stock_rack_id"].toString(), QStringLiteral("MRCK_S02_TEST_Dual"));
         QCOMPARE(rack[u"stock_missile_ids"].toArray().size(), 2);
         const QJsonObject gunSlot = slotList[1].toObject();
         QCOMPARE(gunSlot[u"label"].toString(), QStringLiteral("nose"));
@@ -316,7 +307,6 @@ private slots:
         QCOMPARE(rackRecord[u"missile_count"].toInt(), 2);
         QCOMPARE(rackRecord[u"manufacturer"].toString(), QStringLiteral("TEST"));
 
-        // An overlay only fills what extraction left null.
         const QString overlay = dir.filePath(QStringLiteral("overlay.json"));
         {
             QFile f(overlay);

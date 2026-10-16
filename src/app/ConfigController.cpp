@@ -28,7 +28,6 @@ using namespace core;
 
 namespace {
 
-// QObject::tr would shadow the catalogue lookup inside members.
 QString text(const char *key, const QVariantHash &args = {})
 {
     return core::i18n::tr(key, args);
@@ -39,7 +38,7 @@ QString thousands(qint64 n)
     return QLocale(QLocale::English).toString(n);
 }
 
-} // namespace
+}
 
 ConfigController::ConfigController(QObject *parent) : QObject(parent)
 {
@@ -63,7 +62,6 @@ bool ConfigController::dataDirOverridden() const
 
 QString ConfigController::dataForgeBase() const
 {
-    // The folder holding <channel>\cache\dataforge (which may not exist yet).
     QString path = QDir::cleanPath(app().dataForgeDir());
     for (int i = 0; i < 3; ++i)
         path = path.left(std::max<qsizetype>(0, path.lastIndexOf(u'/')));
@@ -97,8 +95,6 @@ void ConfigController::setTutorialDisabled(bool on)
     emit changed();
 }
 
-// ── folders ───────────────────────────────────────────────────────────────
-
 void ConfigController::setDataDir(const QString &path)
 {
     const QString target = QDir::cleanPath(QDir::fromNativeSeparators(path.trimmed()));
@@ -120,7 +116,6 @@ void ConfigController::setDataDir(const QString &path)
             return;
         }
         app().saveUserIni();
-        // Back at the default location: drop the override rather than pin it.
         Settings &settings = app().settings();
         settings.setUserDataDirOverride({});
         const bool isDefault = QDir(app().userDataRoot()) == QDir(target);
@@ -195,8 +190,6 @@ void ConfigController::resetDataForgeBase()
     app().notifyPathsChanged();
     emit changed();
 }
-
-// ── user.ini tools ────────────────────────────────────────────────────────
 
 void ConfigController::resetUserIni()
 {
@@ -341,8 +334,6 @@ void ConfigController::previewApply()
         body += QStringLiteral("  %1: %2\n").arg(status, thousands(n));
     app().prompts()->info(text("config.preview_title"), body);
 }
-
-// ── Import INI ────────────────────────────────────────────────────────────
 
 void ConfigController::importIni(const QString &sourceText)
 {
@@ -491,8 +482,7 @@ void ConfigController::cancelImport()
 
 void ConfigController::writeImport(const QMap<QString, QString> &resolved, int resolvedCount)
 {
-    // dict(current); update(auto_add); update(resolutions): current order first.
-    app().saveUserIni(); // table edits not yet saved go in first
+    app().saveUserIni();
     const UserIni ini(app().paths().userIni());
     IniMap final = ini.load();
     for (auto it = pendingAdd_.cbegin(); it != pendingAdd_.cend(); ++it)
@@ -515,8 +505,6 @@ void ConfigController::writeImport(const QMap<QString, QString> &resolved, int r
                                                              {QStringLiteral("resolved"), resolvedCount},
                                                              {QStringLiteral("excluded"), excluded}}));
 }
-
-// ── settings backups ──────────────────────────────────────────────────────
 
 QString ConfigController::defaultSettingsBackupPath() const
 {
@@ -586,8 +574,6 @@ void ConfigController::importSettings(const QUrl &source)
                 QDir().mkpath(QFileInfo(ini.path()).absolutePath());
                 if (QFileInfo::exists(ini.path()))
                     ini.backup();
-                // Written as-is (no newline conversion) and replaced only once
-                // complete, so a failed write never leaves a truncated file.
                 QSaveFile f(ini.path());
                 const QByteArray bytes = it.value().toUtf8();
                 if (!f.open(QIODevice::WriteOnly) || f.write(bytes) != bytes.size() || !f.commit()) {
@@ -623,8 +609,6 @@ void ConfigController::importSettings(const QUrl &source)
             app().reloadFromDisk(text("dialogs.merging_sources"));
         });
 }
-
-// ── language sources ──────────────────────────────────────────────────────
 
 QVariantList ConfigController::languageSources() const
 {

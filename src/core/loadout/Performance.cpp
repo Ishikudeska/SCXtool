@@ -29,7 +29,6 @@ QString categoryOf(const Item &item)
     return QString();
 }
 
-// Who fires a gun: the turret it sits in, if any.
 QString groupOf(const std::vector<const Item *> &ancestors)
 {
     for (auto it = ancestors.rbegin(); it != ancestors.rend(); ++it) {
@@ -75,7 +74,7 @@ Damage maxOf(const Damage &a, const Damage &b)
             std::max(a.biochemical, b.biochemical), std::max(a.stun, b.stun)};
 }
 
-} // namespace
+}
 
 double powerModifier(const Resources &resources, int pips)
 {
@@ -120,7 +119,6 @@ std::vector<Consumer> consumers(const Loadout &loadout, const PowerPlan &plan)
             output += s.item->resources.powerOutput;
     });
     int budget = int(std::floor(output + 1e-9));
-    // Up to `want` pips, never below the consumer's minimum once on.
     const auto give = [&](Consumer &c, int want) {
         want = std::min(want, c.max);
         if (want <= c.pips)
@@ -131,7 +129,6 @@ std::vector<Consumer> consumers(const Loadout &loadout, const PowerPlan &plan)
         c.pips += add;
         budget -= add;
     };
-    // Explicit pips first, then the defaults in order.
     std::vector<Consumer *> open;
     for (Consumer &c : out) {
         if (const auto it = plan.pips.constFind(c.key); it != plan.pips.cend()) {
@@ -266,7 +263,6 @@ Totals computeTotals(const Loadout &loadout, const std::vector<Consumer> &power)
             plantIr += r.ir;
         }
 
-        // Powered components: their share of output and signature.
         const QString category = categoryOf(*item);
         if (category.isEmpty() || item->type == u"WeaponGun")
             return;
@@ -289,7 +285,6 @@ Totals computeTotals(const Loadout &loadout, const std::vector<Consumer> &power)
     };
     walk(loadout.roots(), ancestors, visit);
 
-    // Weapons and power plants run in proportion to the power they get.
     t.em += weaponEm * t.weaponEfficiency;
     t.ir += weaponIr * t.weaponEfficiency;
     if (t.powerOutput > 0) {
@@ -376,4 +371,4 @@ Engagement engage(const Totals &attacker, const Totals &target)
     return e;
 }
 
-} // namespace core::loadout
+}

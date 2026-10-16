@@ -1,11 +1,3 @@
-"""Report UI text keys the C++/QML code asks for that the English catalog lacks.
-
-Scans src/ for qsTr("a.b"), tr("a.b") and text("a.b") with a dotted key and
-checks each against resources/languages/english/ui.json. Exit status 1 when
-any is missing.
-
-    python tools/i18n/check_keys.py
-"""
 import json
 import re
 import sys
@@ -26,7 +18,7 @@ def flatten(node, prefix=""):
 
 
 def main() -> int:
-    ignore = {"dot.key"}  # an example in a comment
+    ignore = {"dot.key"}
     catalog = flatten(json.loads((ROOT / "resources/languages/english/ui.json").read_text(encoding="utf-8")))
     missing = {}
     for path in sorted((ROOT / "src").rglob("*")):

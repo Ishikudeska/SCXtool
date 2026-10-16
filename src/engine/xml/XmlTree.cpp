@@ -139,4 +139,4 @@ void XmlTree::copyTo(NodeId node, pugi::xml_node parent) const
         copyTo(c, el);
 }
 
-} // namespace engine::xml
+}

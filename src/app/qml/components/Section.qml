@@ -3,7 +3,6 @@ import QtQuick.Controls.Basic
 import QtQuick.Layouts
 import ScApp
 
-// A titled card grouping related settings or actions.
 Rectangle {
     id: section
 

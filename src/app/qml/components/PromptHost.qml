@@ -4,8 +4,6 @@ import QtQuick.Controls.Basic
 import QtQuick.Layouts
 import ScApp
 
-// Shows App.prompts.current, the message box a C++ flow is waiting on, and
-// sends the answer back.
 Popup {
     id: host
 

@@ -11,11 +11,6 @@
 #include <functional>
 #include <memory>
 
-// Runs long jobs (extraction, generation, loading, applying) on the thread
-// pool, one at a time in submission order, and publishes their progress
-// for the single progress overlay in QML. Replaces the Python app's eight
-// QThread workers: a job is a plain function, cancellation is a flag it
-// polls, and its result comes back on the GUI thread.
 class TaskRunner : public QObject
 {
     Q_OBJECT
@@ -32,7 +27,6 @@ class TaskRunner : public QObject
     Q_PROPERTY(int queued READ queued NOTIFY changed)
 
 public:
-    // What a job sees: progress reporting and the cancel flag.
     class Job
     {
     public:
@@ -51,8 +45,6 @@ public:
 
     explicit TaskRunner(QObject *parent = nullptr);
 
-    // Queues `work` to run off the GUI thread; `done` then gets its result on
-    // the GUI thread (not called if this object is gone).
     template <class Result>
     void run(const QString &title, bool cancellable, std::function<Result(Job &)> work,
              std::function<void(Result)> done)
@@ -77,14 +69,12 @@ public:
     int queued() const { return static_cast<int>(pending_.size()); }
 
     Q_INVOKABLE void cancel();
-    // Drops the queued jobs and cancels the current one (if it can be).
     void cancelAll();
 
 signals:
     void runningChanged();
     void changed();
     void finished(const QString &title);
-    // The job threw; `done` still ran, with a default-constructed result.
     void failed(const QString &title, const QString &message);
 
 private:

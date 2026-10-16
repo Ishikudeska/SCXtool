@@ -31,7 +31,7 @@ using engine::p4k::TreeIndex;
 namespace {
 
 constexpr int kMaxResults = 5000;
-constexpr std::uint64_t kMaxPreviewBytes = 64ull << 20; // read whole entries up to this size
+constexpr std::uint64_t kMaxPreviewBytes = 64ull << 20;
 constexpr std::size_t kHexBytes = 64 * 1024;
 constexpr qsizetype kMaxPreviewChars = 1 << 20;
 
@@ -60,8 +60,6 @@ QString localPath(const QUrl &url)
     return url.isEmpty() ? QString() : url.isLocalFile() ? url.toLocalFile() : url.toString();
 }
 
-// Builds the tree over the archive's entries and, when given, the
-// database's records.
 std::shared_ptr<ExplorerData> buildData(std::shared_ptr<const engine::p4k::Archive> archive,
                                         std::shared_ptr<const engine::forge::DataForge> forge,
                                         const std::string &dcbName, const std::atomic<bool> *cancel)
@@ -141,7 +139,6 @@ QString hexDump(std::span<const std::uint8_t> bytes)
     return out;
 }
 
-// Text a person would read: valid UTF-8 with no NULs in the first 8 KB.
 bool looksLikeText(std::span<const std::uint8_t> bytes)
 {
     const std::size_t n = std::min<std::size_t>(bytes.size(), 8192);
@@ -160,7 +157,6 @@ bool looksLikeText(std::span<const std::uint8_t> bytes)
     QStringDecoder decoder(QStringDecoder::Utf8);
     (void)decoder.decode(
         QByteArrayView(reinterpret_cast<const char *>(bytes.data()), static_cast<qsizetype>(n)));
-    // A cut multi-byte sequence at the end of the sample is not an error.
     return !decoder.hasError() || n < bytes.size();
 }
 
@@ -271,7 +267,7 @@ QString folderInfo(const TreeIndex::Node &n)
                                              {QStringLiteral("packed"), size(n.packed)}});
 }
 
-} // namespace
+}
 
 ExplorerController::ExplorerController(QObject *parent) : QObject(parent), tree_(new P4kTreeModel(this))
 {}
@@ -351,8 +347,6 @@ void ExplorerController::setPreview(int node, const QString &title, const QStrin
     emit previewChanged();
 }
 
-// ── open ──────────────────────────────────────────────────────────────────
-
 void ExplorerController::openUrl(const QUrl &url)
 {
     open(localPath(url));
@@ -399,7 +393,7 @@ void ExplorerController::open(const QString &requested)
                 return;
             }
             if (!result.data)
-                return; // cancelled
+                return;
             qCInfo(lcApp).noquote() << "Explorer: opened" << path << "-" << result.data->archiveItems
                                     << "entries," << result.data->index.nodeCount() << "nodes";
             self->setLoaded(std::move(result.data), path);
@@ -461,8 +455,6 @@ void ExplorerController::loadDataForge()
         });
 }
 
-// ── search ────────────────────────────────────────────────────────────────
-
 void ExplorerController::search(const QString &pattern)
 {
     const quint64 serial = ++*searchSerial_;
@@ -486,7 +478,7 @@ void ExplorerController::search(const QString &pattern)
         const std::size_t items = data->archiveItems + data->recordPaths.size();
         for (std::size_t i = 0; i < items; ++i) {
             if ((i & 0x3FFF) == 0 && *current != serial)
-                return; // superseded
+                return;
             const std::string_view path = itemPath(*data, static_cast<std::uint32_t>(i));
             if (glob ? engine::p4k::globMatches(globPattern, path) : containsCaseless(path, needle)) {
                 if (hits.size() < kMaxResults)
@@ -521,8 +513,6 @@ void ExplorerController::search(const QString &pattern)
             Qt::QueuedConnection);
     });
 }
-
-// ── preview ───────────────────────────────────────────────────────────────
 
 QString ExplorerController::nodePath(int node) const
 {
@@ -591,8 +581,6 @@ void ExplorerController::select(int node)
             Qt::QueuedConnection);
     });
 }
-
-// ── extract ───────────────────────────────────────────────────────────────
 
 QString ExplorerController::defaultExtractDir() const
 {
@@ -734,8 +722,6 @@ void ExplorerController::extract(const QVariantList &nodes, const QUrl &outputDi
             prompts.info(text("scx.explorer_extract_title"), body);
         });
 }
-
-// ── game data ─────────────────────────────────────────────────────────────
 
 QString ExplorerController::defaultGameDataPath() const
 {

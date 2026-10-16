@@ -1,11 +1,3 @@
-// scxloadout: the ship loadout catalog outside the app, for checking it
-// against real game data. Build the cache with `scxmissions forge`.
-//
-//   scxloadout ships <cache-dir> <base.ini>             every ship, with a summary
-//   scxloadout show <cache-dir> <base.ini> <ship-id>    a ship's stock loadout and totals
-//   scxloadout audit <cache-dir> <base.ini>             stock entries the catalog can't place
-//   scxloadout compat <cache-dir> <base.ini> <ship-id> <slot-path>   what fits a slot
-
 #include "core/loadout/Catalog.h"
 #include "core/loadout/Loadout.h"
 #include "core/loadout/Performance.h"
@@ -217,7 +209,6 @@ int show(const QString &cache, const QString &baseIni, const QString &id)
     return 0;
 }
 
-// What fits one of a ship's slots.
 int compat(const QString &cache, const QString &baseIni, const QString &id, const QString &path)
 {
     const IniMap loc = loadIni(baseIni);
@@ -231,8 +222,6 @@ int compat(const QString &cache, const QString &baseIni, const QString &id, cons
     return 0;
 }
 
-// Stock loadout entries the catalog can't place: items it doesn't know,
-// ports the ship or the item doesn't have.
 int audit(const QString &cache, const QString &baseIni)
 {
     const IniMap loc = loadIni(baseIni);
@@ -259,7 +248,7 @@ int audit(const QString &cache, const QString &baseIni)
                                 item ? u8(item->id).constData() : "-");
                 if (!item && !(e.item.isEmpty() && e.refItem.isEmpty())) {
                     ++unknownItems[e.item.isEmpty() ? e.refItem : e.item];
-                    continue; // its children can't be placed either way
+                    continue;
                 }
                 if (item && port && !fits(*port, *item, s.portTags)) {
                     QStringList types;
@@ -299,7 +288,7 @@ int audit(const QString &cache, const QString &baseIni)
     return 0;
 }
 
-} // namespace
+}
 
 int main(int argc, char **argv)
 {

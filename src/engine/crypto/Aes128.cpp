@@ -73,7 +73,6 @@ inline void addRoundKey(std::uint8_t *s, const std::uint8_t *k)
         s[i] ^= k[i];
 }
 
-// State is column-major: s[col * 4 + row].
 inline void subShift(std::uint8_t *s)
 {
     std::uint8_t t[16];
@@ -116,7 +115,7 @@ inline void invMixColumns(std::uint8_t *s)
     }
 }
 
-} // namespace
+}
 
 Aes128::Aes128(std::span<const std::uint8_t, 16> key)
 {
@@ -192,4 +191,4 @@ void cbcEncrypt(const Aes128 &aes, Aes128::Block &iv, std::span<std::uint8_t> da
     }
 }
 
-} // namespace engine::crypto
+}

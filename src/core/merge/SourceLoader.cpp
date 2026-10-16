@@ -44,8 +44,7 @@ LoadedSources loadSources(const SourceFiles &files)
     }
 
     if (!files.userIni.isEmpty() && QFileInfo::exists(files.userIni)) {
-        IniMap user =
-            loadIni(files.userIni, /*stripValues=*/false); // a space favourite prefix must survive (#100)
+        IniMap user = loadIni(files.userIni, false);
         if (!user.isEmpty())
             out.sources[kSourceUser] = std::move(user);
     }
@@ -57,16 +56,16 @@ EntryStatus statusFromSource(const QString &source, const QString &baseSource, b
                              bool inGlobalSource)
 {
     if (!keyInBase)
-        return EntryStatus::New; // only the user has it
+        return EntryStatus::New;
     if (!inGlobalSource)
-        return EntryStatus::New; // only the enhancements have it (found in DataForge)
+        return EntryStatus::New;
     if (source == kSourceUser)
         return EntryStatus::Modified;
     if (source == kSourceEnhancements)
         return EntryStatus::Enhanced;
     if (source == baseSource)
         return EntryStatus::Unmodified;
-    return EntryStatus::Modified; // some other higher-priority source
+    return EntryStatus::Modified;
 }
 
 QList<StringEntry> buildEntries(const LoadedSources &loaded, const IniMap *userOverrides)
@@ -84,10 +83,8 @@ QList<StringEntry> buildEntries(const LoadedSources &loaded, const IniMap *userO
             baseHierarchy << name;
     const QString baseSource = baseHierarchy.isEmpty() ? kSourceGlobal : baseHierarchy.first();
 
-    // Merge without the user layer, so originalValue is the pre-edit baseline.
     const IniMap baseMerged = mergeSourcesByHierarchy(loaded.sources, baseHierarchy, nullptr);
 
-    // The last base source holding each key.
     QHash<QString, QString> origin;
     origin.reserve(baseMerged.size());
     for (const QString &name : std::as_const(baseHierarchy))
@@ -100,7 +97,6 @@ QList<StringEntry> buildEntries(const LoadedSources &loaded, const IniMap *userO
     QList<StringEntry> entries;
     entries.reserve(baseMerged.size() + user->size());
     auto add = [&](const QString &key) {
-        // Short ship names (vehicle_Name*_short) are not editable rows.
         if (key.startsWith(u"vehicle_name", Qt::CaseInsensitive) && key.contains(u"_short"))
             return;
 
@@ -134,4 +130,4 @@ QList<StringEntry> buildEntries(const LoadedSources &loaded, const IniMap *userO
     return entries;
 }
 
-} // namespace core
+}

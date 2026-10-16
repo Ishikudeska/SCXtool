@@ -19,7 +19,6 @@ constexpr QLatin1StringView kSettingsName("settings.json");
 constexpr QLatin1StringView kOverridesPrefix("overrides/");
 constexpr QLatin1StringView kUserIniSuffix("/user.ini");
 constexpr QLatin1StringView kKind("settings-backup");
-// Backups made by Smart Citizen carry this marker; they share our keys.
 constexpr QLatin1StringView kSmartCitizenMarker("SmartCitizen");
 
 QString appMarker()
@@ -32,14 +31,13 @@ std::string utf8(const QString &s)
     return s.toStdString();
 }
 
-// One plain path segment: no separators, no "." or "..", no drive.
 bool isSafeChannel(const QString &channel)
 {
     if (channel.isEmpty() || channel == u"." || channel == u"..")
         return false;
     if (channel.contains(u'/') || channel.contains(u'\\'))
         return false;
-    return !(channel.size() >= 2 && channel[1] == u':'); // ntpath.splitdrive
+    return !(channel.size() >= 2 && channel[1] == u':');
 }
 
 QJsonDocument parseJson(const std::vector<std::uint8_t> &bytes, QString *error)
@@ -52,7 +50,7 @@ QJsonDocument parseJson(const std::vector<std::uint8_t> &bytes, QString *error)
     return doc;
 }
 
-} // namespace
+}
 
 QString defaultBackupFilename(QDate today)
 {
@@ -93,7 +91,6 @@ std::expected<int, QString> writeProfileZip(const QString &zipPath, const QVaria
         return std::unexpected(r.error());
     ++entries;
     for (auto it = overrides.cbegin(); it != overrides.cend(); ++it) {
-        // Forward slashes inside the zip, whatever the host.
         if (auto r = add(kOverridesPrefix + it.key() + kUserIniSuffix, it.value().toUtf8()); !r)
             return std::unexpected(r.error());
         ++entries;
@@ -136,7 +133,6 @@ std::expected<ProfileContents, QString> readProfileZip(const QString &zipPath)
                                    .arg(QString::fromUtf8(identity::kAppName)));
 
     const QJsonValue schemaValue = manifest.value(QStringLiteral("schema_version"));
-    // An int, as json.loads would give: not a bool, not a fraction.
     if (!schemaValue.isDouble() || schemaValue.toDouble() != double(schemaValue.toInteger()))
         return std::unexpected(QStringLiteral("Backup manifest is missing a schema version."));
     const int schema = int(schemaValue.toInteger());
@@ -153,7 +149,6 @@ std::expected<ProfileContents, QString> readProfileZip(const QString &zipPath)
     contents.exportedAt = manifest.value(QStringLiteral("exported_at")).toVariant().toString();
     contents.sourceMode = manifest.value(QStringLiteral("source_mode")).toVariant().toString();
 
-    // settings.json may be absent, but not corrupt.
     if (const auto settingsBytes = read(kSettingsName)) {
         const QJsonDocument doc = parseJson(*settingsBytes, &error);
         if (!error.isEmpty())
@@ -174,7 +169,6 @@ std::expected<ProfileContents, QString> readProfileZip(const QString &zipPath)
         const auto bytes = zip.read(i);
         if (!bytes)
             continue;
-        // bytes.decode("utf-8"): strict, and a BOM stays part of the text.
         const QByteArrayView view(bytes->data(), qsizetype(bytes->size()));
         if (view.isValidUtf8())
             contents.overrides.insert(channel, QString::fromUtf8(view));
@@ -238,7 +232,7 @@ InstallPathOutcome reconcileImportedInstallPath(Settings &settings, const std::f
         return InstallPathOutcome::Restored;
     }
     settings.remove(QStringLiteral("sc_install_root"));
-    settings.remove(QStringLiteral("game_install_path")); // Smart Citizen's legacy key
+    settings.remove(QStringLiteral("game_install_path"));
     const QString detected = detect ? detect() : QString();
     if (detected.isEmpty())
         return InstallPathOutcome::None;
@@ -246,4 +240,4 @@ InstallPathOutcome reconcileImportedInstallPath(Settings &settings, const std::f
     return InstallPathOutcome::Redetected;
 }
 
-} // namespace core::profile
+}

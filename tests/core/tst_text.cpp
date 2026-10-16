@@ -1,6 +1,3 @@
-// Ports test_ini_encoding_fallback.py (#251) and the INI parsing cases from
-// test_core.py / test_favorite_prefix_whitespace.py.
-
 #include "core/text/IniFile.h"
 #include "core/text/IniText.h"
 #include "core/text/PyText.h"
@@ -13,8 +10,6 @@ using namespace core;
 
 namespace {
 
-// Valid UTF-8 with plenty of multi-byte characters and ONE bare corrupt
-// byte, with keys after it that a truncating parser would lose.
 QByteArray corruptedUtf8()
 {
     return QStringLiteral("vehicle_NameHunter=Drake Cutlass Black\n"
@@ -26,7 +21,6 @@ QByteArray corruptedUtf8()
            QStringLiteral("key_after_bad_byte=must survive\nlast=entrée\n").toUtf8();
 }
 
-// A whole file in Windows-1252: every high byte is invalid UTF-8 on its own.
 QByteArray cp1252File()
 {
     return QByteArray("vehicle_NameHunter=Drake Cutlass Black\n"
@@ -45,7 +39,7 @@ QString writeTemp(const QTemporaryDir &dir, const QString &name, const QByteArra
     return f.fileName();
 }
 
-} // namespace
+}
 
 class TestText : public QObject
 {
@@ -57,7 +51,7 @@ private slots:
         QCOMPARE(py::strip(u"  \t a b \r\n"), QStringLiteral("a b"));
         QCOMPARE(py::strip(QStringView(u"\x1c"
                                        "x\x1f")),
-                 QStringLiteral("x")); // Python counts these as whitespace
+                 QStringLiteral("x"));
         QCOMPARE(py::strip(QString(QChar(0xA0)) + QStringLiteral("x")), QStringLiteral("x"));
         QCOMPARE(py::rstrip(QStringView(u"a=b\r\r"), u'\r').toString(), QStringLiteral("a=b"));
     }
@@ -133,15 +127,13 @@ private slots:
         QCOMPARE(m.value(QStringLiteral("key")), QStringLiteral("metadata stripped"));
         QCOMPARE(m.value(QStringLiteral("k")), QStringLiteral("a=b"));
         QCOMPARE(m.value(QStringLiteral("dup")), QStringLiteral("second"));
-        // Re-assigning keeps the original position, like a Python dict.
         QCOMPARE(m.entries().last().first, QStringLiteral("dup"));
         QCOMPARE(m.entries().first().first, QStringLiteral("spaced key"));
     }
 
-    // #100: a single-space favourite prefix must survive user.ini.
     void unstrippedValuesKeepSpaces()
     {
-        const IniMap m = parseIni(QStringLiteral("vehicle_NameX= Cutlass\n"), /*stripValues=*/false);
+        const IniMap m = parseIni(QStringLiteral("vehicle_NameX= Cutlass\n"), false);
         QCOMPARE(m.value(QStringLiteral("vehicle_NameX")), QStringLiteral(" Cutlass"));
     }
 

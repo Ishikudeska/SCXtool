@@ -11,10 +11,6 @@
 
 namespace engine::gamedata::json {
 
-// System.Text.Json's Utf8JsonWriter with WriteIndented, UnsafeRelaxedJsonEscaping
-// and Environment.NewLine (CRLF): two-space indent, "key": value, numbers
-// as .NET formats them. Callers write keys in the order the C# properties
-// are declared and skip the ones that are null.
 class Writer
 {
 public:
@@ -30,7 +26,6 @@ public:
     void value(std::int32_t v);
     void null();
 
-    // Shorthands for "key": value.
     template <class T> void field(std::string_view name, const T &v)
     {
         key(name);
@@ -51,27 +46,23 @@ private:
     void newLine();
 
     std::string out_;
-    std::vector<bool> hasItems_; // per open container
+    std::vector<bool> hasItems_;
     bool afterKey_ = false;
 };
 
 struct Member;
 
-// A parsed JSON value, enough for reading an overlay game_data.json.
 struct Value
 {
     enum class Type { Null, Bool, Number, String, Array, Object } type = Type::Null;
     bool boolean = false;
     double number = 0;
-    std::string numberText; // as written, for Int32 checks
+    std::string numberText;
     std::string string;
     std::vector<Value> array;
-    // In document order. A forward-declared Member, not std::pair<string,
-    // Value>: a pair of the still-incomplete Value is undefined behaviour
-    // (GCC accepts it; clang, and so clangd and clang-tidy, reject it).
     std::vector<Member> object;
 
-    const Value *find(std::string_view name) const; // the last property with that name
+    const Value *find(std::string_view name) const;
 };
 
 struct Member
@@ -82,4 +73,4 @@ struct Member
 
 std::optional<Value> parse(std::string_view text);
 
-} // namespace engine::gamedata::json
+}

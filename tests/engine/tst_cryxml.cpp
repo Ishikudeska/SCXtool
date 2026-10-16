@@ -11,7 +11,6 @@ using namespace engine;
 
 namespace {
 
-// Builds a CryXmlB file. Nodes are (name, content, parent, attributes).
 struct Node
 {
     std::string name;
@@ -23,7 +22,7 @@ struct Node
 std::vector<std::uint8_t> buildCryXml(const std::vector<Node> &nodes, bool bigEndian,
                                       const std::string &magic = "CryXmlB")
 {
-    std::string strings(1, '\0'); // offset 0 = empty string
+    std::string strings(1, '\0');
     std::map<std::string, std::int32_t> offsets{{"", 0}};
     auto intern = [&](const std::string &s) {
         if (auto it = offsets.find(s); it != offsets.end())
@@ -98,7 +97,7 @@ std::vector<std::uint8_t> buildCryXml(const std::vector<Node> &nodes, bool bigEn
 const std::vector<Node> kShip = {
     {"Root", "", -1, {{"version", "2"}, {"name", "ship"}}},
     {"Part", "some text", 0, {{"name", "nose"}}},
-    {"Part", "  \r\n ", 0, {{"name", "tail"}}}, // blank content is dropped
+    {"Part", "  \r\n ", 0, {{"name", "tail"}}},
 };
 
 const std::string kShipXml = "<Root version=\"2\" name=\"ship\">\r\n"
@@ -111,7 +110,7 @@ std::string asString(const Result<std::string> &r)
     return r ? *r : "error: " + r.error().message;
 }
 
-} // namespace
+}
 
 class TestCryXml : public QObject
 {

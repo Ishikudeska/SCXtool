@@ -1,14 +1,8 @@
-# The executable: C++ view-models exposed to the QML frontend.
-
 qt_add_executable(scapp WIN32
     main.cpp
 )
 if(WIN32)
-    # windres does not quote -I paths, so a space anywhere in the source path
-    # breaks it. Compile the resource in its own object library with no include
-    # directories and reference the manifest by absolute path.
     set(SC_APP_MANIFEST "${CMAKE_CURRENT_SOURCE_DIR}/app.manifest")
-    # Built from the SVGs beside it by tools/icon/build_ico.py.
     set(SC_APP_ICON "${PROJECT_SOURCE_DIR}/resources/icon/app.ico")
     configure_file(app.rc.in ${CMAKE_CURRENT_BINARY_DIR}/app.rc @ONLY)
     add_library(scapp_resources OBJECT ${CMAKE_CURRENT_BINARY_DIR}/app.rc)
@@ -68,7 +62,6 @@ qt_add_qml_module(scapp
         qml/pages/DocsPage.qml
 )
 
-# Bundled data: UI translations, DataForge patches, docs and the tour, read from qrc.
 file(GLOB_RECURSE SC_LANGUAGE_FILES CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/resources/languages/*)
 file(GLOB_RECURSE SC_PATCH_FILES CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/resources/patches/*)
 file(GLOB_RECURSE SC_DOC_FILES CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/resources/docs/*)
@@ -93,21 +86,15 @@ target_link_libraries(scapp PRIVATE
 sc_set_warnings(scapp)
 sc_precompile(scapp <QQmlEngine> <QVariantList> <QVariantMap> <QtQml/qqmlregistration.h>)
 
-# QML compiles to bytecode only, not to C++ as well: each page's C++ took as
-# long to build as the largest source files, for no difference this UI shows.
 set_target_properties(scapp PROPERTIES QT_QMLCACHEGEN_ARGUMENTS "--only-bytecode")
 
-# ── install / deploy ──────────────────────────────────────────────────────
 if(NOT WIN32)
-    # Linux and other Unix: a standard FHS layout against the system Qt, for
-    # distro packages (see packaging/aur/PKGBUILD).
     include(GNUInstallDirs)
     install(TARGETS scapp RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
     configure_file(${PROJECT_SOURCE_DIR}/packaging/linux/app.desktop.in
                    ${CMAKE_CURRENT_BINARY_DIR}/${APP_EXE_NAME}.desktop @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${APP_EXE_NAME}.desktop
             DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
-    # The .desktop file's Icon= names this; app-small.svg is the 16-32 px design.
     set(SC_ICON_DIR ${CMAKE_INSTALL_DATADIR}/icons/hicolor)
     install(FILES ${PROJECT_SOURCE_DIR}/resources/icon/app.svg
             DESTINATION ${SC_ICON_DIR}/scalable/apps RENAME ${APP_EXE_NAME}.svg)
@@ -115,7 +102,6 @@ if(NOT WIN32)
         install(FILES ${PROJECT_SOURCE_DIR}/resources/icon/app-small.svg
                 DESTINATION ${SC_ICON_DIR}/${_size}/apps RENAME ${APP_EXE_NAME}.svg)
     endforeach()
-    # zstd, zlib and pugixml are linked in statically, so their licenses ship.
     set(SC_LICENSE_DIR ${CMAKE_INSTALL_DATADIR}/licenses/${APP_EXE_NAME}
         CACHE STRING "Where the license files install (packages use their package name)")
     install(FILES ${PROJECT_SOURCE_DIR}/LICENSE ${PROJECT_SOURCE_DIR}/NOTICE DESTINATION ${SC_LICENSE_DIR})
@@ -125,19 +111,14 @@ if(NOT WIN32)
     return()
 endif()
 
-# Windows: `cmake --install <build> --prefix <dir>` produces a runnable folder: the
-# exe, the Qt DLLs, plugins and QML modules windeployqt picks (Qt stays as
-# DLLs, which keeps LGPL compliance simple), and the license files.
 install(TARGETS scapp RUNTIME DESTINATION .)
 qt_generate_deploy_qml_app_script(
     TARGET scapp
     OUTPUT_SCRIPT SC_DEPLOY_SCRIPT
     NO_TRANSLATIONS
     NO_UNSUPPORTED_PLATFORM_ERROR
-    # The QML debugger plugins are only useful attached to Qt Creator.
     DEPLOY_TOOL_OPTIONS --skip-plugin-types qmltooling
 )
-# The Qt DLLs go beside the exe, not in bin/ (Qt's default).
 install(CODE [[set(QT_DEPLOY_BIN_DIR ".")]])
 install(SCRIPT ${SC_DEPLOY_SCRIPT})
 
@@ -145,7 +126,6 @@ install(FILES ${PROJECT_SOURCE_DIR}/LICENSE ${PROJECT_SOURCE_DIR}/NOTICE DESTINA
 install(FILES ${zstd_SOURCE_DIR}/LICENSE DESTINATION licenses RENAME zstd-BSD-3-Clause.txt)
 install(FILES ${zlib_SOURCE_DIR}/LICENSE DESTINATION licenses RENAME zlib.txt)
 install(FILES ${pugixml_SOURCE_DIR}/LICENSE.md DESTINATION licenses RENAME pugixml-MIT.txt)
-# Qt's LGPLv3 text ships with the Qt installer, two levels above the kit.
 get_filename_component(SC_QT_LICENSE "${QT6_INSTALL_PREFIX}/../../Licenses/LICENSE" ABSOLUTE)
 if(EXISTS "${SC_QT_LICENSE}")
     install(FILES "${SC_QT_LICENSE}" DESTINATION licenses RENAME Qt-LGPL-3.0.txt)
@@ -153,6 +133,5 @@ else()
     message(WARNING "Qt license text not found at ${SC_QT_LICENSE}; add it to licenses/ by hand")
 endif()
 if(APP_PORTABLE)
-    # Portable builds keep settings and data in data/ beside the exe.
     install(DIRECTORY DESTINATION data)
 endif()

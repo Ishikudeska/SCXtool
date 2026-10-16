@@ -6,8 +6,6 @@
 using namespace core;
 using namespace core::table;
 
-// The String Editor's model over the core filter/sort functions: rows,
-// search, edits and their counts, and sorting.
 class TestStringTableModel : public QObject
 {
     Q_OBJECT
@@ -54,11 +52,11 @@ private slots:
                                        QStringLiteral("ui_Zeta")}));
         QCOMPARE(m.data(m.index(0, ColCurrent)).toString(), QStringLiteral("First Thing"));
 
-        m.sortBy(ColKey); // same column again: descending
+        m.sortBy(ColKey);
         QVERIFY(m.sortDescending());
         QCOMPARE(keys(m), (QStringList{QStringLiteral("ui_Zeta"), QStringLiteral("ui_Mid"),
                                        QStringLiteral("ui_alpha")}));
-        m.sortBy(ColCurrent); // a new column starts ascending
+        m.sortBy(ColCurrent);
         QVERIFY(!m.sortDescending());
         QCOMPARE(m.key(0), QStringLiteral("ui_alpha"));
     }
@@ -73,11 +71,11 @@ private slots:
         QCOMPARE(keys(m), QStringList{QStringLiteral("ui_Mid")});
         QCOMPARE(m.rowForKey(QStringLiteral("ui_Mid")), 0);
         QCOMPARE(m.rowForKey(QStringLiteral("ui_alpha")), -1);
-        m.setSearchText(QStringLiteral("avenger")); // the same filter: no refilter, no signal
+        m.setSearchText(QStringLiteral("avenger"));
         QCOMPARE(changed.size(), 1);
 
         m.setColumnFilter(ColKey, QStringLiteral("zeta"));
-        QCOMPARE(m.visibleCount(), 0); // both filters apply
+        QCOMPARE(m.visibleCount(), 0);
         m.clearFilters();
         QCOMPARE(m.searchText(), QString());
         QCOMPARE(m.visibleCount(), 3);

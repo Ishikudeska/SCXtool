@@ -7,12 +7,12 @@
 namespace engine {
 
 enum class Errc {
-    Io,          // a read or write failed
-    NotFound,    // file or archive entry missing
-    Locked,      // file held open by another process (e.g. the RSI Launcher patching Data.p4k)
-    Format,      // not the format we expected
-    Unsupported, // valid data using a feature we don't implement
-    Corrupt,     // data failed to decode or verify
+    Io,
+    NotFound,
+    Locked,
+    Format,
+    Unsupported,
+    Corrupt,
     Cancelled,
 };
 
@@ -29,4 +29,4 @@ inline std::unexpected<Error> fail(Errc code, std::string message)
     return std::unexpected(Error{code, std::move(message)});
 }
 
-} // namespace engine
+}

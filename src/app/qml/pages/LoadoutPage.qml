@@ -4,16 +4,12 @@ import QtQuick.Controls.Basic
 import QtQuick.Layouts
 import ScApp
 
-// Loadout: a ship's stock loadout from the game data and what it adds up
-// to; swap items for ones that fit, split the power, save loadouts, and run
-// the quantum travel and versus simulations.
 Item {
     id: page
 
-    // True while the page is showing: the catalog loads on first show.
     property bool active: false
     property string shipSearch: ""
-    property string versusId: "" // the versus simulation's target ship; "" for none
+    property string versusId: ""
     readonly property var shownShips: {
         const q = shipSearch.trim().toLowerCase()
         return q === "" ? lc.ships
@@ -25,9 +21,6 @@ Item {
         active: page.active
     }
 
-    // ── building blocks ──
-
-    // A titled panel.
     component Panel: Rectangle {
         id: panel
         property string title
@@ -59,7 +52,6 @@ Item {
         }
     }
 
-    // A big figure with its caption.
     component Figure: ColumnLayout {
         id: figure
         property string value
@@ -71,7 +63,6 @@ Item {
         Label { text: figure.caption; color: Theme.placeholder; font.pixelSize: Theme.smallFont }
     }
 
-    // A label and its value on one line; hidden when the value is empty.
     component Row: RowLayout {
         id: row
         property string label
@@ -84,7 +75,6 @@ Item {
         Label { text: row.value; color: row.valueColor; font.bold: true }
     }
 
-    // Physical / energy / distortion columns for one quantity.
     component TypeRow: RowLayout {
         id: typeRow
         property string label
@@ -104,7 +94,6 @@ Item {
         }
     }
 
-    // A small outlined tag.
     component Tag: Rectangle {
         id: tag
         property string text
@@ -125,8 +114,6 @@ Item {
         }
     }
 
-    // ── layout ──
-
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: Theme.spacing
@@ -144,7 +131,6 @@ Item {
             }
         }
 
-        // ── what's missing ──
         RowLayout {
             Layout.fillWidth: true
             spacing: 10
@@ -165,7 +151,6 @@ Item {
             }
         }
 
-        // ── ship and saved loadouts ──
         Flow {
             Layout.fillWidth: true
             spacing: 8
@@ -236,7 +221,6 @@ Item {
             color: Theme.placeholder
         }
 
-        // ── summary beside the slots ──
         RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -399,7 +383,6 @@ Item {
                                         font.pixelSize: Theme.smallFont
                                     }
                                 }
-                                // Click a pip to power up to it; the first again to switch off.
                                 Flow {
                                     Layout.fillWidth: true
                                     spacing: 3
@@ -476,7 +459,6 @@ Item {
 
                     Panel {
                         title: qsTr("loadout.simulations")
-                        // Quantum travel time.
                         RowLayout {
                             Layout.fillWidth: true
                             visible: (lc.totals.quantum?.speed ?? "") !== ""
@@ -498,7 +480,6 @@ Item {
                                 font.bold: true
                             }
                         }
-                        // Versus another ship's stock loadout.
                         RowLayout {
                             Layout.fillWidth: true
                             spacing: 6
@@ -518,7 +499,6 @@ Item {
                             Layout.fillWidth: true
                             implicitHeight: fightRows.implicitHeight
                             visible: page.versusId !== ""
-                            // Recomputed whenever the loadout's totals change.
                             readonly property var result: lc.totals && page.versusId !== "" ? lc.engage(page.versusId)
                                                                                            : ({})
                             ColumnLayout {
@@ -545,7 +525,6 @@ Item {
                 }
             }
 
-            // ── slots ──
             ScrollView {
                 id: slotScroll
                 Layout.fillWidth: true
@@ -664,7 +643,6 @@ Item {
         }
     }
 
-    // ── item picker ──
     Popup {
         id: picker
         property string path

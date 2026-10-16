@@ -30,7 +30,6 @@ QJsonObject loadTree(const QString &path)
     const QByteArray bytes = file.readAll();
     QJsonParseError error;
     const QJsonDocument doc = QJsonDocument::fromJson(bytes, &error);
-    // json.load rejects a BOM; so does this, rather than half-loading.
     if (bytes.startsWith("\xEF\xBB\xBF") || error.error != QJsonParseError::NoError || !doc.isObject()) {
         qCWarning(lcI18n) << "could not load" << path << error.errorString();
         return {};
@@ -43,7 +42,6 @@ bool isLeaf(const QJsonValue &v)
     return v.isObject() && (v.toObject().contains(kHuman) || v.toObject().contains(kAi));
 }
 
-// "ht" if set, else "at"; a plain string is itself; anything else is blank.
 QString leafValue(const QJsonValue &v)
 {
     if (v.isString())
@@ -58,7 +56,6 @@ QString leafValue(const QJsonValue &v)
 void flatten(const QJsonObject &node, const QString &prefix, QHash<QString, QString> &out)
 {
     for (auto it = node.begin(); it != node.end(); ++it) {
-        // A dotted name cannot be addressed by a dot path.
         if (it.key().contains(u'.'))
             continue;
         const QString path = prefix + it.key();
@@ -85,7 +82,6 @@ int leafCount(const QJsonValue &node)
     return n;
 }
 
-// Python's str() of a format argument.
 QString pyStr(const QVariant &v)
 {
     if (v.typeId() == QMetaType::Bool)
@@ -110,7 +106,6 @@ bool isIntegral(const QVariant &v)
     }
 }
 
-// format(value, ",") for an integer: "1,234,567".
 QString groupThousands(const QVariant &v)
 {
     const bool negative = v.toLongLong() < 0;
@@ -130,15 +125,15 @@ std::optional<QString> formatField(const QString &field, const QVariantHash &arg
         return std::nullopt;
     const auto it = args.constFind(name);
     if (it == args.cend())
-        return std::nullopt; // KeyError
+        return std::nullopt;
     if (spec.isEmpty())
         return pyStr(*it);
     if (spec == u"," && isIntegral(*it))
         return groupThousands(*it);
-    return std::nullopt; // a spec the UI text never uses
+    return std::nullopt;
 }
 
-} // namespace
+}
 
 Catalog Catalog::load(const QString &languagesDir, const QString &language)
 {
@@ -166,7 +161,6 @@ void deepMerge(QJsonObject &base, const QJsonObject &overlay)
         const QString &k = it.key();
         const QJsonValue v = it.value();
         if (isLeaf(v)) {
-            // A blank leaf keeps the English one as the floor.
             if (!leafValue(v).isEmpty() || !base.contains(k))
                 base.insert(k, v);
         } else if (v.isObject() && base.value(k).isObject() && !isLeaf(base.value(k))) {
@@ -220,7 +214,6 @@ QString format(const QString &text, const QVariantHash &args)
                 ++i;
                 continue;
             }
-            // The field runs to the matching brace (a spec may nest one).
             qsizetype depth = 1;
             qsizetype j = i + 1;
             for (; j < text.size() && depth > 0; ++j)
@@ -238,7 +231,7 @@ QString format(const QString &text, const QVariantHash &args)
                 ++i;
                 continue;
             }
-            return text; // "Single '}' encountered"
+            return text;
         } else {
             out += c;
         }
@@ -249,7 +242,6 @@ QString format(const QString &text, const QVariantHash &args)
 QString tr(const char *key, const QVariantHash &args)
 {
     const QString text = QCoreApplication::translate(nullptr, key);
-    // The Python only formats when arguments are given.
     return args.isEmpty() ? text : format(text, args);
 }
 
@@ -269,4 +261,4 @@ QStringList availableLanguages(const QString &languagesDir)
     return names;
 }
 
-} // namespace core::i18n
+}

@@ -63,7 +63,6 @@ bool less(QStringView a, QStringView b)
     for (qsizetype i = 0; i < n; ++i) {
         if (a[i] == b[i])
             continue;
-        // Surrogates encode code points above every other BMP character.
         const auto rank = [](QChar c) { return c.isSurrogate() ? 0x10000 + c.unicode() : c.unicode() + 0; };
         return rank(a[i]) < rank(b[i]);
     }
@@ -87,7 +86,7 @@ QString titleOf(char32_t c)
     return one(QChar::toTitleCase(c));
 }
 
-} // namespace
+}
 
 QString rePattern(const QString &pattern)
 {
@@ -108,7 +107,6 @@ QString rePattern(const QString &pattern)
         if (c == u'[' && !inClass) {
             inClass = true;
             out += c;
-            // A leading ']' (or "^]") is a literal member.
             if (i + 1 < pattern.size() && pattern[i + 1] == u'^')
                 out += pattern[++i];
             if (i + 1 < pattern.size() && pattern[i + 1] == u']')
@@ -150,4 +148,4 @@ QString title(QStringView s)
     return out;
 }
 
-} // namespace core::py
+}

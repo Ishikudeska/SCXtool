@@ -67,7 +67,6 @@ Loc scanEntityDir(const RecordStore &store, const QString &relDir, const Enhance
             ++missed;
         }
 
-        // The item_Name tag ([MIL-S1-A], [IR-S2], ...), and its _short.
         if (options.generateNameTags && !loc.isEmpty()) {
             const QString nameKey = locNameKey(root);
             if (nameKey.isEmpty())
@@ -101,14 +100,12 @@ Loc scanEntityDir(const RecordStore &store, const QString &relDir, const Enhance
 
 namespace {
 
-// The stats part of `value` grafted onto `base`, or `value` when it has none.
 QString graftStats(const QString &base, const QString &value)
 {
     const qsizetype at = value.indexOf(kEnhancementSeparator);
     return at >= 0 ? base + value.sliced(at) : value;
 }
 
-// "Name [MIL-S1-A]" -> "<base> [MIL-S1-A]", or `value` without a trailing tag.
 QString graftTag(const QString &base, const QString &value)
 {
     static const QRegularExpression re = py::re(QStringLiteral(R"(\s(\[[A-Z0-9\-]+\])\s*$)"));
@@ -118,7 +115,7 @@ QString graftTag(const QString &base, const QString &value)
 
 constexpr std::array kCompTypes = {"COOL", "SHLD", "POWR", "QDRV", "RADR"};
 
-} // namespace
+}
 
 std::pair<int, int> mirrorScitemSiblings(Loc &out, const Loc &loc)
 {
@@ -276,7 +273,6 @@ Loc generateShipWeapons(const Context &ctx)
     options.nameTagPlacement = cfg.placement;
     options.tagLoc = ctx.tagLoc;
     options.prepend = ctx.statsPrepend;
-    // Mining lasers share the folder with combat weapons.
     const auto dispatch = [&ctx](Node root) {
         if (findDescendant(root, "SEntityComponentMiningLaserParams"))
             return enhancementsMiningLaser(root);
@@ -292,7 +288,6 @@ Loc generateFpsWeapons(const Context &ctx)
         return {};
     ScanOptions options;
     options.prepend = ctx.statsPrepend;
-    // Handheld salvage tools share the folder with combat weapons.
     const auto dispatch = [&ctx](Node root) {
         if (findDescendant(root, "SWeaponActionFireSalvageRepairParams"))
             return enhancementsSalvageTool(root);
@@ -305,7 +300,6 @@ Loc generateShips(const Context &ctx)
 {
     const QString dir = QStringLiteral("entities/spaceships");
     QStringList files = ctx.store->filesIn(dir);
-    // sorted(Path(...)): Windows paths compare lower-cased.
     std::stable_sort(files.begin(), files.end(), [](const QString &a, const QString &b) {
         return py::less(QFileInfo(a).fileName().toLower(), QFileInfo(b).fileName().toLower());
     });
@@ -368,7 +362,6 @@ Loc generateShips(const Context &ctx)
 
 Loc generateMedicalConsumables(const Context &ctx)
 {
-    // CureLife pens: their descriptions are lore only.
     static const std::array<std::pair<const char *, const char *>, 7> effects = {{
         {"item_Desccrlf_consumable_adrenaline_01",
          "Reduces concussion symptoms, normalizes weapon handling and movement speed."},
@@ -391,4 +384,4 @@ Loc generateMedicalConsumables(const Context &ctx)
     return out;
 }
 
-} // namespace core::enh
+}

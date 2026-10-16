@@ -24,7 +24,6 @@ bool isZeroText(const std::optional<std::string_view> &v)
     return v && (*v == "0" || *v == "0.0");
 }
 
-// `v not in (None, "0", "0.0")`
 bool setAndNonZero(const std::optional<std::string_view> &v)
 {
     return v && !isZeroText(v);
@@ -40,7 +39,6 @@ QString lower(std::string_view s)
     return qs(s).toLower();
 }
 
-// f"{v:,.0f}", f"{v:.2f}" and friends.
 QString f0(double v)
 {
     return py::fixed(v, 0, true);
@@ -103,7 +101,6 @@ QString damageLabel(const char *attr)
     return labels.value(QString::fromLatin1(attr));
 }
 
-// float(info.get(attr, 0)): a missing attribute is 0; nothing for junk.
 std::optional<double> damageValue(Node info, const char *attr)
 {
     const auto v = get(info, attr);
@@ -126,7 +123,7 @@ void addDamage(DamageBreakdown &b, Node info)
     }
 }
 
-} // namespace
+}
 
 double requireFloat(const std::optional<std::string_view> &value)
 {
@@ -254,7 +251,6 @@ DamageBreakdown ammoDamageBreakdown(Node ammoRoot)
         for (const Node info : iter(damage, "DamageInfo"))
             addDamage(b, info);
     } else {
-        // The first DamageInfo anywhere.
         const std::vector<Node> infos = iter(ammoRoot, "DamageInfo");
         if (!infos.empty())
             addDamage(b, infos.front());
@@ -327,7 +323,6 @@ QString enhancementsShield(Node root)
 QString enhancementsMissile(Node root)
 {
     QStringList lines;
-    // Positive float of a truthy, non-"0" attribute value.
     const auto positive = [](const std::optional<std::string_view> &v) -> std::optional<double> {
         if (!v || v->empty() || *v == "0")
             return std::nullopt;
@@ -391,7 +386,6 @@ QString enhancementsMissile(Node root)
         return true;
     });
 
-    // Lock range from targetingParams' lockRangeMin / lockRangeMax.
     const auto optFloat = [](const std::optional<std::string_view> &v) -> std::optional<double> {
         return v && !v->empty() ? toFloat(*v) : std::nullopt;
     };
@@ -485,7 +479,6 @@ QString enhancementsRadar(Node root)
         const auto maxD = get(aim.front(), "distanceMaxAssignment");
         const std::optional<double> minV = minD && !minD->empty() ? toFloat(*minD) : std::nullopt;
         const std::optional<double> maxV = maxD && !maxD->empty() ? toFloat(*maxD) : std::nullopt;
-        // Both must parse: one bad number voids the line, as the shared try block does.
         if (minV && maxV && *maxV > 0)
             lines << QStringLiteral("Aim Assist Range: %1–%2 m").arg(f0(*minV), f0(*maxV));
     }
@@ -560,8 +553,6 @@ QString enhancementsQuantumDrive(Node root)
     if (!qd)
         return QString();
     const auto fuelReq = get(qd, "quantumFuelRequirement");
-    // The 4.x rework dropped the __type marker: try the typed form, then
-    // the bare <params> child.
     Node params = findByType(root, "SQuantumDriveParams");
     if (!params)
         params = find(qd, "params");
@@ -618,7 +609,6 @@ QString enhancementsQuantumDrive(Node root)
 
 namespace {
 
-// The beam parts shared by mining lasers and salvage tools.
 void energyHeatWear(QStringList &parts, Node fa)
 {
     const auto eMin = get(fa, "minEnergyDraw");
@@ -643,7 +633,7 @@ QString signedPercent(const QString &label, std::string_view value)
     return QStringLiteral("%1: %2%3%").arg(label, sign, qs(value));
 }
 
-} // namespace
+}
 
 QString enhancementsMiningLaser(Node root)
 {
@@ -1132,4 +1122,4 @@ QString enhancementsShip(Node root, Node controllerRoot, const Loc *loc, const R
     return joinLines(lines);
 }
 
-} // namespace core::enh
+}

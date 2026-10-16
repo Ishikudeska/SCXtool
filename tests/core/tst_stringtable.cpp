@@ -1,7 +1,3 @@
-// The String Editor's table logic. Ports test_ship_sort_prefix.py,
-// test_entry_filter.py, test_favorite_toggle_stranded.py and
-// test_onedrive.py.
-
 #include "core/model/StringTable.h"
 #include "core/util/OneDrive.h"
 
@@ -35,7 +31,7 @@ QProcessEnvironment env(std::initializer_list<std::pair<const char *, const char
     return e;
 }
 
-} // namespace
+}
 
 class TestStringTable : public QObject
 {
@@ -94,7 +90,6 @@ private slots:
         QCOMPARE(name.customValue, QString());
         QCOMPARE(name.status, EntryStatus::Unmodified);
 
-        // A description can't be starred, but a stranded prefix comes off.
         StringEntry desc =
             entry(QStringLiteral("vehicle_DescAEGS_Avenger"), category::kShips, QStringLiteral("Desc"));
         QVERIFY(!toggleFavorite(desc, kFav));
@@ -108,7 +103,6 @@ private slots:
             entry(QStringLiteral("ui_x"), category::kOther, QStringLiteral("x"), QStringLiteral("*x"));
         QVERIFY(toggleFavorite(other, kFav));
         QCOMPARE(other.customValue, QString());
-        // An empty prefix never touches non-name rows.
         StringEntry plain = entry(QStringLiteral("ui_y"), category::kOther, QStringLiteral("y"));
         QVERIFY(!toggleFavorite(plain, QString()));
     }
@@ -150,7 +144,7 @@ private slots:
         QCOMPARE(filterEntryIndices(entries, defaults, status), QList<int>{2});
 
         FilterCriteria fav;
-        fav.favoritesOnly = true; // the starred description row doesn't count
+        fav.favoritesOnly = true;
         QCOMPARE(filterEntryIndices(entries, defaults, fav), QList<int>{0});
 
         FilterCriteria col;
@@ -166,10 +160,10 @@ private slots:
         col.columnText[ColStatus] = QStringLiteral("enh");
         QCOMPARE(filterEntryIndices(entries, defaults, col), QList<int>{2});
 
-        FilterCriteria search; // key, default, current and custom values
+        FilterCriteria search;
         search.searchText = QStringLiteral("avenger");
         QCOMPARE(filterEntryIndices(entries, defaults, search), (QList<int>{0, 1}));
-        search.searchText = QStringLiteral("AVENGER"); // matching ignores case either way
+        search.searchText = QStringLiteral("AVENGER");
         QCOMPARE(filterEntryIndices(entries, defaults, search), (QList<int>{0, 1}));
         search.searchText = QStringLiteral("stock");
         QCOMPARE(filterEntryIndices(entries, defaults, search), QList<int>{2});
@@ -177,14 +171,14 @@ private slots:
         QCOMPARE(filterEntryIndices(entries, defaults, search), QList<int>{1});
         search.searchText = QStringLiteral("haul");
         QCOMPARE(filterEntryIndices(entries, defaults, search), QList<int>{3});
-        search.category = category::kShips; // combines with the other filters
+        search.category = category::kShips;
         QVERIFY(filterEntryIndices(entries, defaults, search).isEmpty());
 
         FilterCriteria bp;
         bp.bpTitlesOnly = true;
         QCOMPARE(filterEntryIndices(entries, defaults, bp), QList<int>{3});
         bp.bpTitlesOnly = false;
-        bp.bpDescsOnly = true; // the commodity's colliding header is not a mission
+        bp.bpDescsOnly = true;
         QCOMPARE(filterEntryIndices(entries, defaults, bp), QList<int>{4});
         bp.bpTitlesOnly = true;
         QCOMPARE(filterEntryIndices(entries, defaults, bp), (QList<int>{3, 4}));
@@ -224,7 +218,7 @@ private slots:
         QList<int> rows = {0, 1, 2};
         sortIndices(rows, entries, {}, ColKey, false, false, kFav, {});
         QCOMPARE(rows, (QList<int>{1, 0, 2}));
-        sortIndices(rows, entries, {}, ColCurrent, true, false, kFav, {}); // ties keep their order
+        sortIndices(rows, entries, {}, ColCurrent, true, false, kFav, {});
         QCOMPARE(rows, (QList<int>{2, 1, 0}));
         sortIndices(rows, entries, {}, ColOrder, false, false, kFav, {});
         QCOMPARE(rows.front(), 2);
@@ -258,7 +252,7 @@ private slots:
             entry(QStringLiteral("a"), category::kOther, QStringLiteral("x"), QStringLiteral("y"))};
         QList<StringEntry> after = {entry(QStringLiteral("a"), category::kOther, QStringLiteral("y"))};
         QCOMPARE(restorePendingEdits(after, pendingEdits(before)), 1);
-        QCOMPARE(after[0].status, EntryStatus::Unmodified); // the new original already says "y"
+        QCOMPARE(after[0].status, EntryStatus::Unmodified);
     }
 
     void detectsOneDrive()
@@ -282,7 +276,6 @@ private slots:
                 .size(),
             1);
         QVERIFY(onedrive::roots({}).isEmpty());
-        // '/' so the path splits on every platform; the result uses native separators.
         const auto profile = env({{"USERPROFILE", "C:/Users/aabou"}});
         QCOMPARE(onedrive::suggestLocalDataDir(QStringLiteral("Smart Citizen"), profile),
                  QDir::toNativeSeparators(QStringLiteral("C:/Users/aabou/Documents/Smart Citizen")));

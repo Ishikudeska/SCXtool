@@ -15,8 +15,6 @@ bool isDigit(QChar c)
     return c >= u'0' && c <= u'9';
 }
 
-// digitpart: digit (["_"] digit)*. Appends the digits to `out` and
-// advances `i`; false when there is no digit at `i`.
 bool digitPart(QStringView s, qsizetype &i, std::string &out)
 {
     if (i >= s.size() || !isDigit(s[i]))
@@ -48,7 +46,7 @@ QString nonFinite(double v, bool plus)
     return plus ? QStringLiteral("+inf") : QStringLiteral("inf");
 }
 
-} // namespace
+}
 
 std::optional<double> toFloat(QStringView s)
 {
@@ -88,7 +86,7 @@ std::optional<double> toFloat(QStringView s)
     const auto [end, ec] = std::from_chars(begin, text.data() + text.size(), v);
     if (end != text.data() + text.size())
         return std::nullopt;
-    if (ec == std::errc::result_out_of_range) // Python rounds to inf / 0
+    if (ec == std::errc::result_out_of_range)
         return std::strtod(begin, nullptr);
     return v;
 }
@@ -116,7 +114,6 @@ QString repr(double v)
 {
     if (!std::isfinite(v))
         return nonFinite(v, false);
-    // Shortest digits in scientific form: "-d.ddde+XX".
     char buf[64];
     const auto [end, ec] = std::to_chars(buf, buf + sizeof buf, v, std::chars_format::scientific);
     std::string sci(buf, end);
@@ -127,7 +124,7 @@ QString repr(double v)
     std::string digits = sci.substr(0, e);
     digits.erase(std::remove(digits.begin(), digits.end(), '.'), digits.end());
     const int exponent = std::stoi(sci.substr(e + 1));
-    const int decpt = exponent + 1; // value = 0.DIGITS x 10^decpt
+    const int decpt = exponent + 1;
 
     std::string out = negative ? "-" : "";
     if (decpt > -4 && decpt <= 16) {
@@ -160,7 +157,7 @@ double round(double v)
         return floor;
     if (diff > 0.5)
         return floor + 1;
-    return std::fmod(floor, 2.0) == 0 ? floor : floor + 1; // ties to even
+    return std::fmod(floor, 2.0) == 0 ? floor : floor + 1;
 }
 
 QString groupThousands(const QString &number)
@@ -204,4 +201,4 @@ QString groupedRepr(double v)
     return groupThousands(repr(v));
 }
 
-} // namespace core::py
+}

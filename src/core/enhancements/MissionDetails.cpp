@@ -16,7 +16,7 @@ const QRegularExpression &routeTokenRe()
     return re;
 }
 
-} // namespace
+}
 
 QString routeTokenRole(const QString &var)
 {
@@ -50,7 +50,6 @@ RouteTokens agreedEndpointTokens(const std::vector<RouteTokens> &perBody)
     return out;
 }
 
-// Python int() of a count attribute: anything else raises.
 qint64 requireInt(std::string_view text)
 {
     const std::optional<qint64> v = py::toInt(qs(text));
@@ -62,14 +61,11 @@ qint64 requireInt(std::string_view text)
 struct SpawnKeyword
 {
     const char *substring;
-    const char *kind; // "ship", "npc" or nullptr for either
+    const char *kind;
     Spawn bucket;
     const char *label;
 };
 
-// Earlier entries win: specific names, factions, civilians, objectives,
-// allies (hostile in mercenary context), NPC roles, generic hostile words,
-// wave/tier rollups, the generic friendly catch-all.
 constexpr SpawnKeyword kSpawnKeywords[] = {
     {"shiptodefend", "ship", Spawn::Friendly, "Ships to Defend"},
     {"ship to defend", "ship", Spawn::Friendly, "Ships to Defend"},
@@ -102,7 +98,7 @@ constexpr SpawnKeyword kSpawnKeywords[] = {
     {"privatesecurity", "npc", Spawn::Hostile, "Private Security"},
     {"privsec", "npc", Spawn::Hostile, "Private Security"},
     {"civilian", nullptr, Spawn::Friendly, "Civilians"},
-    {"civillian", nullptr, Spawn::Friendly, "Civilians"}, // CIG typo
+    {"civillian", nullptr, Spawn::Friendly, "Civilians"},
     {"civs", "npc", Spawn::Friendly, "Civilians"},
     {"civ", "npc", Spawn::Friendly, "Civilians"},
     {"hostage", "npc", Spawn::Friendly, "Hostages"},
@@ -128,7 +124,7 @@ constexpr SpawnKeyword kSpawnKeywords[] = {
     {"attacker", "npc", Spawn::Hostile, "Attackers"},
     {"target", nullptr, Spawn::Hostile, "Targets"},
     {"reinforcement", nullptr, Spawn::Hostile, "Reinforcements"},
-    {"reinforcments", nullptr, Spawn::Hostile, "Reinforcements"}, // CIG typo
+    {"reinforcments", nullptr, Spawn::Hostile, "Reinforcements"},
     {"enemy", nullptr, Spawn::Hostile, "Hostiles"},
     {"enemies", nullptr, Spawn::Hostile, "Hostiles"},
     {"hostile", nullptr, Spawn::Hostile, "Hostiles"},
@@ -151,7 +147,6 @@ constexpr SpawnKeyword kSpawnKeywords[] = {
     {"protect", nullptr, Spawn::Friendly, "Protected"},
 };
 
-// A player-relative MissionProperty wrapper rescues an unclassified group.
 std::optional<std::pair<Spawn, QString>> wrapperHostileFallback(Node group)
 {
     static const std::array<std::pair<const char *, const char *>, 5> wrappers = {{
@@ -189,7 +184,7 @@ void addSpawn(SpawnBreakdown &b, Spawn bucket, const QString &label, qint64 coun
         b[bucket][label] += count;
 }
 
-} // namespace
+}
 
 QString classifyMissionEngagement(const QString &locKey)
 {
@@ -265,7 +260,6 @@ std::pair<RouteTokens, RouteTokens> expandNestedRouteVars(const QString &var, co
             perFrom.push_back(from);
             perTo.push_back(to);
         }
-        // Strict: a variant without the var means it may not register.
         const auto strict = [](const std::vector<RouteTokens> &per) {
             RouteTokens out;
             if (per.empty())
@@ -384,7 +378,6 @@ SpawnBreakdown extractSpawnCounts(Node element, const QStringList &excludeWithin
             total += requireInt(getOr(ship, "concurrentAmount", "0"));
         if (total <= 0)
             continue;
-        // Turrets are reported on their own line.
         if (name.contains(u"turret", Qt::CaseInsensitive))
             continue;
         auto [bucket, label] = classifySpawnGroup(name, QStringLiteral("ship"));
@@ -425,7 +418,6 @@ SpawnBreakdown extractSpawnCounts(Node element, const QStringList &excludeWithin
 
 QStringList formatSpawnLines(const SpawnBreakdown &breakdown)
 {
-    // Unknown is never shown (#187).
     QStringList lines;
     for (const auto &[bucket, header] : {std::pair{Spawn::Hostile, "Hostiles"},
                                          {Spawn::Friendly, "Friendlies"},
@@ -461,7 +453,7 @@ QString extractTurretInfo(Node root)
     }
     std::optional<bool> hostile;
     for (const Node prop : findAll(root, ".//MissionProperty")) {
-        if (getOr(prop, "missionVariableName") != "OverrideTurretHosility_BP") // CIG's spelling
+        if (getOr(prop, "missionVariableName") != "OverrideTurretHosility_BP")
             continue;
         if (const Node val = find(prop, ".//MissionPropertyValue_Boolean"))
             hostile = getOr(val, "value") == "1";
@@ -536,7 +528,6 @@ QStringList extractMissionFlags(Node root)
 
 qint64 extractMissionXp(Node root, const QHash<QString, qint64> &reputation)
 {
-    // The success outcome, primary faction only (as SCMDB shows it).
     const std::vector<Node> outcomes =
         findAll(root, ".//missionResultReputationRewards/SReputationAmountListParams");
     if (outcomes.empty())
@@ -579,8 +570,6 @@ QString enhancementsMission(Node root, const QHash<QString, qint64> &reputation,
         if (xp > 0 && ctx.showField(QStringLiteral("reputation")))
             lines << QStringLiteral("<EM4>%1:</EM4> %2").arg(repXpLabel, py::integer(xp, true));
 
-        // #165: a description shared by missions with different hostiles
-        // can't show one count for them.
         const bool ambiguous = spawnAmbiguousKeys && spawnAmbiguousKeys->contains(key);
         if (ctx.showField(QStringLiteral("spawns"))) {
             SpawnBreakdown b = extractSpawnCounts(root);
@@ -591,9 +580,8 @@ QString enhancementsMission(Node root, const QHash<QString, qint64> &reputation,
         if (const QString turrets = extractTurretInfo(root); !turrets.isEmpty())
             lines << QStringLiteral("<EM4>Turrets:</EM4> ") + turrets;
     } catch (const PyError &) {
-        // The Python swallows the error and keeps the lines it had.
     }
     return lines.join(kNl);
 }
 
-} // namespace core::enh
+}

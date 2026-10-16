@@ -6,12 +6,9 @@ import ScApp
 ApplicationWindow {
     id: window
 
-    // Set by main(): run the startup checks (off for --smoke-test and
-    // --screenshot), and the page to show first.
     property bool autoStart: true
     property string initialPage: ""
     property string explorerPath: ""
-    // --tour [n]: start the guided tour (n steps in) instead of the startup checks.
     property int tourStep: -1
     readonly property bool simple: App.uiMode === "simple"
     property string page: initialPage !== "" ? initialPage : "strings"
@@ -72,8 +69,6 @@ ApplicationWindow {
         App.requestClose()
     }
 
-    // Window size: the saved geometry when there is one, else by mode
-    // (Advanced maximized, Simple compact). Not for --screenshot runs.
     function saveGeometry() {
         if (!autoStart)
             return
@@ -108,8 +103,6 @@ ApplicationWindow {
         function onWindowProportionsReset() { window.sizeForMode() }
     }
 
-    // First launch of a version: the tour runs before the startup checks,
-    // so its coach marks and the startup prompts never overlap.
     Component.onCompleted: {
         if (tourStep >= 0) {
             Qt.callLater(() => { tutorial.start(); for (let i = 0; i < tourStep; ++i) tutorial.next() })
@@ -226,7 +219,6 @@ ApplicationWindow {
         DocsPage { document: "LEGAL" }
     }
 
-    // The Help side panel (HELP.md).
     Drawer {
         id: helpDrawer
         edge: Qt.RightEdge

@@ -1,9 +1,3 @@
-// The enhancements generator's helpers against the original Python: every
-// call Smart Citizen's own generator tests made (tests/fixtures/
-// generator_calls.json, recorded by tools/parity/gen_generator_fixtures.py)
-// is replayed here and must return the same value. Whole-file output is
-// checked against real data by tests/parity/tst_parity_generator.
-
 #include "core/enhancements/Crafting.h"
 #include "core/enhancements/Missions.h"
 #include "core/enhancements/Stats.h"
@@ -23,11 +17,9 @@ using namespace core::enh;
 
 namespace {
 
-// ── decoding the recorder's encoding ──────────────────────────────────
-
 struct Decoder
 {
-    std::vector<XmlDoc> docs; // keep parsed elements alive
+    std::vector<XmlDoc> docs;
 
     Node element(const QJsonValue &v)
     {
@@ -60,7 +52,6 @@ QStringList strList(const QJsonValue &v)
     return out;
 }
 
-// (key, value) pairs of a recorded str-keyed dict.
 QList<std::pair<QString, QJsonValue>> items(const QJsonValue &v)
 {
     QList<std::pair<QString, QJsonValue>> out;
@@ -91,8 +82,6 @@ QHash<QString, qint64> intMap(const QJsonValue &v)
         out.insert(k, x.toInteger());
     return out;
 }
-
-// ── encoding results the same way ─────────────────────────────────────
 
 QJsonValue optStr(const QString &s)
 {
@@ -162,7 +151,6 @@ SpawnBreakdown breakdownFrom(const QJsonValue &v)
     return b;
 }
 
-// Python dict order the C++ side doesn't keep (QHash/QMap): compare sorted.
 QJsonValue sortDicts(const QJsonValue &v)
 {
     if (v.isArray()) {
@@ -187,8 +175,6 @@ QJsonValue sortDicts(const QJsonValue &v)
     }
     return o;
 }
-
-// ── the replay table ──────────────────────────────────────────────────
 
 struct Replay
 {
@@ -242,7 +228,7 @@ const std::map<QString, Replay> &replays()
              for (const QString &b : bodies)
                  ptrs << &b;
              const auto cfg = config(a[u"cfg"]);
-             RouteExpandCache cache; // some tests seed it instead of a loc
+             RouteExpandCache cache;
              for (const auto &[var, pair] : items(a[u"expand_cache"])) {
                  auto &[from, to] = cache[var];
                  for (const auto &[k, v] : items(pair[0]))
@@ -406,7 +392,7 @@ QByteArray compact(const QJsonValue &v)
     return QJsonDocument(QJsonArray{v}).toJson(QJsonDocument::Compact);
 }
 
-} // namespace
+}
 
 class TestGenerator : public QObject
 {
@@ -467,8 +453,6 @@ private slots:
             QVERIFY2(replays().contains(it.key()), qPrintable(it.key()));
     }
 
-    // PyError is raised like Python's exception, caught by reference, and
-    // still a std::exception for the task runner's last-resort handler.
     void raisesPyErrors()
     {
         QCOMPARE(requireFloat(std::string_view("2.5")), 2.5);

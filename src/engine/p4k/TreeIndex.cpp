@@ -12,7 +12,6 @@ char lower(char c)
     return c >= 'A' && c <= 'Z' ? static_cast<char>(c - 'A' + 'a') : c;
 }
 
-// -1/0/1 comparing ASCII case-insensitively.
 int compareCaseless(std::string_view a, std::string_view b)
 {
     const std::size_t n = std::min(a.size(), b.size());
@@ -29,7 +28,7 @@ bool equalCaseless(std::string_view a, std::string_view b)
     return a.size() == b.size() && compareCaseless(a, b) == 0;
 }
 
-} // namespace
+}
 
 std::optional<TreeIndex> TreeIndex::build(std::span<const Item> items, const std::atomic<bool> *cancel)
 {
@@ -43,9 +42,6 @@ std::optional<TreeIndex> TreeIndex::build(std::span<const Item> items, const std
     folders.emplace(std::string(), 0);
     std::string key;
 
-    // The folder for `dir` (a prefix of some item path), created with its
-    // ancestors when new. Parents are always created before their children,
-    // so a parent's id is lower than its children's.
     auto folderOf = [&](std::string_view dir, auto &self) -> NodeId {
         key.assign(dir);
         std::transform(key.begin(), key.end(), key.begin(), lower);
@@ -75,7 +71,7 @@ std::optional<TreeIndex> TreeIndex::build(std::span<const Item> items, const std
             slash == std::string_view::npos ? std::string_view() : p.substr(0, slash);
         const std::string_view name = slash == std::string_view::npos ? p : p.substr(slash + 1);
         const NodeId parent = dir.empty() ? 0 : folderOf(dir, folderOf);
-        if (name.empty()) { // a zip folder entry ("a/b/")
+        if (name.empty()) {
             index.itemNodes_[i] = parent;
             continue;
         }
@@ -94,7 +90,6 @@ std::optional<TreeIndex> TreeIndex::build(std::span<const Item> items, const std
     if (cancel && cancel->load(std::memory_order_relaxed))
         return std::nullopt;
 
-    // Group siblings: by parent, folders first, then name ignoring case.
     std::vector<NodeId> order(nodes.size() - 1);
     for (std::size_t i = 0; i < order.size(); ++i)
         order[i] = static_cast<NodeId>(i + 1);
@@ -121,7 +116,6 @@ std::optional<TreeIndex> TreeIndex::build(std::span<const Item> items, const std
     }
     index.children_ = std::move(order);
 
-    // Totals: children have higher ids than their parents.
     for (std::size_t id = nodes.size() - 1; id > 0; --id) {
         const Node &n = nodes[id];
         Node &parent = nodes[n.parent];
@@ -156,8 +150,6 @@ std::optional<TreeIndex::NodeId> TreeIndex::find(std::string_view path) const
         if (part.empty())
             continue;
         const Node &folder = nodes_[at];
-        // More path to come needs a folder; at the end a file wins over a
-        // folder of the same name.
         const bool wantFolder = !path.empty();
         NodeId found = kNone;
         for (std::uint32_t r = 0; r < folder.childCount; ++r) {
@@ -194,4 +186,4 @@ void TreeIndex::collectItems(NodeId id, std::vector<std::uint32_t> &out) const
     }
 }
 
-} // namespace engine::p4k
+}

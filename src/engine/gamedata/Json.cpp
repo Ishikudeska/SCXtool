@@ -18,10 +18,6 @@ void appendHexEscape(std::string &out, unsigned unit)
     out += buf;
 }
 
-// JavaScriptEncoder.UnsafeRelaxedJsonEscaping: everything but controls,
-// quote, backslash, line/paragraph separators, private use, lone
-// surrogates and non-BMP characters (always escaped as a surrogate pair)
-// is written as is.
 void appendEscaped(std::string &out, std::string_view s)
 {
     out += '"';
@@ -61,7 +57,7 @@ void appendEscaped(std::string &out, std::string_view s)
         }
         const int extra = b >= 0xF0 ? 3 : b >= 0xE0 ? 2 : b >= 0xC0 ? 1 : 0;
         if (extra == 0 || i + extra >= s.size()) {
-            appendHexEscape(out, 0xFFFD); // malformed
+            appendHexEscape(out, 0xFFFD);
             ++i;
             continue;
         }
@@ -331,7 +327,7 @@ private:
     std::size_t pos_ = 0;
 };
 
-} // namespace
+}
 
 void Writer::newLine()
 {
@@ -427,4 +423,4 @@ std::optional<Value> parse(std::string_view text)
     return Parser(text).document();
 }
 
-} // namespace engine::gamedata::json
+}

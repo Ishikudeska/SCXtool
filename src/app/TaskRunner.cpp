@@ -61,15 +61,11 @@ void TaskRunner::enqueue(Pending task)
 
 void TaskRunner::startNext()
 {
-    // A `done` that queues two jobs starts the first itself; the call after
-    // `done` must not start the second alongside it.
     if (current_ || pending_.empty())
         return;
     Pending task = std::move(pending_.front());
     pending_.pop_front();
 
-    // Results are posted to the application object, not to `self`: reading a
-    // QPointer on the worker races this object's destruction.
     QPointer<TaskRunner> self(this);
     current_ = std::shared_ptr<Job>(new Job([self](int completed, int total, const QString &message) {
         QMetaObject::invokeMethod(

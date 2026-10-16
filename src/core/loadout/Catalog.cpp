@@ -39,8 +39,6 @@ double num(Node n, const char *attr, double fallback = 0)
     return v && std::isfinite(*v) ? *v : fallback;
 }
 
-// The first of `attrs` the element has (attribute names vary in case
-// between the vehicle XMLs).
 double numAny(Node n, std::initializer_list<const char *> attrs, double fallback = 0)
 {
     for (const char *a : attrs)
@@ -77,9 +75,6 @@ Damage damageOf(Node info)
     return d;
 }
 
-// "Item Type: Power Plant\nManufacturer: ...\n\nThe PowerBolt ...": the
-// "Key: Value" header lines, and the prose after them. The text holds
-// literal "\n" escapes, as base.ini does.
 struct Description
 {
     QHash<QString, QString> header;
@@ -107,8 +102,6 @@ Description splitDescription(const QString &raw)
     return d;
 }
 
-// "COOL_AEGS_S01_Bracer_SCItem" -> "COOL AEGS S01 Bracer": for items the
-// language file doesn't name.
 QString fallbackName(const QString &id)
 {
     QString s = id;
@@ -138,7 +131,7 @@ std::vector<LoadoutEntry> parseLoadout(Node loadoutParent, const QHash<QString, 
                 if (it != byGuid.cend())
                     e.refItem = (*items)[std::size_t(*it)].id;
             } else {
-                e.refItem = u'#' + ref; // resolved once every item is known
+                e.refItem = u'#' + ref;
             }
         }
         if (const Node sub = find(entry, "loadout"))
@@ -148,7 +141,6 @@ std::vector<LoadoutEntry> parseLoadout(Node loadoutParent, const QHash<QString, 
     return out;
 }
 
-// What a vehicle XML ItemPort or an item's SItemPortDef says.
 Port portFromVehicleXml(const QString &name, Node itemPort, const missions::LocText &loc)
 {
     Port p;
@@ -203,8 +195,6 @@ Port portFromItemDef(Node def, const missions::LocText &loc)
     return p;
 }
 
-// An amount in a resource delta: segments, standard units, or the smaller
-// units.
 double resourceAmount(Node amountParent)
 {
     for (const Node n : iter(amountParent)) {
@@ -251,7 +241,6 @@ Resources parseResources(Node root)
             }
         }
     }
-    // A quantum drive burns fuel in its travelling state, not the first one.
     for (const Node other : findAll(params, "states/ItemResourceState")) {
         if (other == state)
             continue;
@@ -270,8 +259,6 @@ Resources parseResources(Node root)
     return r;
 }
 
-// The first element in `n`'s subtree (n included) whose tag contains
-// `part` and that has a positive `attr`.
 Node firstWith(Node n, std::string_view part, const char *attr)
 {
     Node found;
@@ -290,7 +277,6 @@ struct AmmoInfo
     double speed = 0, lifetime = 0, penetration = 0;
 };
 
-// Records by __ref, read on first use: ammo and manufacturers.
 class RefIndex
 {
 public:
@@ -325,7 +311,7 @@ private:
     void addItem(const QString &file, Node root);
     std::optional<WeaponStats> weapon(Node root);
     const AmmoInfo *ammo(const QString &guid);
-    std::pair<QString, QString> manufacturer(const QString &guid); // name, code
+    std::pair<QString, QString> manufacturer(const QString &guid);
     void addShip(const QString &file, bool ground);
     void resolve(std::vector<LoadoutEntry> &entries) const;
 
@@ -432,8 +418,6 @@ std::optional<WeaponStats> Builder::weapon(Node root)
     return w;
 }
 
-// The AttachDef types a loadout shows or counts; the rest (seats, doors,
-// screens, controllers) are skipped before they are parsed.
 const QSet<QString> &wantedTypes()
 {
     static const QSet<QString> types = {
@@ -478,8 +462,6 @@ const QSet<QString> &wantedTypes()
 void Builder::addItems(const std::atomic<bool> *cancel)
 {
     static const QRegularExpression attachType(QStringLiteral("<AttachDef [^>]*?\\bType=\"([A-Za-z]+)\""));
-    // Ship items, ground vehicle items, weapon mounts, mounted guns, and the
-    // doors folder's few modules.
     QStringList files;
     for (const char *dir :
          {"entities/scitem/ships", "entities/scitem/vehicles", "entities/scitem/weaponmounts",
@@ -620,7 +602,6 @@ void Builder::addItem(const QString &file, Node root)
             st.stageTwoAccel = num(p, "stageTwoAccelRate");
         }
         st.splineSpeed = num(find(q, "splineJumpParams"), "driveSpeed");
-        // The travelling state's micro units read as mSCU a gigametre.
         st.fuelPerGm = item.resources.quantumFuel / 1000.0;
         item.quantum = st;
     }
@@ -693,10 +674,6 @@ Node findById(Node root, const QString &id)
     return found;
 }
 
-// Applies a vehicle XML's <Modification name=...>: its patch file's elements
-// replace the base elements with the same id, then its Elems set attributes.
-// A patch can replace the root <Vehicle> itself, so the Elems are read first
-// and ids are looked up afresh: a replacement frees what it replaces.
 void applyModification(const XmlDoc &doc, const QString &name, const QString &vehiclesDir)
 {
     if (name.isEmpty())
@@ -743,7 +720,6 @@ void applyModification(const XmlDoc &doc, const QString &name, const QString &ve
     }
 }
 
-// A stock loadout as text, to tell copies of a ship from variants.
 QString loadoutKey(const std::vector<LoadoutEntry> &entries)
 {
     QStringList parts;
@@ -821,8 +797,6 @@ void Builder::addShip(const QString &file, bool ground)
     ship.portTags = splitTags(qs(getOr(vehicle, "itemPortTags")));
     if (const Node parts = find(vehicle, "Parts"))
         walkParts(parts, 0, ship, loc_);
-    // Newer ships declare ports in the record too (components, turrets, life
-    // support); a record port replaces a vehicle XML one of the same name.
     if (const Node container = findDescendant(root, "SItemPortContainerComponentParams")) {
         const QStringList recordTags = splitTags(qs(getOr(container, "PortTags")));
         for (const QString &tag : recordTags)
@@ -871,9 +845,6 @@ void Builder::addShips(const std::atomic<bool> *cancel)
             addShip(file, ground);
         }
     }
-    // Records under one name: copies with the same stock loadout go (the
-    // shortest record name stays); the rest are variants and keep the part of
-    // the record name that sets them apart ("Kruger S-65 Stingray (Ballistic)").
     std::stable_sort(catalog_.ships.begin(), catalog_.ships.end(), [](const Ship &a, const Ship &b) {
         if (a.name != b.name)
             return a.name.localeAwareCompare(b.name) < 0;
@@ -926,7 +897,6 @@ bool same(const QString &a, QLatin1StringView b)
     return a.compare(b, Qt::CaseInsensitive) == 0;
 }
 
-// Tags compare without the "$" some records put in front of them.
 QStringView bareTag(const QString &tag)
 {
     return tag.startsWith(u'$') ? QStringView(tag).sliced(1) : QStringView(tag);
@@ -942,7 +912,6 @@ bool hasTag(const QStringList &tags, const QString &tag)
 bool typeMatches(const PortType &t, const Item &item)
 {
     if (t.type.compare(item.type, Qt::CaseInsensitive) == 0) {
-        // An item of no particular subtype goes wherever its type does.
         if (t.subTypes.isEmpty() || item.subType.isEmpty() || same(item.subType, "UNDEFINED"_L1))
             return true;
         for (const QString &s : t.subTypes)
@@ -950,9 +919,6 @@ bool typeMatches(const PortType &t, const Item &item)
                 return true;
         return false;
     }
-    // Gimbal mounts go in gun ports (mining gimbals in mining laser ports and
-    // the other way round), and a bare turret arm takes the guns and tools
-    // made for mounts, as the stock loadouts have them.
     if (same(t.type, "WeaponGun"_L1) && same(item.type, "Turret"_L1) && same(item.subType, "GunTurret"_L1))
         return true;
     if ((same(t.type, "WeaponMining"_L1) && same(item.type, "UtilityTurret"_L1)) ||
@@ -962,7 +928,7 @@ bool typeMatches(const PortType &t, const Item &item)
            hasTag(item.tags, QStringLiteral("weaponMountUsable"));
 }
 
-} // namespace
+}
 
 double WeaponStats::timeToOverheat() const
 {
@@ -1063,4 +1029,4 @@ Catalog buildCatalog(const CatalogSources &sources, const std::atomic<bool> *can
     return builder.take();
 }
 
-} // namespace core::loadout
+}

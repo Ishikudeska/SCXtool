@@ -119,4 +119,4 @@ bool writeIniFile(const QString &path, const IniMap &map)
     return file.commit();
 }
 
-} // namespace core
+}

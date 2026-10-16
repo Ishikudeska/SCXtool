@@ -31,7 +31,7 @@ qint64 newestP4kMtime(const QString &root)
     return newest;
 }
 
-} // namespace
+}
 
 bool isScInstallRoot(const QString &path)
 {
@@ -110,4 +110,4 @@ QString locateScInstall()
     return pickLiveInstall(scanCommonInstallLocations());
 }
 
-} // namespace core
+}

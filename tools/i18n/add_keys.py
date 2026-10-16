@@ -1,12 +1,3 @@
-"""Add English UI strings to resources/languages/english/ui.json.
-
-    python tools/i18n/add_keys.py strings.json
-
-strings.json maps dotted keys to English text ({"scx.yes": "Yes"}). New
-leaves are written as {"ht": text, "at": ""} like the rest of the file;
-existing keys are left alone unless --replace is given. Other languages fall
-back to English until translated.
-"""
 import argparse
 import json
 from pathlib import Path

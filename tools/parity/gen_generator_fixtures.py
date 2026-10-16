@@ -1,18 +1,3 @@
-"""Record the enhancements generator's helper calls for tests/core/tst_generator.
-
-Runs Smart Citizen's own generator test files under pytest with a plugin
-that wraps selected functions of scripts/generate_enhancements_ini.py each
-time a test loads it. Every call (arguments as bound before the call, so
-in-place mutation doesn't leak in) and its result is written to
-tests/fixtures/generator_calls.json; the C++ test replays them. Internal
-calls are recorded too, which is the point: a synthetic forge tree run
-through scan_* reaches the helpers with inputs the real data never has.
-
-    python gen_generator_fixtures.py --reference "<Smart Citizen checkout>" \
-        [--out tests/fixtures/generator_calls.json]
-
-Dev-only; needs pytest and lxml.
-"""
 from __future__ import annotations
 
 import argparse
@@ -27,9 +12,6 @@ from pathlib import Path, PurePath
 
 from lxml import etree
 
-# Function name -> the parameter names that are recorded (others must be
-# defaults or are dropped). Keep in sync with the dispatch table in
-# tests/core/tst_generator.cpp.
 FUNCTIONS = (
     "append_enhancements",
     "classify_spawn_group",
@@ -128,7 +110,7 @@ class Recorder:
                 encoded = None
             try:
                 result = fn(*args, **kwargs)
-            except Exception as ex:  # recorded too: the C++ side must fail the same way
+            except Exception as ex:
                 self._add(name, encoded, {"$raises": type(ex).__name__})
                 raise
             self._add(name, encoded, result)
@@ -157,8 +139,6 @@ RECORDER = Recorder()
 
 
 class Plugin:
-    """Wraps the generator module whenever a test file execs it."""
-
     def pytest_configure(self, config):
         original = bootstrap.SourceFileLoader.exec_module
 

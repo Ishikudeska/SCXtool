@@ -18,8 +18,6 @@ constexpr QLatin1StringView kLiveLogName("Game.log");
 constexpr QLatin1StringView kLogBackupsDir("logbackups");
 constexpr QByteArrayView kCheapMarker = "Received Blueprint:";
 
-// The name is captured lazily up to the trailing `: "`, so names with their
-// own quotes (Demeco "Purgatory Camo" LMG) survive.
 const QRegularExpression &eventRe()
 {
     static const QRegularExpression re(
@@ -29,8 +27,6 @@ const QRegularExpression &eventRe()
     return re;
 }
 
-// datetime.fromisoformat: an impossible date or time is no timestamp.
-// Fractions beyond milliseconds are truncated (the log writes three digits).
 QDateTime timestampOf(const QRegularExpressionMatch &m)
 {
     const auto n = [&](int group) { return m.capturedView(group).toInt(); };
@@ -49,7 +45,7 @@ QDateTime floorFor(const QDateTime &since)
     return since.isValid() ? since : blueprintEpoch();
 }
 
-} // namespace
+}
 
 QDateTime blueprintEpoch()
 {
@@ -114,13 +110,11 @@ ScanResult scanFiles(const QStringList &paths, const QDateTime &since, const Sca
             progress(static_cast<int>(i), result.filesScanned, QFileInfo(paths[i]).fileName());
         QFile file(paths[i]);
         if (!file.open(QIODevice::ReadOnly))
-            continue; // a locked or vanished log is skipped, not fatal
+            continue;
         while (!file.atEnd()) {
             const QByteArray line = file.readLine();
-            // Cheap reject before decoding: most lines never mention one.
             if (!line.contains(kCheapMarker))
                 continue;
-            // Python's text mode also splits on a lone CR.
             for (const auto parts = line.split('\r'); const QByteArray &part : parts) {
                 for (const auto events = parseEvents(QString::fromUtf8(part));
                      const BlueprintEvent &ev : events) {
@@ -149,7 +143,7 @@ ScanResult scanChannel(const QString &channelDir, const QDateTime &since, const 
 
 QStringList channelsToScan(const QString &activeChannel, bool includeLinked, const QStringList &installed)
 {
-    static const QStringList linked = {QStringLiteral("HOTFIX"), QStringLiteral("LIVE")}; // sorted
+    static const QStringList linked = {QStringLiteral("HOTFIX"), QStringLiteral("LIVE")};
     QStringList channels = {activeChannel};
     if (includeLinked && linked.contains(activeChannel)) {
         for (const QString &other : linked)
@@ -159,4 +153,4 @@ QStringList channelsToScan(const QString &activeChannel, bool includeLinked, con
     return channels;
 }
 
-} // namespace core::blueprints
+}

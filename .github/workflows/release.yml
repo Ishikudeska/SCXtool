@@ -1,9 +1,3 @@
-# Builds the installer and the portable zip with packaging/package.ps1.
-# Runs on a version tag (v1.2.3), which also publishes a GitHub release, on
-# pull requests, or by hand from the Actions tab (artifacts only).
-#
-# Qt is installed to C:\Qt so the paths in CMakePresets.json hold.
-
 name: Release
 
 on:
@@ -15,8 +9,6 @@ on:
 permissions:
   contents: write
 
-# A new push to a pull request supersedes its earlier package build; tag builds
-# always finish.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
@@ -25,9 +17,6 @@ jobs:
   package:
     runs-on: windows-latest
     env:
-      # Compile through ccache: objects carry over between runs, and the
-      # portable build reuses most of the installed build's (same relative
-      # paths under CCACHE_BASEDIR, only the portable flag differs).
       CMAKE_C_COMPILER_LAUNCHER: ccache
       CMAKE_CXX_COMPILER_LAUNCHER: ccache
       CCACHE_BASEDIR: ${{ github.workspace }}
@@ -45,8 +34,6 @@ jobs:
           dir: C:\
           tools: "tools_mingw1310 tools_ninja tools_cmake"
           cache: true
-          # aqtinstall 3.3.0 (latest on PyPI) predates the per-compiler repo layout
-          # Qt uses from 6.11, so use a master commit with that support until 3.4.0.
           aqtsource: "git+https://github.com/miurahr/aqtinstall.git@076e1659807d0b362a3ed684d54c2e9c775eb9c7"
 
       - name: Set up ccache
@@ -68,15 +55,12 @@ jobs:
             throw "Tag ${{ github.ref_name }} does not match APP_VERSION $($Matches[1])"
           }
 
-      # The release presets build only the app (no tests or tools).
       - name: Build and package
         shell: pwsh
         run: |
           $env:PATH = "C:\Qt\Tools\mingw1310_64\bin;C:\Qt\6.12.0\mingw_64\bin;C:\Qt\Tools\Ninja;C:\Qt\Tools\CMake_64\bin;$env:PATH"
           ./packaging/package.ps1
 
-      # One artifact per package, each required: package.ps1 only warns when it
-      # cannot find Inno Setup, and the in-app updater needs the Setup.exe.
       - name: Upload the installer
         uses: actions/upload-artifact@v7
         with:

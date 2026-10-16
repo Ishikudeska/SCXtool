@@ -1,5 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-  <!-- SCXtool app icon, 16-32 px: resources/icon/app.svg with thicker lines and two HUD bars. -->
   <defs>
     <linearGradient id="shell" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#55627a"/>

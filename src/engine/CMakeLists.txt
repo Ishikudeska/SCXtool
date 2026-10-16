@@ -1,6 +1,3 @@
-# Format library: P4K archives, DataForge, CryXML, game-data export.
-# Deliberately Qt-free so it can be tested and reused without an event loop.
-
 add_library(scengine STATIC
     Error.h
     Parallel.h

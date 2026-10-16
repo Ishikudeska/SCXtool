@@ -45,8 +45,6 @@ constexpr Enclosing kEnclosings[] = {
     {"round", "Round ( )", "(", ")"},      {"curly", "Curly { }", "{", "}"},
     {"angle", "Angle < >", "<", ">"},
 };
-// "->" not "→": mobiGlas has no glyph for U+2192 (#200). "shape" is built
-// from the endpoint counts in renderRoute; its text here is the 1:1 form.
 constexpr TextOption kRouteArrows[] = {
     {"gt", "Greater-than ( > )", ">"},
     {"arrow", "Arrow ( -> )", "->"},
@@ -67,12 +65,9 @@ constexpr Option kLocationDetails[] = {{"address", "Full address"}, {"name", "Na
 constexpr PhraseOption kShortenPhrases[] = {
     {"intro", "Shorten \"Opportunity for Independent Cargo Hauler\" to \"Intro\"",
      "Opportunity for Independent Cargo Hauler", "Intro"},
-    // The "-" is a fallback; abbreviateTitle uses the live rank separator.
     {"hauler_needed_for", "Shorten \"Hauler Needed for\" to the Rank separator", "Hauler Needed for", "-"},
     {"local_shipment_route", "Shorten \"Local Shipment Route\" to \"Route\"", "Local Shipment Route",
      "Route"},
-    // Ling Family titles put "Cargo" right after the rank token; the
-    // replacement is rebuilt from the rank settings in abbreviateTitle.
     {"ling_family_rank", "Add the Rank separator to Ling Family haul titles",
      "~mission(ReputationRank) Cargo", "~mission(ReputationRank) Rank Cargo"},
     {"ling_family_prefix", "Shorten \"Ling Family\" by removing it", "Ling Family ", ""},
@@ -80,14 +75,12 @@ constexpr PhraseOption kShortenPhrases[] = {
 constexpr PhraseOption kRemoveWords[] = {
     {"cargo", "Remove \"Cargo\"", "Cargo", ""},
     {"haul", "Remove \"Haul\"", "Haul", ""},
-    {"rank", "Remove \"Rank\"", "", ""}, // handled through the rank triggers
+    {"rank", "Remove \"Rank\"", "", ""},
 };
 constexpr PhraseOption kUnderline[] = {
     {"underline_direct", "Underline \"Direct\"", "Direct", "<EM3>DIRECT</EM3>"},
 };
 
-// The punctuation after "Rank" in stock titles; the leading space keeps
-// "~mission(ReputationRank)" out of it.
 constexpr const char *kRankTriggers[] = {" Rank -", " Rank,"};
 
 constexpr std::pair<const char *, const char *> kSizeAbbreviations[] = {
@@ -176,21 +169,20 @@ QString styleValue(const QString &kind, const QString &style, const QString &raw
             return raw;
         if (style == u"size_n")
             return QStringLiteral("Size ") + raw;
-        return u'S' + raw; // "sn" and anything unknown
+        return u'S' + raw;
     }
     if (kind == u"grade")
         return style == u"grade_letter" ? QStringLiteral("Grade ") + raw : raw;
     if (isMappedKind(kind)) {
         const auto it = mapping.constFind(raw);
         if (it == mapping.cend())
-            return raw; // shown as-is so the user can add it to the mapping
+            return raw;
         const int index = style == u"short" ? 0 : style == u"long" ? 2 : 1;
         return (*it)[static_cast<std::size_t>(index)];
     }
     return raw;
 }
 
-// " ".join(text.split()): runs of Python whitespace become one space.
 QString collapseWhitespace(const QString &text)
 {
     QString out;
@@ -217,8 +209,6 @@ QString replaceWord(const QString &text, const QString &word, const QString &rep
     return out;
 }
 
-// Rewrites a procedural haul title (it has both the rank and size tokens)
-// into one canonical "Rank <sep> [Direct] Size Cargo Haul [Circuit]".
 QString standardizeHaulingTitle(const QString &title, bool removeRank, const QString &sep)
 {
     static const QString rankToken = QStringLiteral("~mission(ReputationRank)");
@@ -258,7 +248,7 @@ QStringList sortedList(const QSet<QString> &set)
     return list;
 }
 
-} // namespace
+}
 
 QStringList elementKinds(const QString &category)
 {
@@ -443,7 +433,6 @@ TagConfig defaultConfig(const QString &category)
         c.elements = {el("damage", true, "short"), el("size", true, "sn")};
         c.classMapping = merged({"damage"});
     } else if (category == u"commodities") {
-        // All off by default (#325): untagged names until the user opts in.
         c.elements = {el("label", false, "short"), el("usage", false, "long"),
                       el("collection", false, "long")};
         c.separator = QStringLiteral("pipe");
@@ -518,7 +507,6 @@ TagConfig TagConfig::fromObject(const QJsonObject &d)
     const bool legacyOn = d.value(QStringLiteral("abbreviate_title")).toBool(false);
     const QJsonValue phrases = d.value(QStringLiteral("abbreviated_phrases"));
     if (phrases.isUndefined() || phrases.isNull()) {
-        // Pre-redesign blobs stored one bool; opting in meant every option.
         if (legacyOn)
             c.abbreviatedPhrases = legacyMigrationKeys();
     } else {
@@ -592,7 +580,6 @@ void backfillNewElements(const QString &category, TagConfig &config)
             for (const ElementSpec &d : defaults.elements)
                 if (d.kind == kind)
                     spec = d;
-            // After the last present element that precedes it canonically.
             const QStringList preceding = expected.mid(0, pos);
             qsizetype insertAt = 0;
             for (qsizetype i = 0; i < config.elements.size(); ++i)
@@ -702,8 +689,6 @@ QString abbreviateTitle(const QString &title, const QSet<QString> &enabled, cons
             const QString phrase = s(o.phrase);
             QString replacement = s(o.replacement);
             if (key == u"hauler_needed_for") {
-                // Same slot as the " Rank -" triggers: keep the word "Rank"
-                // unless it's being removed, then the rank separator.
                 replacement = removeRank ? sep : QStringLiteral("Rank") + sep;
             } else if (key == u"ling_family_rank") {
                 const QString fragment = removeRank ? u' ' + sep : QStringLiteral(" Rank") + sep;
@@ -717,7 +702,6 @@ QString abbreviateTitle(const QString &title, const QSet<QString> &enabled, cons
     apply(kRemoveWords);
     apply(kUnderline);
 
-    // The punctuation after "Rank" always follows the rank separator.
     for (const char *trigger : kRankTriggers) {
         const QString t = s(trigger);
         if (!out.contains(t))
@@ -746,4 +730,4 @@ QString fingerprint(const QMap<QString, TagConfig> &configs, bool annotateMissio
         QCryptographicHash::hash(blob.toUtf8(), QCryptographicHash::Sha256).toHex().left(12));
 }
 
-} // namespace core::tags
+}

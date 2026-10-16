@@ -25,7 +25,7 @@ QString text(const char *key, const QVariantHash &args = {})
     return i18n::tr(key, args);
 }
 
-} // namespace
+}
 
 UpdateController::UpdateController(QObject *parent) : QObject(parent)
 {}
@@ -89,7 +89,6 @@ void UpdateController::onCheck(const net::UpdateCheck &check, const QString &cur
     qCInfo(lcApp).noquote() << "App update available:" << check.latest << "(current" << current
                             << (check.installer ? "with installer)" : "without installer)");
     app().setStatus(text("status_bar.update_available", {{QStringLiteral("version"), check.latest}}));
-    // Installers are for installed builds; a portable build updates by hand.
     const bool canInstall = check.installer.has_value() && !identity::kPortable;
     PromptService::Prompt p;
     p.kind = PromptService::Kind::Info;
@@ -146,7 +145,6 @@ void UpdateController::downloadAndInstall(const net::UpdateCheck &check)
                     text("dialogs.update_download_failed_body", {{QStringLiteral("message"), d.error}}));
                 return;
             }
-            // /AUTOUPDATE=1 makes the installer relaunch the app when it is done.
             const QStringList args{QStringLiteral("/SILENT"), QStringLiteral("/NORESTART"),
                                    QStringLiteral("/SUPPRESSMSGBOXES"), QStringLiteral("/AUTOUPDATE=1")};
             if (!QProcess::startDetached(d.path, args)) {

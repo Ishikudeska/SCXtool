@@ -6,10 +6,6 @@
 #include <QStringList>
 #include <QtQml/qqmlregistration.h>
 
-// The String Editor's table: every entry, filtered and sorted into rows.
-// Owns the entries; App reads them back for saving and applying. Filters
-// are properties the QML filter row binds to; any change re-filters and
-// keeps the current row selected by key when it survives.
 class StringTableModel : public QAbstractTableModel
 {
     Q_OBJECT
@@ -41,13 +37,11 @@ public:
         EditableRole,
         CenteredRole,
         TooltipRole,
-        KindRole, // "star", "order", "owned", "status" or "text"
+        KindRole,
     };
 
     explicit StringTableModel(QObject *parent = nullptr);
 
-    // Replaces everything (after a load). Entry order is the table's
-    // natural order.
     void setEntries(QList<core::StringEntry> entries, core::IniMap defaults);
     const QList<core::StringEntry> &entries() const { return entries_; }
     QList<core::StringEntry> &mutableEntries() { return entries_; }
@@ -56,7 +50,6 @@ public:
     void setOwnedState(core::table::OwnedState owned);
     void setBlueprintHeader(const QString &header);
     void setAppStamp(const QString &appName, const QString &version);
-    // Re-reads every row after entries changed in place.
     void refreshAll();
 
     int rowCount(const QModelIndex &parent = {}) const override;
@@ -96,17 +89,17 @@ public:
     Q_INVOKABLE void setColumnFilter(int column, const QString &text);
     Q_INVOKABLE QString columnFilter(int column) const;
     Q_INVOKABLE void clearFilters();
-    Q_INVOKABLE void sortBy(int column); // a header click: toggles the direction on the same column
+    Q_INVOKABLE void sortBy(int column);
     Q_INVOKABLE void sortGrouped();
     Q_INVOKABLE QString key(int row) const;
     Q_INVOKABLE int rowForKey(const QString &key) const;
-    Q_INVOKABLE QString effectiveValue(int row) const; // custom, else current
+    Q_INVOKABLE QString effectiveValue(int row) const;
     Q_INVOKABLE QString customValue(int row) const;
     Q_INVOKABLE QString previewHtml(int row) const;
     Q_INVOKABLE bool isFavoritable(int row) const;
     Q_INVOKABLE void toggleFavorite(int row);
     Q_INVOKABLE void setCustom(int row, const QString &text);
-    Q_INVOKABLE void resetRow(int row); // back to the merged baseline
+    Q_INVOKABLE void resetRow(int row);
     Q_INVOKABLE QString filteredTsv() const;
     Q_INVOKABLE int defaultColumnWidth(int column) const;
 
@@ -116,8 +109,8 @@ signals:
     void filtersChanged();
     void sortChanged();
     void countsChanged();
-    void edited();                // a user change: the Apply button lights up
-    void rowsRelaid(int keepRow); // after a filter/sort; keepRow is the selected key's new row or -1
+    void edited();
+    void rowsRelaid(int keepRow);
 
 public slots:
     void retranslate();
@@ -132,8 +125,8 @@ private:
 
     QList<core::StringEntry> entries_;
     core::IniMap defaults_;
-    QList<int> rows_;       // entry indices, in display order
-    QHash<int, int> rowOf_; // entry index -> row
+    QList<int> rows_;
+    QHash<int, int> rowOf_;
     core::table::FilterCriteria criteria_;
     core::table::OwnedState owned_;
     QString appName_, version_;

@@ -38,9 +38,9 @@ QString enhancementCategory(const QString &id)
 {
     return QStringLiteral("enhancements/categories/%1/enabled").arg(id);
 }
-} // namespace key
+}
 
-} // namespace
+}
 
 QStringList channels()
 {
@@ -65,7 +65,6 @@ QString scLanguageId(const QString &language)
 
 QString Settings::defaultFilePath()
 {
-    // A separate profile for development and screenshots.
     if (const QString file = qEnvironmentVariable("SCX_SETTINGS_FILE"); !file.isEmpty())
         return file;
     if (identity::kPortable)
@@ -231,9 +230,6 @@ tags::TagConfig Settings::tagConfig(const QString &category)
     tags::migrateMapping(category, *config);
     tags::backfillNewElements(category, *config);
 
-    // 1.5.0 gave commodities a second flag; an old single-flag config with
-    // separator "none" would now mash them together ("[CFCollection]").
-    // Upgrade once, so a later deliberate "none" sticks.
     if (category == u"commodities") {
         const QString marker = QStringLiteral("tag_builder/commodities/sep_migrated");
         if (!settings_->value(marker, false).toBool()) {
@@ -301,7 +297,6 @@ void Settings::setRepXpLabel(const QString &label)
 
 QString Settings::missionHeaderEmTag() const
 {
-    // EM1/EM2 never rendered in-game; a stored one reads as the default.
     const QString tag = settings_->value(QStringLiteral("mission_header/em_tag")).toString();
     return tag == u"EM3" || tag == u"EM4" ? tag : QStringLiteral("EM3");
 }
@@ -344,7 +339,6 @@ void Settings::migrateTitleTagSettings()
     const QString marker = QStringLiteral("mission_title_tag/migrated");
     if (settings_->value(marker, false).toBool())
         return;
-    // Only an explicit earlier "off" carries forward.
     settings_->setValue(QStringLiteral("mission_title_tag/blueprint"),
                         settings_->value(QStringLiteral("mission_field/blueprint_tag"), true).toBool());
     settings_->setValue(QStringLiteral("mission_title_tag/ace"),
@@ -384,7 +378,6 @@ void Settings::setRsOreNameAnnotations(bool enabled)
 
 QString Settings::theme() const
 {
-    // Anything else, including the retired "scle" and "odw", reads as dark.
     const QString t = settings_->value(QStringLiteral("theme")).toString();
     return t == u"light" ? t : QStringLiteral("dark");
 }
@@ -457,7 +450,6 @@ QSet<QString> Settings::ownedItems() const
 
 void Settings::setOwnedItems(const QSet<QString> &names)
 {
-    // json.dumps(sorted(names)), so the stored text matches Smart Citizen's.
     QStringList sorted(names.cbegin(), names.cend());
     std::sort(sorted.begin(), sorted.end(),
               [](const QString &a, const QString &b) { return py::less(a, b); });
@@ -503,7 +495,6 @@ QDateTime Settings::blueprintLogWatermark(const QString &channel) const
 {
     const QString raw =
         settings_->value(key::watermark(channel.isEmpty() ? activeChannel() : channel)).toString();
-    // datetime.isoformat(): "2026-03-26T17:15:41.684000+00:00".
     static const QRegularExpression iso(QStringLiteral(
         R"(^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{1,6}))?(Z|[+-]\d{2}:\d{2})?$)"));
     const QRegularExpressionMatch m = iso.match(raw);
@@ -540,4 +531,4 @@ QStringList Settings::enabledEnhancementFileIds() const
     return ids;
 }
 
-} // namespace core
+}

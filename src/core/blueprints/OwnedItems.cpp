@@ -12,7 +12,7 @@ namespace {
 
 constexpr auto kUcp = QRegularExpression::UseUnicodePropertiesOption;
 
-constexpr QLatin1StringView kNl("\\n"); // the literal two-character separator
+constexpr QLatin1StringView kNl("\\n");
 constexpr QLatin1StringView kOwnedTag(" <EM4>[Owned]</EM4>");
 
 QString nfkc(const QString &s)
@@ -20,8 +20,6 @@ QString nfkc(const QString &s)
     return s.normalized(QString::NormalizationForm_KC);
 }
 
-// A pattern written with Python's \s. Substitute before inserting escaped
-// text, which may itself hold a backslash followed by an "s".
 QString pyPattern(const QString &pattern)
 {
     QString p = pattern;
@@ -34,7 +32,6 @@ QRegularExpression pyRe(const QString &pattern, QRegularExpression::PatternOptio
     return QRegularExpression(pyPattern(pattern), kUcp | extra);
 }
 
-// "\n- <name>": a bullet runs to the next backslash.
 const QRegularExpression &bulletRe()
 {
     static const QRegularExpression re(QStringLiteral(R"(\\n- ([^\\]+))"), kUcp);
@@ -53,9 +50,6 @@ const QRegularExpression &wsRe()
     return re;
 }
 
-// CIG's bullets annotate some items with a category the item's own name
-// lacks ("Bendix (Fuel Nozzle)"). An allow-list, since some names end in a
-// real parenthetical ("Artimex Arms (Modified)").
 const QRegularExpression &trailingCategoryRe()
 {
     static const QRegularExpression re = pyRe(QStringLiteral(
@@ -63,8 +57,6 @@ const QRegularExpression &trailingCategoryRe()
     return re;
 }
 
-// Any <EM3>/<EM4> label: a section header unless it is a region label
-// ("[Nyx]"), a reputation tier ("Awarded from ... variants") or a pool.
 const QRegularExpression &sectionHeaderRe()
 {
     static const QRegularExpression re(QStringLiteral(R"(<EM([34])>([^<]*)</EM\1>)"), kUcp);
@@ -100,8 +92,6 @@ struct TagPatterns
     bool valid = false;
 };
 
-// Leading and trailing tag patterns for the delimited enclosings; none for
-// a list without one (empty, or only the None style).
 const TagPatterns &tagPatterns(const Enclosings &enclosings)
 {
     thread_local QHash<QString, TagPatterns> cache;
@@ -142,15 +132,12 @@ const QRegularExpression &bpHeaderRe(const QString &customHeader)
     QStringList escaped;
     for (const QString &p : std::as_const(parts))
         escaped << QRegularExpression::escape(p);
-    // A trailing "(Repeat Only)"-style qualifier is part of the header.
     const QRegularExpression re(pyPattern(QStringLiteral(R"(<EM([34])>\s*(?:%1)(?:\s*\([^)]*\))?\s*</EM\1>)"))
                                     .arg(escaped.join(u'|')),
                                 kUcp | QRegularExpression::CaseInsensitiveOption);
     return *cache.insert(customHeader, re);
 }
 
-// [start, end) of the blueprint section's bullets: from its header to the
-// next real section header.
 std::optional<std::pair<qsizetype, qsizetype>> bpSectionSpan(const QString &value, const QString &bpHeader)
 {
     const QRegularExpressionMatch m = bpHeaderRe(bpHeader).match(value);
@@ -206,7 +193,7 @@ QString collapseWhitespace(const QString &s)
     return py::strip(out);
 }
 
-} // namespace
+}
 
 const Enclosings &defaultEnclosings()
 {
@@ -221,7 +208,6 @@ const QHash<QString, QString> &bulletNameAliases()
         {QStringLiteral("Helix"), QStringLiteral("S0 Helix")},
         {QStringLiteral("Hofstede"), QStringLiteral("S00 Hofstede")},
         {QStringLiteral("Klein"), QStringLiteral("Lawson Mining Laser")},
-        // Fuel nozzles the key-slug fallback does not reach (#266).
         {QStringLiteral("Nozzle Fuelgiver Grin Nozzlefast"), QStringLiteral("Norfield")},
         {QStringLiteral("Nozzle Fuelgiver Grin Nozzleverysecure"), QStringLiteral("Harkin")},
         {QStringLiteral("Nozzle Fuelgiver Misc Nozzlestandard"), QStringLiteral("RN-7s")},
@@ -304,8 +290,6 @@ QString normalizeItemName(const QString &name, const Enclosings &enclosings, con
         s.replace(patterns.leading, QString());
         s.replace(patterns.trailing, QString());
     }
-    // Only for users who configured the None style: real names can look
-    // like a None-style tag word ("F-4 Blaster").
     if (hasNoneStyle(enclosings))
         s = stripNoneStyleTagHeuristic(s);
     s.replace(trailingCategoryRe(), QString());
@@ -314,7 +298,6 @@ QString normalizeItemName(const QString &name, const Enclosings &enclosings, con
 
 std::optional<QString> resolveAgainstCatalogue(const QString &name, const QSet<QString> &catalogue)
 {
-    // Characters that may separate a foreign tag from the real name.
     static const QString boundary = QStringLiteral(" ]/-_)}>.:");
     const QString n = normalizeItemName(name);
     if (n.isEmpty())
@@ -406,4 +389,4 @@ QString applyOwnedToValue(const QString &value, const QSet<QString> &owned, cons
     return out;
 }
 
-} // namespace core::blueprints
+}

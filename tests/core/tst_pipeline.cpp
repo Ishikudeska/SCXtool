@@ -1,6 +1,3 @@
-// Extraction (base.ini + DataForge cache) and the DataForge patcher. Ports
-// test_dataforge_patcher.py and the freshness cases of test_pak_extraction.py.
-
 #include "../engine/DcbBuilder.h"
 #include "../engine/P4kBuilder.h"
 #include "core/pipeline/Extraction.h"
@@ -38,7 +35,6 @@ QByteArray readAll(const QString &path)
     return f.readAll();
 }
 
-// Two records in a kept subtree, one outside it.
 std::vector<std::uint8_t> buildDcb()
 {
     DcbBuilder b;
@@ -91,7 +87,7 @@ QString patch(const QString &xpath, const QString &expected, const QString &set)
         .arg(xpath, expected, set);
 }
 
-} // namespace
+}
 
 class TestPipeline : public QObject
 {
@@ -107,11 +103,9 @@ private slots:
         const QString base = dir.filePath(QStringLiteral("data/LIVE/cache/base.ini"));
         QVERIFY(!baseIniIsFresh(p4k, base));
         QVERIFY(extractBaseIni(*archive, base));
-        QCOMPARE(readAll(base), QByteArray("\xEF\xBB\xBFkey=Value\r\n")); // byte for byte, BOM included
+        QCOMPARE(readAll(base), QByteArray("\xEF\xBB\xBFkey=Value\r\n"));
         QVERIFY(baseIniIsFresh(p4k, base));
 
-        // A patched (resized) Data.p4k makes it stale. The open archive
-        // refuses writers, as the launcher would be refused, so close it.
         archive.reset();
         QFile f(p4k);
         QVERIFY(f.open(QIODevice::Append));
@@ -141,24 +135,19 @@ private slots:
         const QString records = dataForgeRecordsDir(cache);
         QCOMPARE(readAll(records + QStringLiteral("/entities/scitem/ships/kept.xml")), kKeptXml);
         QVERIFY(QFileInfo::exists(records + QStringLiteral("/missionbroker/pu_missions/m.xml")));
-        QVERIFY(
-            !QFileInfo::exists(records + QStringLiteral("/tagdatabase/dropped.xml"))); // not a kept subtree
+        QVERIFY(!QFileInfo::exists(records + QStringLiteral("/tagdatabase/dropped.xml")));
         QVERIFY(dataForgeCacheIsFresh(p4k, cache));
         QVERIFY(!QFileInfo::exists(cache + QStringLiteral("/raw.new")));
         QVERIFY(!QFileInfo::exists(cache + QStringLiteral("/raw.old")));
 
-        // A rebuild replaces the tree (stale files from an older build go).
         writeFile(records + QStringLiteral("/entities/scitem/stale.xml"), "old build");
         QVERIFY(extractDataForge(*archive, cache, dir.filePath(QStringLiteral("no-patches"))));
         QVERIFY(!QFileInfo::exists(records + QStringLiteral("/entities/scitem/stale.xml")));
 
-        // A stamp without content is not fresh.
         QVERIFY(QDir(cache + QStringLiteral("/raw")).removeRecursively());
         QVERIFY(!dataForgeCacheIsFresh(p4k, cache));
     }
 
-    // Tags share the tag database's file, so the table is how they reach the
-    // cache: one line per tag, with the parent its children list implies.
     void writesTagTable()
     {
         DcbBuilder b;
@@ -197,10 +186,10 @@ private slots:
         const QString cache = dir.filePath(QStringLiteral("cache"));
         QVERIFY(extractDataForge(*archive, cache, dir.filePath(QStringLiteral("no-patches"))));
         QCOMPARE(dataForgeTagTablePath(cache), cache + QStringLiteral("/raw/tags.tsv"));
-        QVERIFY(QFileInfo::exists(dataForgeTagTablePath(cache))); // empty here: the fixture has no tags
+        QVERIFY(QFileInfo::exists(dataForgeTagTablePath(cache)));
         QVERIFY(dataForgeKeepSubpaths().contains(QStringLiteral("missiondata/pu_locations")));
         QCOMPARE(dataForgeVehiclesDir(cache), cache + QStringLiteral("/raw/vehicles"));
-        QVERIFY(QFileInfo(dataForgeVehiclesDir(cache)).isDir()); // empty: the fixture has no vehicles
+        QVERIFY(QFileInfo(dataForgeVehiclesDir(cache)).isDir());
         QVERIFY(dataForgeKeepSubpaths().contains(QStringLiteral("scitemmanufacturer")));
     }
 
@@ -224,7 +213,6 @@ private slots:
         const auto written = writeVehicleDefinitions(*archive, out);
         QVERIFY(written);
         QCOMPARE(*written, std::size_t(2));
-        // Names lower-cased, so ship records' lower-case paths find them.
         QCOMPARE(readAll(out + QStringLiteral("/aegs_test.xml")),
                  QByteArray("<Vehicle name=\"AEGS_Test\" />"));
         QCOMPARE(readAll(out + QStringLiteral("/modifications/aegs_test_variant.xml")),
@@ -269,10 +257,9 @@ private slots:
         QCOMPARE(report.patchesSeen, 1);
         QCOMPARE(report.filesRewritten, 1);
         QCOMPARE(report.editsApplied, 1);
-        QCOMPARE(report.editsMismatched, 1); // "new" is neither expected nor set: left alone
+        QCOMPARE(report.editsMismatched, 1);
         QCOMPARE(report.editsUnmatched, 1);
         QVERIFY(report.errors.isEmpty());
-        // Rewritten in unforge's format, only the value changed.
         QByteArray expected = kKeptXml;
         expected.replace("name=\"old\"", "name=\"new\"");
         QCOMPARE(readAll(records + QStringLiteral("/entities/scitem/ships/kept.xml")), expected);
@@ -297,7 +284,6 @@ private slots:
 
     void bundledPatchesParse()
     {
-        // The real patch files shipped in resources/patches.
         const QString root = QStringLiteral(SC_SOURCE_DIR "/resources/patches");
         if (!QFileInfo::exists(root))
             QSKIP("resources/patches not present");
@@ -327,11 +313,11 @@ private slots:
         entries.insert(QStringLiteral("desc_b"), QStringLiteral("B"));
         QCOMPARE(applyLocstringWorkarounds(entries, workarounds), 1);
         QCOMPARE(entries.value(QStringLiteral("desc_a")), QStringLiteral(R"(A\n--\nB)"));
-        QCOMPARE(applyLocstringWorkarounds(entries, workarounds), 0); // already applied
+        QCOMPARE(applyLocstringWorkarounds(entries, workarounds), 0);
 
         IniMap other;
         other.insert(QStringLiteral("desc_a"), QStringLiteral("A"));
-        QCOMPARE(applyLocstringWorkarounds(other, workarounds), 0); // source key not here
+        QCOMPARE(applyLocstringWorkarounds(other, workarounds), 0);
     }
 };
 

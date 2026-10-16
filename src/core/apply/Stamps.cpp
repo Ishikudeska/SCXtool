@@ -12,7 +12,6 @@ namespace {
 
 constexpr auto kUnicode = QRegularExpression::UseUnicodePropertiesOption;
 
-// Earlier stamps from this app, from it under its former name, or from Smart Citizen.
 QString stampedBy(const QString &appName)
 {
     return QStringLiteral("(?:Smart Citizen|%1|%2)")
@@ -20,7 +19,7 @@ QString stampedBy(const QString &appName)
              QRegularExpression::escape(appName));
 }
 
-} // namespace
+}
 
 void stampJournalEntries(IniMap &merged, const IniMap &stock, const QString &appName, const QString &version)
 {
@@ -43,7 +42,7 @@ void stampJournalEntries(IniMap &merged, const IniMap &stock, const QString &app
         unstamped = py::rstrip(unstamped);
         const QString *stockValue = stock.find(key);
         if (!stock.isEmpty() && stockValue && *stockValue == unstamped)
-            out.insert(key, unstamped); // stock content; nothing of ours to mark
+            out.insert(key, unstamped);
         else
             out.insert(key, unstamped + newStamp);
     }
@@ -55,8 +54,6 @@ void stampFrontendVersion(IniMap &merged, const QString &appName, const QString 
     const QString *current = merged.find(kFrontendVersionKey);
     if (!current)
         return;
-    // Matches today's "\n"-separated form, the older " | " form and the
-    // legacy phrasings, with or without a "v" before the version.
     const QRegularExpression stampRe(
         QStringLiteral(
             R"(\s*(?:\|\s*|(?:\\n)+\s*)(?:Localizations Enhanced (?:with|by)|Enhanced with <3 by)\s+%1\s+v?[^\s|]+\s*$)")
@@ -69,4 +66,4 @@ void stampFrontendVersion(IniMap &merged, const QString &appName, const QString 
                   base + QStringLiteral(R"(\nLocalizations Enhanced with %1 v%2)").arg(appName, version));
 }
 
-} // namespace core
+}

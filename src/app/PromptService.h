@@ -9,9 +9,6 @@
 #include <deque>
 #include <functional>
 
-// Message boxes for C++ flows. A flow calls ask() with a callback and
-// carries on there; QML's PromptHost shows `current` and calls answer().
-// Prompts queue, so two flows never stack dialogs on each other.
 class PromptService : public QObject
 {
     Q_OBJECT
@@ -29,25 +26,21 @@ public:
         Kind kind = Kind::Info;
         QString title;
         QString text;
-        QString detail;      // optional monospace block (paths, error text)
-        QStringList buttons; // empty: a single OK
+        QString detail;
+        QStringList buttons;
         int defaultButton = 0;
-        QString checkbox;    // optional "don't ask again" style checkbox
-        QStringList choices; // optional list to pick from (answered as `choice`)
+        QString checkbox;
+        QStringList choices;
     };
 
-    // button: the index pressed (-1 when dismissed); checked: the checkbox;
-    // choice: index into `choices`, or -1.
     using Answer = std::function<void(int button, bool checked, int choice)>;
 
     explicit PromptService(QObject *parent = nullptr);
 
     void ask(Prompt prompt, Answer answer = {});
-    // Shorthands.
     void info(const QString &title, const QString &text, const QString &detail = {});
     void warning(const QString &title, const QString &text, const QString &detail = {});
     void error(const QString &title, const QString &text, const QString &detail = {});
-    // Yes / No; `yes` runs on Yes only.
     void confirm(const QString &title, const QString &text, std::function<void()> yes,
                  Kind kind = Kind::Question, std::function<void()> no = {});
 

@@ -1,9 +1,3 @@
-// scxmissions: the mission catalog outside the app, for checking it against
-// real game data.
-//
-//   scxmissions forge <Data.p4k> <cache-dir>        DataForge cache, as the app builds it
-//   scxmissions dump <cache-dir> <base.ini> [out.tsv]   the catalog as TSV, with a summary
-
 #include "core/missions/Catalog.h"
 #include "core/pipeline/Extraction.h"
 
@@ -161,7 +155,7 @@ int dump(const QString &cache, const QString &baseIni, const QString &out)
     return 0;
 }
 
-} // namespace
+}
 
 int main(int argc, char **argv)
 {

@@ -24,4 +24,4 @@ QString buildDescription()
              QString::fromStdString(libs.pugixml));
 }
 
-} // namespace core
+}

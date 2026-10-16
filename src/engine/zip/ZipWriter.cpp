@@ -57,7 +57,7 @@ Result<std::vector<std::uint8_t>> deflateRaw(std::span<const std::uint8_t> data,
     return out;
 }
 
-} // namespace
+}
 
 Result<ZipWriter> ZipWriter::create(const std::filesystem::path &path)
 {
@@ -136,11 +136,11 @@ Result<void> ZipWriter::finish()
         put32(dir, e.compressedSize);
         put32(dir, e.size);
         put16(dir, static_cast<std::uint16_t>(e.name.size()));
-        put16(dir, 0); // extra
-        put16(dir, 0); // comment
-        put16(dir, 0); // disk
-        put16(dir, 0); // internal attributes
-        put32(dir, 0); // external attributes
+        put16(dir, 0);
+        put16(dir, 0);
+        put16(dir, 0);
+        put16(dir, 0);
+        put32(dir, 0);
         put32(dir, e.offset);
         dir.insert(dir.end(), e.name.begin(), e.name.end());
     }
@@ -159,4 +159,4 @@ Result<void> ZipWriter::finish()
     return file_.commit();
 }
 
-} // namespace engine::zip
+}

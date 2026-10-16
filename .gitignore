@@ -1,14 +1,10 @@
-# Reference sources (the original Python app and the C# tools). Kept locally
-# as porting references and test oracles, never committed.
 /Smart Citizen CPLusPLus/
 /unp4k/
 
-# Build trees and packaged artifacts
 /build/
 /out/
 /dist/
 
-# Local CMake / IDE state
 CMakeUserPresets.json
 *.user
 *.user.*
@@ -19,9 +15,7 @@ CMakeUserPresets.json
 compile_commands.json
 .ckaude/
 
-# Parity-test scratch output
 /tools/parity/.venv/
 /tools/parity/out/
 
-#smart-citizen parity version kept
 /smart-citizen-main/

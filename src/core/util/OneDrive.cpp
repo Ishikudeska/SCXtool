@@ -6,7 +6,6 @@ namespace core::onedrive {
 
 namespace {
 
-// os.path.normcase(os.path.normpath(p)) on Windows.
 QString normalized(const QString &path)
 {
     return QDir::toNativeSeparators(QDir::cleanPath(QDir::fromNativeSeparators(path))).toLower();
@@ -18,7 +17,7 @@ bool isOneDriveSegment(const QString &segment)
     return low == u"onedrive" || low.startsWith(u"onedrive - ") || low.startsWith(u"onedrive-");
 }
 
-} // namespace
+}
 
 QStringList roots(const QProcessEnvironment &env)
 {
@@ -60,4 +59,4 @@ QString suggestLocalDataDir(const QString &appName, const QProcessEnvironment &e
     return QDir::toNativeSeparators(QDir(profile).filePath(QStringLiteral("Documents/") + appName));
 }
 
-} // namespace core::onedrive
+}

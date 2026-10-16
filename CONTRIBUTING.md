@@ -102,12 +102,12 @@ The [wiki](../../wiki) explains how the app works and has notes for each source 
 
 - Keep `engine` free of app and UI code, and keep `core` free of UI code. Logic in `core` should be testable without the interface.
 - Follow the style of the code around you. clang-format takes care of layout.
-- Write comments to explain *why* the code does something, not what it does.
+- Don't write comments in the code. Explain *why* the code does something in the folder's page of the wiki's [source notes](../../wiki/Notes), and update a note when you change the code it describes.
 - Add or update tests for what you change. Tests use Qt Test and are registered in the folder's `CMakeLists.txt` with `sc_add_test`. Small sample inputs go in `tests/fixtures/`.
 
-### Keeping output identical to Smart Citizen
+### Keeping output similar to Smart Citizen
 
-The generated text has to match the original Python Smart Citizen byte for byte. If your change touches enhancement generation, tags or merging, run the parity tests. They need the Python app and a `Data.p4k`; setup is described in `tests/CMakeLists.txt` and `tests/parity`:
+The generated text has to match the original Python Smart Citizen byte for byte. If your change touches enhancement generation, tags or merging, run the parity tests. They need the Python app and a `Data.p4k`; setup is described in the wiki's [Testing](../../wiki/Dev-Testing#parity-tests) page:
 
 ```sh
 ctest --preset mingw-debug -L parity

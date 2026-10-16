@@ -12,9 +12,6 @@
 namespace engine::io {
 
 #ifdef _WIN32
-// Absolute, normalized, `\\?\`-prefixed form of `path`, so Win32 calls accept
-// it past MAX_PATH without the machine-wide LongPathsEnabled policy. DataForge
-// record paths run to 170 characters before the cache root is added.
 std::wstring longPath(const std::filesystem::path &path);
 
 std::string systemErrorMessage(unsigned long code);
@@ -22,22 +19,13 @@ std::string systemErrorMessage(unsigned long code);
 
 bool exists(const std::filesystem::path &path);
 
-// Calls `visit` with the '/'-separated path (UTF-8) of every regular file
-// under `root`, relative to it. Long-path safe on Windows, where
-// std::filesystem's iterators stop at MAX_PATH.
 Result<void> forEachFile(const std::filesystem::path &root,
                          const std::function<void(std::string_view relativePath)> &visit);
 
-// Removes `path` and everything under it; long-path safe. Missing is fine.
 Result<void> removeAll(const std::filesystem::path &path);
 
-// Like std::filesystem::create_directories, but long-path safe on Windows.
 Result<void> createDirectories(const std::filesystem::path &dir);
 
-// A file being written. With `atomic` the bytes go to "<target>.part" and only
-// replace the target on commit(), so an interrupted write never leaves a
-// truncated file behind (unp4k's skip-if-exists rule then made such files
-// permanent). An uncommitted file is deleted on destruction.
 class OutputFile
 {
 public:
@@ -74,4 +62,4 @@ inline Result<void> writeFile(const std::filesystem::path &target, std::string_v
                      atomic);
 }
 
-} // namespace engine::io
+}

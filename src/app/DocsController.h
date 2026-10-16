@@ -4,8 +4,6 @@
 #include <QString>
 #include <QtQml/qqmlregistration.h>
 
-// The About, FAQ, Legal and Help pages: bundled Markdown in the selected
-// language (FAQ and Help have translations), English otherwise.
 class DocsController : public QObject
 {
     Q_OBJECT
@@ -15,6 +13,5 @@ class DocsController : public QObject
 public:
     explicit DocsController(QObject *parent = nullptr);
 
-    // name: "ABOUT", "FAQ", "HELP" or "LEGAL".
     Q_INVOKABLE QString markdown(const QString &name, const QString &language) const;
 };

@@ -31,7 +31,6 @@ std::expected<qint64, QString> writeLocPackZip(const QString &sourceGlobalIni, c
     auto zip = engine::zip::ZipWriter::create(fsPath(outputZip));
     if (!zip)
         return std::unexpected(errorText(zip.error()));
-    // Deflate 9: loc files are repetitive text and shrink about 85%.
     if (auto r = zip->add("global.ini", std::string_view(bytes.constData(), bytes.size()), 9, modified); !r)
         return std::unexpected(errorText(r.error()));
     if (auto r = zip->finish(); !r)
@@ -39,4 +38,4 @@ std::expected<qint64, QString> writeLocPackZip(const QString &sourceGlobalIni, c
     return bytes.size();
 }
 
-} // namespace core
+}

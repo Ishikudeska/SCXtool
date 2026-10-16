@@ -12,18 +12,12 @@
 
 class AppController;
 
-// The Missions page: every mission and contract in the DataForge cache with
-// its description, contractor, payout and possible locations, searchable and
-// filtered by type, system and payout. The catalog is built off the GUI
-// thread the first time the page shows, and again when the game data or the
-// language changes.
 class MissionsController : public QObject
 {
     Q_OBJECT
     QML_ELEMENT
 
     Q_PROPERTY(bool active READ active WRITE setActive NOTIFY activeChanged)
-    // "nodata" (no DataForge cache), "loading" or "ready".
     Q_PROPERTY(QString status READ status NOTIFY statusChanged)
     Q_PROPERTY(bool hasPlaces READ hasPlaces NOTIFY catalogChanged)
     Q_PROPERTY(int totalCount READ totalCount NOTIFY catalogChanged)
@@ -33,9 +27,7 @@ class MissionsController : public QObject
     Q_PROPERTY(QString search READ search WRITE setSearch NOTIFY filtersChanged)
     Q_PROPERTY(QString category READ category WRITE setCategory NOTIFY filtersChanged)
     Q_PROPERTY(QString system READ system WRITE setSystem NOTIFY filtersChanged)
-    // "", "fixed" or "calculated".
     Q_PROPERTY(QString payout READ payout WRITE setPayout NOTIFY filtersChanged)
-    // "title", "payout_high" or "payout_low".
     Q_PROPERTY(QString sort READ sort WRITE setSort NOTIFY filtersChanged)
     Q_PROPERTY(bool blueprintsOnly READ blueprintsOnly WRITE setBlueprintsOnly NOTIFY filtersChanged)
 
@@ -63,10 +55,8 @@ public:
     bool blueprintsOnly() const { return filter_.blueprintsOnly; }
     void setBlueprintsOnly(bool v);
 
-    // One mission's details for the side panel (`mission` is a row's index).
     Q_INVOKABLE QVariantMap details(int mission) const;
     Q_INVOKABLE void reload();
-    // Re-extracts the DataForge cache (for a missing or pre-catalog one).
     Q_INVOKABLE void extractGameData();
 
 signals:
@@ -78,7 +68,6 @@ signals:
 
 private:
     AppController &app() const;
-    // What the catalog is built from; a change means a rebuild.
     QString sourceKey() const;
     void sourcesChanged();
     void build();
@@ -90,7 +79,7 @@ private:
     core::missions::Filter filter_;
     QVariantList rows_;
     QString status_ = QStringLiteral("loading");
-    QString builtKey_; // sourceKey() of catalog_ or of the build under way
+    QString builtKey_;
     bool active_ = false;
     bool building_ = false;
 };

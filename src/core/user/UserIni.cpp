@@ -21,7 +21,7 @@ QByteArray normalizedNewlines(QByteArray bytes)
     return bytes;
 }
 
-} // namespace
+}
 
 UserIni::UserIni(QString path) : path_(std::move(path))
 {}
@@ -33,7 +33,7 @@ QString UserIni::backupsDir() const
 
 IniMap UserIni::load() const
 {
-    return loadIni(path_, /*stripValues=*/false);
+    return loadIni(path_, false);
 }
 
 bool UserIni::writeText(const QString &text) const
@@ -51,9 +51,6 @@ void UserIni::backupIfChanging(const QString &newText) const
     QFile file(path_);
     if (!file.exists() || file.size() == 0 || !file.open(QIODevice::ReadOnly))
         return;
-    // Compare bytes with newlines normalized: a corrupt file then simply
-    // counts as changing (and gets snapshotted), and an identical save
-    // doesn't push real history out of the five slots.
     if (normalizedNewlines(file.readAll()) != newText.toUtf8())
         backup();
 }
@@ -93,7 +90,6 @@ QString UserIni::backup(const QDateTime &now) const
     if (!QDir().mkpath(dir.path()))
         return {};
 
-    // Names carry a fixed-width timestamp, so name order is age order.
     QStringList existing = dir.entryList({kBackupPrefix + u'*'}, QDir::Files, QDir::Name);
     while (existing.size() >= kKeepBackups)
         QFile::remove(dir.filePath(existing.takeFirst()));
@@ -173,8 +169,6 @@ int migrateUserDataDir(const QString &oldRoot, const QString &newRoot, bool move
     if (!QFileInfo(oldRoot).isDir() || oldResolved.compare(newResolved, kPathCase) == 0)
         return 0;
 
-    // Snapshot first: when the new folder sits inside the old one, files
-    // copied into it must not be picked up again.
     QStringList files;
     for (QDirIterator it(oldResolved, QDir::Files | QDir::Hidden, QDirIterator::Subdirectories);
          it.hasNext();)
@@ -185,10 +179,10 @@ int migrateUserDataDir(const QString &oldRoot, const QString &newRoot, bool move
     int transferred = 0;
     for (const QString &src : std::as_const(files)) {
         if (QDir::cleanPath(src).startsWith(newPrefix, kPathCase))
-            continue; // already inside the destination
+            continue;
         const QString dest = QDir(newRoot).filePath(oldDir.relativeFilePath(src));
         if (QFileInfo::exists(dest))
-            continue; // never clobber data already in the new location
+            continue;
         QDir().mkpath(QFileInfo(dest).absolutePath());
         if (!QFile::copy(src, dest))
             continue;
@@ -198,7 +192,6 @@ int migrateUserDataDir(const QString &oldRoot, const QString &newRoot, bool move
     }
 
     if (move) {
-        // Prune emptied folders, deepest first, then the old root itself.
         QStringList dirs;
         for (QDirIterator it(oldResolved, QDir::Dirs | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
              it.hasNext();)
@@ -212,4 +205,4 @@ int migrateUserDataDir(const QString &oldRoot, const QString &newRoot, bool move
     return transferred;
 }
 
-} // namespace core
+}

@@ -1,10 +1,3 @@
-// Blueprint Tracker core: the log scanner, owned-item matching, metadata
-// and export. Ports test_blueprint_log_scanner.py, test_owned_items.py,
-// test_blueprint_meta.py, test_blueprint_export.py,
-// test_foreign_editor_blueprint_names.py and test_blueprint_scan_channels.py,
-// and replays tools/parity/gen_blueprint_fixtures.py over the Kraken
-// global.ini (tests/fixtures/blueprints.json).
-
 #include "core/Settings.h"
 #include "core/blueprints/BlueprintExport.h"
 #include "core/blueprints/BlueprintMeta.h"
@@ -56,7 +49,6 @@ QDateTime dt(const char *iso)
     return QDateTime::fromString(s(iso), Qt::ISODateWithMs).toUTC();
 }
 
-// One authoritative received-blueprint line, as the game writes it.
 QString logEvent(const char *ts, const QString &name, int id = 1)
 {
     return QStringLiteral("<%1> [Notice] <SHUDEvent_OnNotification> Added notification "
@@ -91,13 +83,10 @@ QStringList fileNames(const QStringList &paths)
 const Enclosings kRound = {{s("("), s(")")}};
 const Enclosings kSquareAndNone = {{s("["), s("]")}, kNoneStyleEnclosing};
 
-// A blueprint-bearing mission body (literal \n separators).
 const QString kDesc = s("POSTING: salvage run.\\n\\n<EM3>POTENTIAL BLUEPRINTS</EM3>"
                         "\\n- Antium Core\\n- [Mil-S1-A] Norfield\\n- Abrade Scraper Module"
                         "\\n\\n<EM3>MISSION DETAILS</EM3>\\n<EM4>Difficulty:</EM4> 3");
 
-// A stray prose bullet before the header, region sub-headers inside the
-// section, and a later section's bullet.
 const QString kDescWithFalsePositives = s("Handle this right and I'll give the main contractor Council Scrip."
                                           "\\n\\n- Stows"
                                           "\\n\\n<EM3>POTENTIAL BLUEPRINTS</EM3>"
@@ -136,14 +125,13 @@ QString itemLine(const BlueprintItem &item)
         .join(QChar(0x1F));
 }
 
-} // namespace
+}
 
 class TestBlueprints : public QObject
 {
     Q_OBJECT
 
 private slots:
-    // ── log scanner ─────────────────────────────────────────────────────
 
     void parseSingleEvent()
     {
@@ -191,7 +179,6 @@ private slots:
         QCOMPARE(res.names, set({"Kept"}));
         QCOMPARE(res.eventsMatched, 1);
 
-        // The watermark is exclusive, and the latest timestamp ignores it.
         const QString b =
             writeLog(dir.filePath(s("b.log")), {logEvent("2026-03-10T00:00:00Z", s("AtWatermark")),
                                                 logEvent("2026-03-11T00:00:00Z", s("AfterWatermark"))});
@@ -300,8 +287,6 @@ private slots:
         QCOMPARE(channelsToScan(s("PTU"), true, both), QStringList{s("PTU")});
     }
 
-    // ── normalizeItemName ───────────────────────────────────────────────
-
     void normalizeBasics()
     {
         QCOMPARE(normalizeItemName(s("[Mil-S1-A] Norfield")), s("Norfield"));
@@ -354,7 +339,6 @@ private slots:
                  s("Norfield"));
         QCOMPARE(normalizeItemName(s("Mil-S1-A Norfield"), kSquareAndNone), s("Norfield"));
         QCOMPARE(normalizeItemName(s("Norfield Mil-S1-A"), kSquareAndNone), s("Norfield"));
-        // Off unless the None style is configured.
         QCOMPARE(normalizeItemName(s("F-4 Blaster")), s("F-4 Blaster"));
         QCOMPARE(normalizeItemName(s("Mil-S1-A Norfield")), s("Mil-S1-A Norfield"));
         QCOMPARE(normalizeItemName(s("[Mil-S1-A] Norfield"), kSquareAndNone), s("Norfield"));
@@ -402,8 +386,6 @@ private slots:
                  (Enclosings{kNoneStyleEnclosing, {s("<"), s(">")}, {s("["), s("]")}}));
     }
 
-    // ── sections and [Owned] ────────────────────────────────────────────
-
     void extractNames()
     {
         QCOMPARE(extractBpItemNames(kDesc), set({"Antium Core", "Norfield", "Abrade Scraper Module"}));
@@ -424,7 +406,6 @@ private slots:
         lower.replace(s("POTENTIAL BLUEPRINTS"), s("my loot"));
         QCOMPARE(extractBpItemNames(lower, defaultEnclosings(), s("My Loot")), all);
         QCOMPARE(extractBpItemNames(kDesc, defaultEnclosings(), s("MY LOOT")), all);
-        // Anchored to the <EM> wrapper: the word in prose does not count.
         QCOMPARE(extractBpItemNames(s("Grab that stuff for me.\\n- Ed\\n- H\\n- Wallace"
                                       "\\n\\n<EM3>stuff</EM3>\\n- Antium Core"),
                                     defaultEnclosings(), s("stuff")),
@@ -480,7 +461,6 @@ private slots:
         QVERIFY(out.contains(s("- [Mil-S1-A] Norfield\\n")));
         QVERIFY(applyOwnedToValue(kDesc, set({"Norfield"}))
                     .contains(s("- [Mil-S1-A] Norfield <EM4>[Owned]</EM4>")));
-        // Idempotent, and un-owning restores the original.
         QCOMPARE(applyOwnedToValue(out, set({"Antium Core"})), out);
         QCOMPARE(out.count(s("[Owned]")), 1);
         QCOMPARE(applyOwnedToValue(out, {}), kDesc);
@@ -512,8 +492,6 @@ private slots:
         QCOMPARE(applyOwnedToValue(tagged, set({"Lynx Legs", "Barbican"})), tagged);
     }
 
-    // ── foreign editors (#372) ──────────────────────────────────────────
-
     void resolveForeignNames()
     {
         const QSet<QString> reporter =
@@ -544,7 +522,6 @@ private slots:
             repairForeignOwnedNames(set({"Cascade", "Fierell Cascade"}), set({"Cascade", "Fierell Cascade"}));
         QCOMPARE(r.repaired, set({"Cascade", "Fierell Cascade"}));
         QVERIFY(r.renamed.isEmpty());
-        // A narrower catalogue reproduces the data loss the wide one avoids.
         r = repairForeignOwnedNames(set({"Cascade", "Fierell Cascade"}), set({"Cascade"}));
         QVERIFY(!r.repaired.contains(s("Fierell Cascade")));
         QCOMPARE(r.renamed.value(s("Fierell Cascade")), std::nullopt);
@@ -572,8 +549,6 @@ private slots:
                                 entry("mission_title_001", s("Some Mission"), ship)})
                     .isEmpty());
     }
-
-    // ── metadata ────────────────────────────────────────────────────────
 
     void componentTags()
     {
@@ -699,7 +674,6 @@ private slots:
             {entry("Loose_Desc_001", s("x\\n<EM4>POTENTIAL BLUEPRINTS</EM4>\\n- Orphan Part"), missions)});
         QVERIFY(orphan.value(s("Orphan Part")).missions.isEmpty());
 
-        // Only mission descriptions are scanned (#354).
         const auto commodity = buildBlueprintMetadata(
             {entry("items_commodities_iron_desc",
                    s("Iron Ore.\\n<EM3>POTENTIAL BLUEPRINTS</EM3>\\n- Power Plants: 10 items"),
@@ -780,7 +754,6 @@ private slots:
              entry("item_Mining_MiningLaser_Greycat_1_S1", s("[ML-S1] Lancet MH1 Mining Laser"), ship)});
         QCOMPARE(meta.value(s("Lancet MH1 Mining Laser")).taggedName, s("[ML-S1] Lancet MH1 Mining Laser"));
 
-        // CIG's de-slugified key in place of the name.
         meta = buildBlueprintMetadata(
             {entry("M_Desc_001", desc("\\n- Nozzle Fuelgiver Grin Nozzleveryfast"), missions),
              entry("Nozzle_FuelGiver_GRIN_NozzleVeryFast_Name", s("Lindstrom"), ship)});
@@ -795,7 +768,6 @@ private slots:
         QCOMPARE(meta.value(s("Lawson Mining Laser")).taggedName, s("Lawson Mining Laser"));
         QVERIFY(!meta.contains(s("Helix")) && !meta.contains(s("Klein")));
 
-        // A raw blueprint filename in place of the name.
         meta = buildBlueprintMetadata(
             {entry("M_Desc_001",
                    desc("\\n- bp_craft_nozzle_fuelgiver_grin_nozzlefast (Fuel Nozzle)"
@@ -811,8 +783,6 @@ private slots:
         meta = buildBlueprintMetadata({entry("M_Desc_001", desc("\\n- Totally Unknown Widget"), missions)});
         QCOMPARE(meta.value(s("Totally Unknown Widget")).type, s("Other"));
     }
-
-    // ── export / import ─────────────────────────────────────────────────
 
     void exportJson()
     {
@@ -903,8 +873,6 @@ private slots:
         QVERIFY(m.matched.isEmpty());
     }
 
-    // ── settings ────────────────────────────────────────────────────────
-
     void ownedSettings()
     {
         QTemporaryDir dir;
@@ -947,14 +915,11 @@ private slots:
         QCOMPARE(st.blueprintLogWatermark(s("LIVE")), when);
         st.setActiveChannel(s("PTU"));
         QVERIFY(!st.blueprintLogWatermark().isValid());
-        // Python wrote other offsets too; garbage reads as unset.
         st.setValue(s("blueprint_log_watermark/PTU"), s("2026-04-01T02:00:00+02:00"));
         QCOMPARE(st.blueprintLogWatermark(), dt("2026-04-01T00:00:00Z"));
         st.setValue(s("blueprint_log_watermark/PTU"), s("not-a-timestamp"));
         QVERIFY(!st.blueprintLogWatermark().isValid());
     }
-
-    // ── parity with the Python over the Kraken global.ini ───────────────
 
     void krakenParity()
     {

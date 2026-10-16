@@ -9,10 +9,6 @@
 
 class AppController;
 
-// The Blueprint Tracker: blueprints the loaded missions can reward, split
-// into available and owned, with search and facet filters; owning one
-// weaves [Owned] into mission texts. Also scans the game's logs for
-// received blueprints and imports/exports the owned list.
 class BlueprintController : public QObject
 {
     Q_OBJECT

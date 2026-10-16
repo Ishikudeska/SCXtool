@@ -3,8 +3,6 @@ import QtQuick.Controls.Basic
 import QtQuick.Layouts
 import ScApp
 
-// The single progress dialog every background job reports into
-// (App.tasks). Modal while a job runs, with Cancel when the job allows it.
 Popup {
     id: overlay
 
@@ -56,7 +54,6 @@ Popup {
             }
             contentItem: Item {
                 implicitHeight: 8
-                // The indeterminate runner slides in from off the left edge.
                 clip: true
                 Rectangle {
                     visible: !bar.indeterminate

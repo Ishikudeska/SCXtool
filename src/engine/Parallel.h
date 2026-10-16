@@ -14,11 +14,6 @@ namespace engine {
 
 using ProgressCallback = std::function<void(std::size_t done, std::size_t total)>;
 
-// Runs work items [0, count) on `threads` threads (0 = hardware
-// concurrency). `makeWorker` is called once per thread and returns a
-// callable taking an item index, so each thread can own scratch state.
-// `progress` is called on the calling thread about ten times a second and
-// once at the end. Stops handing out items once `cancel` is set.
 template <class MakeWorker>
 void parallelFor(std::size_t count, unsigned threads, MakeWorker &&makeWorker,
                  const ProgressCallback &progress, const std::atomic<bool> *cancel)
@@ -73,4 +68,4 @@ void parallelFor(std::size_t count, unsigned threads, MakeWorker &&makeWorker,
         progress(done.load(), count);
 }
 
-} // namespace engine
+}

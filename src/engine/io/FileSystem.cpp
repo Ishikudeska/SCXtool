@@ -80,8 +80,6 @@ std::string toUtf8(std::wstring_view text)
     return out;
 }
 
-// Depth-first walk over `dir` (a \\?\ path). `relative` is the UTF-8 prefix
-// for entries found in it.
 Result<void> walk(const std::wstring &dir, const std::string &relative,
                   const std::function<void(std::string_view)> *visitFile,
                   const std::function<Result<void>(const std::wstring &, bool)> *visitAny)
@@ -121,7 +119,7 @@ Result<void> walk(const std::wstring &dir, const std::string &relative,
     return result;
 }
 
-} // namespace
+}
 
 Result<void> forEachFile(const std::filesystem::path &root,
                          const std::function<void(std::string_view relativePath)> &visit)
@@ -161,14 +159,13 @@ Result<void> createDirectories(const std::filesystem::path &dir)
         return fail(Errc::Io, dir.string() + " exists and is not a directory");
     }
 
-    // Skip the `\\?\C:\` or `\\?\UNC\server\share\` root, then create each level.
     std::size_t pos = 4;
     if (full.compare(4, 4, L"UNC\\") == 0) {
-        pos = full.find(L'\\', 8); // end of server
+        pos = full.find(L'\\', 8);
         if (pos != std::wstring::npos)
-            pos = full.find(L'\\', pos + 1); // end of share
+            pos = full.find(L'\\', pos + 1);
     } else {
-        pos = full.find(L'\\', pos); // after drive
+        pos = full.find(L'\\', pos);
     }
     while (pos != std::wstring::npos) {
         pos = full.find(L'\\', pos + 1);
@@ -397,4 +394,4 @@ Result<void> writeFile(const std::filesystem::path &target, std::span<const std:
     return file->commit();
 }
 
-} // namespace engine::io
+}

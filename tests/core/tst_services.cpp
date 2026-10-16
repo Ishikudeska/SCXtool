@@ -1,8 +1,3 @@
-// Settings backups, loc-packs, downloads, logging, crash reports and
-// progress. Ports test_settings_profile.py, test_locpack_exporter.py and
-// test_progress_sink.py; tests/fixtures/smartcitizen_settings_backup.zip
-// was written by Smart Citizen's own write_profile_zip.
-
 #include "core/EnginePaths.h"
 #include "core/Settings.h"
 #include "core/apply/LocPack.h"
@@ -52,7 +47,6 @@ void writeFile(const QString &path, const QByteArray &bytes)
     f.write(bytes);
 }
 
-// name -> content of every entry in a zip.
 QMap<QString, QByteArray> zipEntries(const QString &path)
 {
     QMap<QString, QByteArray> out;
@@ -82,8 +76,6 @@ void writeZip(const QString &path, const QList<std::pair<const char *, QByteArra
 
 const QByteArray kManifest = R"({"app": "SmartCitizen", "kind": "settings-backup", "schema_version": 1})";
 
-// A one-request-per-connection HTTP server driven by the test's event loop
-// (downloadIfChanged spins a nested one).
 class TinyHttp : public QObject
 {
 public:
@@ -101,7 +93,7 @@ public:
                     requests << buffers_.take(socket);
                     const QByteArray response = responder_(requests.back());
                     if (response.isNull())
-                        return; // hang: never answer
+                        return;
                     socket->write(response);
                     socket->disconnectFromHost();
                 });
@@ -130,14 +122,13 @@ QByteArray response(int status, const QByteArray &body,
            "Content-Length: " + QByteArray::number(body.size()) + "\r\nConnection: close\r\n\r\n" + body;
 }
 
-} // namespace
+}
 
 class TestServices : public QObject
 {
     Q_OBJECT
 
 private slots:
-    // ── settings backups ────────────────────────────────────────────────
 
     void profileRoundTrip()
     {
@@ -255,7 +246,7 @@ private slots:
                  2);
         QCOMPARE(target.value(s("theme")).toString(), s("light"));
         QVERIFY(!target.value(s("user_data_dir")).isValid());
-        QCOMPARE(target.favoritePrefix(), s("*")); // layered, not replaced
+        QCOMPARE(target.favoritePrefix(), s("*"));
     }
 
     void reconcileInstallPath()
@@ -293,8 +284,6 @@ private slots:
         QVERIFY(defaultLocPackFilename(s("PTU")) != defaultLocPackFilename(s("LIVE")));
     }
 
-    // ── loc-packs ───────────────────────────────────────────────────────
-
     void locPack()
     {
         QTemporaryDir dir;
@@ -313,8 +302,6 @@ private slots:
         QVERIFY(!missing.has_value());
         QVERIFY(missing.error().contains(s("not found")));
     }
-
-    // ── downloads ───────────────────────────────────────────────────────
 
     void downloadThenNotModified()
     {
@@ -372,7 +359,7 @@ private slots:
 
     void downloadCancels()
     {
-        TinyHttp http([](const QByteArray &) { return QByteArray(); }); // never answers
+        TinyHttp http([](const QByteArray &) { return QByteArray(); });
         QTemporaryDir dir;
         std::atomic<bool> cancel = false;
         QTimer::singleShot(200, [&] { cancel = true; });
@@ -384,15 +371,13 @@ private slots:
         QVERIFY(t.elapsed() < 5000);
     }
 
-    // ── logging and crash reports ───────────────────────────────────────
-
     void logRingAndFile()
     {
         QTemporaryDir dir;
         log::LogHub &hub = log::LogHub::instance();
         const QString file = dir.filePath(s("logs/app.log"));
         writeFile(file, "last session\n");
-        hub.install(file, /*debug=*/true);
+        hub.install(file, true);
         QVERIFY(hub.isInstalled());
         QCOMPARE(readFile(file + s(".previous")), QByteArray("last session\n"));
         hub.clearRecent();
@@ -409,7 +394,7 @@ private slots:
             hub.record(QtWarningMsg, s("test"), QString::number(i));
         QCOMPARE(hub.recentLines().size(), log::kRingSize);
         QVERIFY(hub.recentLines().constLast().endsWith(s("WARNING - %1").arg(log::kRingSize + 9)));
-        hub.install({}, false); // detach the file before the temp dir goes
+        hub.install({}, false);
         QVERIFY(hub.logFile().isEmpty());
     }
 
@@ -429,8 +414,6 @@ private slots:
         QVERIFY(text.contains(s("ERROR - the last thing that happened")));
         QVERIFY(crash::writeCrashReport(QString(), s("x")).isEmpty());
     }
-
-    // ── progress ────────────────────────────────────────────────────────
 
     void progressSink()
     {

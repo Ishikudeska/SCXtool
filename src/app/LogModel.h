@@ -5,8 +5,6 @@
 #include <QUrl>
 #include <QtQml/qqmlregistration.h>
 
-// The Log page: the session's log lines (the last 2,000 at or above the
-// chosen level), live as they are logged.
 class LogModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -46,7 +44,7 @@ private:
     void append(const QString &line, int level);
     void rebuild();
 
-    QList<Line> all_;     // everything since the last clear (bounded)
-    QList<Line> visible_; // at or above minLevel_
+    QList<Line> all_;
+    QList<Line> visible_;
     int minLevel_ = 10;
 };

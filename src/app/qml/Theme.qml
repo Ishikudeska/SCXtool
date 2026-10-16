@@ -2,8 +2,6 @@ pragma Singleton
 import QtQuick
 import ScApp
 
-// The Light and Dark palettes (from Smart Citizen's theme.py). Everything
-// visual reads from here; App.theme picks the palette.
 QtObject {
     id: theme
 
@@ -51,7 +49,6 @@ QtObject {
     readonly property color tooltip: p.tooltip
     readonly property color buttonText: p.buttonText
 
-    // Action colours (load / restore / apply / clear / open / needs_apply).
     function action(role) {
         switch (role) {
         case "load": return p.load

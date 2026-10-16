@@ -1,7 +1,3 @@
-// Settings, path layout and install discovery. Ports the relevant cases of
-// test_language_paths.py, test_cache_dir.py, test_sc_install_root.py and
-// test_sc_install_scan_picks_live.py.
-
 #include "core/AppIdentity.h"
 #include "core/Paths.h"
 #include "core/ScInstall.h"
@@ -25,7 +21,7 @@ void touch(const QString &path, const QDateTime &mtime = {})
     if (!f.open(QIODevice::WriteOnly))
         qFatal("cannot open %s", qPrintable(f.fileName()));
     f.write("x");
-    f.flush(); // or closing would write after, and reset, the timestamp
+    f.flush();
     if (mtime.isValid())
         f.setFileTime(mtime, QFileDevice::FileModificationTime);
 }
@@ -40,7 +36,7 @@ PathRoots roots(const QTemporaryDir &dir, bool portable = false)
     return r;
 }
 
-} // namespace
+}
 
 class TestSettings : public QObject
 {
@@ -60,7 +56,7 @@ private slots:
             QCOMPARE(s.enabledEnhancementFileIds().size(), 9);
 
             s.setActiveChannel(QStringLiteral("PTU"));
-            s.setActiveChannel(QStringLiteral("NOT-A-CHANNEL")); // ignored
+            s.setActiveChannel(QStringLiteral("NOT-A-CHANNEL"));
             s.setFavoritePrefix(QStringLiteral(" "));
             s.setEnhancementCategoryEnabled(QStringLiteral("ship_items"), false);
             s.setScInstallRoot(QStringLiteral("D:/Games/StarCitizen"));
@@ -74,7 +70,6 @@ private slots:
         QCOMPARE(s.enabledEnhancementFileIds().size(), 6);
         QCOMPARE(s.scInstallRoot(), QStringLiteral("D:/Games/StarCitizen"));
 
-        // Slash keys round-trip (the reason Smart Citizen avoided INI files).
         s.setValue(QStringLiteral("tag_builder/components/config"), QStringLiteral("{\"a\":1}"));
         s.sync();
         QCOMPARE(Settings(file).value(QStringLiteral("tag_builder/components/config")).toString(),
@@ -97,7 +92,6 @@ private slots:
         QVERIFY(s.tagConfig(QStringLiteral("ship_weapons")) ==
                 tags::defaultConfig(QStringLiteral("ship_weapons")));
 
-        // Commodities' "none" separator is upgraded once, then left alone.
         tags::TagConfig com = tags::defaultConfig(QStringLiteral("commodities"));
         com.separator = QStringLiteral("none");
         s.setTagConfig(QStringLiteral("commodities"), com);
@@ -130,9 +124,9 @@ private slots:
             QCOMPARE(defaults.missionHeaders.value(QStringLiteral("items")), QStringLiteral("ITEM REWARDS"));
 
             s.setRepXpLabel(QStringLiteral("XP"));
-            s.setMissionHeaderEmTag(QStringLiteral("EM1")); // removed in 1.5.0: reads as the default
+            s.setMissionHeaderEmTag(QStringLiteral("EM1"));
             s.setMissionDetailField(QStringLiteral("spawns"), false);
-            s.setMissionDetailField(QStringLiteral("nonsense"), false); // ignored
+            s.setMissionDetailField(QStringLiteral("nonsense"), false);
             s.setMissionTitleTag(QStringLiteral("rep_track"), true);
             s.setStatsPrepend(true);
             s.setRsOreNameAnnotations(false);
@@ -150,7 +144,6 @@ private slots:
         QVERIFY(!o.rsOreNameAnnotations);
         QVERIFY(!o.categories->contains(QStringLiteral("journal")));
 
-        // The pre-2.2 blueprint_tag/ace toggles carry into the title tags once.
         s.setValue(QStringLiteral("mission_field/blueprint_tag"), false);
         s.migrateTitleTagSettings();
         QVERIFY(!s.missionTitleTag(QStringLiteral("blueprint")));
@@ -233,7 +226,7 @@ private slots:
         const Paths p(s, roots(dir));
         QCOMPARE(p.userDataRoot(), dir.filePath(QStringLiteral("Elsewhere")));
         QCOMPARE(p.dataForgeCacheDir(), dir.filePath(QStringLiteral("FastDisk/LIVE/cache/dataforge")));
-        QVERIFY(p.p4kPath().isEmpty()); // no install configured
+        QVERIFY(p.p4kPath().isEmpty());
         QVERIFY(p.gameGlobalIni().isEmpty());
 
         qputenv("SCX_TEST_DIR", dir.path().toUtf8());
@@ -259,13 +252,12 @@ private slots:
         QCOMPARE(normalizeInstallRoot(QDir::toNativeSeparators(root)), root);
         QVERIFY(normalizeInstallRoot(dir.filePath(QStringLiteral("SmartCitizen 1.4.1"))).isEmpty());
 
-        QVERIFY(installedChannels(root).isEmpty()); // no Data.p4k yet
+        QVERIFY(installedChannels(root).isEmpty());
         touch(root + QStringLiteral("/PTU/Data.p4k"));
         touch(root + QStringLiteral("/LIVE/Data.p4k"));
         QCOMPARE(installedChannels(root), (QStringList{QStringLiteral("LIVE"), QStringLiteral("PTU")}));
     }
 
-    // #370: an abandoned install must not beat the one the launcher patches.
     void picksTheLiveInstall()
     {
         QTemporaryDir dir;
@@ -274,7 +266,7 @@ private slots:
         const QDateTime old(QDate(2025, 1, 1), QTime(0, 0));
         touch(stale + QStringLiteral("/LIVE/Data.p4k"), old);
         touch(live + QStringLiteral("/LIVE/Data.p4k"), old.addDays(10));
-        touch(live + QStringLiteral("/PTU/Data.p4k"), old.addDays(400)); // any channel counts
+        touch(live + QStringLiteral("/PTU/Data.p4k"), old.addDays(400));
         QCOMPARE(pickLiveInstall({stale, live}), live);
         QCOMPARE(pickLiveInstall({live, stale}), live);
         QCOMPARE(pickLiveInstall({stale}), stale);

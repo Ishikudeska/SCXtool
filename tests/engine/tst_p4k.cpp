@@ -27,7 +27,7 @@ std::vector<std::uint8_t> pattern(std::size_t size, std::uint32_t seed)
     std::uint32_t x = seed;
     for (auto &b : out) {
         x = x * 1664525u + 1013904223u;
-        b = static_cast<std::uint8_t>((x >> 24) % 26 + 'a'); // compressible but not trivial
+        b = static_cast<std::uint8_t>((x >> 24) % 26 + 'a');
     }
     return out;
 }
@@ -56,7 +56,7 @@ std::vector<std::uint8_t> readFile(const QString &path)
     return {data.begin(), data.end()};
 }
 
-} // namespace
+}
 
 class TestP4k : public QObject
 {
@@ -93,7 +93,7 @@ private slots:
         QVERIFY2(archive, archive ? "" : archive.error().message.c_str());
         QCOMPARE((*archive)->entryCount(), entries_.size());
         for (std::size_t i = 0; i < entries_.size(); ++i) {
-            QCOMPARE(std::string((*archive)->name(i)), entries_[i].name); // backslashes become '/'
+            QCOMPARE(std::string((*archive)->name(i)), entries_[i].name);
             const auto &e = (*archive)->entry(i);
             QCOMPARE(e.method, entries_[i].method);
             QCOMPARE(e.encrypted, entries_[i].encrypted);
@@ -136,13 +136,11 @@ private slots:
 
     void zstdMethodWithoutMagicPassesThrough()
     {
-        // unp4k returns method-100 data as-is when it is not a zstd frame.
         QTemporaryDir dir;
         P4kEntry raw{"Data/raw.txt", bytesOf("not compressed at all"), 0, false};
         P4kBuilder builder;
         builder.add(raw);
         auto bytes = builder.build();
-        // Relabel the entry as ZSTD in both headers (method field at +8 / +10).
         bytes[8] = 100;
         const std::size_t cd = bytes.size() - 828 - 22 - 16 - 20 - 56 - (46 + raw.name.size() + 206);
         QCOMPARE(bytes[cd], std::uint8_t('P'));
@@ -155,27 +153,21 @@ private slots:
 
     void reportsCorruptData()
     {
-        // Entry data starts after the 30-byte local header, the name and a
-        // 20-byte ZIP64 extra field.
         const std::string name = "Data/x.bin";
         const std::size_t dataAt = 30 + name.size() + 20;
         P4kBuilder builder;
         builder.add({name, pattern(10000, 3), 100, false});
         const auto good = builder.build();
 
-        // A broken frame header fails to decode.
         {
             QTemporaryDir dir;
             auto bytes = good;
-            bytes[dataAt + 4] = 0xFF; // frame descriptor with the reserved bit set
+            bytes[dataAt + 4] = 0xFF;
             auto archive = *p4k::Archive::open(writeFile(dir, "bad.p4k", bytes));
             auto data = archive->read(0);
             QVERIFY(!data);
             QCOMPARE(data.error().code, Errc::Corrupt);
         }
-        // zstd frames here carry no checksum (and CIG's CRC field is not a
-        // content CRC), so damaged payload bytes may still decode. The stored
-        // SHA-256 is what catches them.
         {
             QTemporaryDir dir;
             auto bytes = good;
@@ -205,7 +197,6 @@ private slots:
     }
 
 #ifdef _WIN32
-    // The RSI Launcher holds Data.p4k open for writing while it patches.
     void lockedArchiveReportsLocked()
     {
         HANDLE writer = CreateFileW(archivePath_.c_str(), GENERIC_WRITE, FILE_SHARE_READ, nullptr,
@@ -281,11 +272,9 @@ private slots:
         for (const auto &e : entries_)
             QVERIFY2(readFile(out.filePath(QString::fromStdString(e.name))) == e.content, e.name.c_str());
 
-        // Nothing half-written is left behind.
         QDirIterator it(out.path(), QStringList{"*.part"}, QDir::Files, QDirIterator::Subdirectories);
         QVERIFY(!it.hasNext());
 
-        // A second run skips what is already there.
         options.skipExisting = true;
         stats = p4k::extract(*archive, entries, options);
         QVERIFY(stats);
@@ -324,7 +313,7 @@ private slots:
             QVERIFY(zip->add("global.ini", std::string_view("a=1\r\n")));
             QVERIFY(zip->add("dir/stored.bin", big, 0));
             QVERIFY(zip->add("dir/deflated.bin", big, 9));
-            QVERIFY(!QFile::exists(dir.filePath("pack.zip"))); // only appears on finish()
+            QVERIFY(!QFile::exists(dir.filePath("pack.zip")));
             QVERIFY(zip->finish());
         }
         auto archive = p4k::Archive::open(path);

@@ -40,7 +40,7 @@ bool iendsWith(std::string_view s, std::string_view suffix)
     return s.size() >= suffix.size() && iequals(s.substr(s.size() - suffix.size()), suffix);
 }
 
-} // namespace
+}
 
 bool unp4kFilterMatches(std::string_view filter, std::string_view name)
 {
@@ -55,7 +55,6 @@ bool unp4kFilterMatches(std::string_view filter, std::string_view name)
 
 bool globMatches(std::string_view pattern, std::string_view name)
 {
-    // Iterative wildcard match with single-star backtracking.
     std::size_t p = 0, n = 0;
     std::size_t starP = std::string_view::npos, starN = 0;
     while (n < name.size()) {
@@ -171,4 +170,4 @@ Result<ExtractStats> extract(const Archive &archive, std::span<const std::size_t
     return stats;
 }
 
-} // namespace engine::p4k
+}

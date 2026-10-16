@@ -5,14 +5,11 @@ import QtQuick.Dialogs
 import QtQuick.Layouts
 import ScApp
 
-// The Blueprint Tracker: available and owned blueprints side by side with
-// search and facet filters, log scanning and owned-list import/export.
 Item {
     id: page
 
     BlueprintController { id: bp }
 
-    // A facet combo: "Any" followed by the facet's values.
     component FacetCombo: RowLayout {
         id: facet
         property string label
@@ -29,7 +26,6 @@ Item {
         }
     }
 
-    // One list with Ctrl/Shift multi-selection; double-click moves a row.
     component BlueprintList: Rectangle {
         id: box
         property string heading
@@ -140,7 +136,6 @@ Item {
         Label { text: qsTr("blueprint_tracker.title"); color: Theme.title; font.pixelSize: 20; font.bold: true }
         Label { text: qsTr("enhancements.blueprints_desc"); color: Theme.dim; wrapMode: Text.WordWrap; Layout.fillWidth: true }
 
-        // ── actions ──
         Flow {
             Layout.fillWidth: true
             spacing: 8
@@ -182,7 +177,6 @@ Item {
             }
         }
 
-        // ── filters ──
         RowLayout {
             Layout.fillWidth: true
             spacing: 10
@@ -223,7 +217,6 @@ Item {
             Layout.fillWidth: true
         }
 
-        // ── lists ──
         RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true

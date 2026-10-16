@@ -32,7 +32,6 @@ QString keyFromRef(std::string_view ref)
     return qs(lstripAt(ref));
 }
 
-// The first Localization element whose `attr` holds a usable "@key".
 QString localizationKey(Node root, const char *attr)
 {
     QString key;
@@ -49,7 +48,7 @@ QString localizationKey(Node root, const char *attr)
     return key;
 }
 
-} // namespace
+}
 
 QString humanizeKey(QStringView key)
 {
@@ -100,7 +99,7 @@ QString fmt(std::optional<double> value, QStringView unit, int decimals)
     if (decimals)
         return py::fixed(v, decimals, true) + unit;
     if (std::isnan(v))
-        return py::repr(v); // int(round(nan)) raises; str(value) is what shows
+        return py::repr(v);
     const double r = py::round(v);
     if (std::fabs(r) < 9.0e18)
         return py::integer(qint64(r), true) + unit;
@@ -113,7 +112,7 @@ QString fmt(const std::optional<std::string_view> &value, QStringView unit, int 
         return QStringLiteral("?");
     const std::optional<double> v = toFloat(*value);
     if (!v)
-        return qs(*value); // not a number: shown as is, without the unit
+        return qs(*value);
     if (!decimals && std::isnan(*v))
         return qs(*value);
     return fmt(v, unit, decimals);
@@ -193,8 +192,6 @@ QString synthesizeDescription(Node root, const QString &xmlFile, const QString &
         if (const std::string_view sig = getOr(tp, "trackingSignalType"); !sig.empty())
             parts << QStringLiteral("Tracking: ") + qs(sig);
 
-    // A real newline: discovered entries are the one place the Python joins
-    // with "\n" rather than the literal "\\n".
     return parts.isEmpty() ? QString(key).replace(u'_', u' ') : parts.join(u'\n');
 }
 
@@ -231,4 +228,4 @@ QString fileStem(const QString &path)
     return QFileInfo(path).completeBaseName();
 }
 
-} // namespace core::enh
+}

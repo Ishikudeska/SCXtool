@@ -2,8 +2,6 @@ import QtQuick
 import QtQuick.Controls.Basic
 import ScApp
 
-// A push button in one of the theme's action colours ("apply", "open",
-// "clear", ...), or a plain panel button when `role` is empty.
 Button {
     id: control
 

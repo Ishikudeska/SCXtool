@@ -1,9 +1,3 @@
-// Runs the C++ enhancements generator outside the app, for parity runs
-// against tools/parity/run_python_generator.py (same options JSON).
-//
-//   scxgen --base-ini <base.ini> --forge-dir <dataforge> --out <dir>
-//          [--options opts.json] [--patches <dir>] [--threads N]
-
 #include "core/enhancements/Generator.h"
 #include "core/log/Log.h"
 
@@ -57,7 +51,6 @@ int main(int argc, char **argv)
         opts = QJsonDocument::fromJson(f.readAll()).object();
     }
 
-    // main() writes beside its base.ini: give it a private copy.
     QDir().mkpath(outDir);
     const QString copy = QDir(outDir).filePath(QStringLiteral("base.ini"));
     QFile::remove(copy);
@@ -69,7 +62,7 @@ int main(int argc, char **argv)
     enh::GeneratorOptions options;
     for (const QString &category : tags::kCategories)
         options.tagConfigs.insert(category, tags::defaultConfig(category));
-    options.missionTitleTags.insert(QStringLiteral("rep_track"), false); // the app's default
+    options.missionTitleTags.insert(QStringLiteral("rep_track"), false);
     enh::applyOptionsJson(options, opts);
     options.baseIni = copy;
     options.forgeDir = forgeDir;

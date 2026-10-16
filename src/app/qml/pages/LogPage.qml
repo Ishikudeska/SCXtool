@@ -5,7 +5,6 @@ import QtQuick.Dialogs
 import QtQuick.Layouts
 import ScApp
 
-// The session log, filtered by level, following new lines.
 Item {
     id: page
 

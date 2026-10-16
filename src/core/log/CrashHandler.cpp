@@ -14,7 +14,6 @@
 
 #ifdef Q_OS_WIN
 #include <windows.h>
-// dbghelp.h needs windows.h first.
 #include <dbghelp.h>
 #endif
 
@@ -23,9 +22,7 @@ namespace core::crash {
 namespace {
 
 std::atomic<bool> g_installed = false;
-std::atomic<bool> g_reporting = false; // one report per crash, even if the report itself faults
-// Set once by install(), read by the handlers. A function-local static, so
-// it is built on first use instead of during static initialization.
+std::atomic<bool> g_reporting = false;
 QString &crashLogsDir()
 {
     static QString dir;
@@ -73,7 +70,7 @@ LONG WINAPI unhandledException(EXCEPTION_POINTERS *info)
         if (!report.isEmpty())
             writeMinidump(report.chopped(4) + QStringLiteral(".dmp"), info);
     }
-    return EXCEPTION_CONTINUE_SEARCH; // let Windows Error Reporting finish the job
+    return EXCEPTION_CONTINUE_SEARCH;
 }
 #endif
 
@@ -101,7 +98,7 @@ void onTerminate()
     std::abort();
 }
 
-} // namespace
+}
 
 void install(const QString &logsDir)
 {
@@ -149,4 +146,4 @@ void reportFatal(const QString &reason)
         writeCrashReport(crashLogsDir(), reason);
 }
 
-} // namespace core::crash
+}

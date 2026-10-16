@@ -10,8 +10,6 @@ namespace engine::forge {
 
 namespace {
 
-// Lays out shortest round-trip digits the way .NET's FormatGeneral does.
-// `scientific` is std::to_chars output such as "1.093429e+09" or "5e-01".
 void layoutGeneral(std::string &out, const char *scientific, std::size_t length, bool negative,
                    int minPrecision)
 {
@@ -26,7 +24,7 @@ void layoutGeneral(std::string &out, const char *scientific, std::size_t length,
     }
     int exponent = 0;
     if (p < end) {
-        ++p; // 'e'
+        ++p;
         std::from_chars(*p == '+' ? p + 1 : p, end, exponent);
     }
     while (digitCount > 1 && digits[digitCount - 1] == '0')
@@ -35,7 +33,6 @@ void layoutGeneral(std::string &out, const char *scientific, std::size_t length,
     if (negative)
         out.push_back('-');
 
-    // .NET's Number.Scale: value = 0.d1d2d3... x 10^scale.
     const int scale = exponent + 1;
     const int maxDigits = std::max(static_cast<int>(digitCount), minPrecision);
 
@@ -91,7 +88,7 @@ template <class T> void appendFloating(std::string &out, T value, int minPrecisi
     layoutGeneral(out, buffer, static_cast<std::size_t>(result.ptr - buffer), negative, minPrecision);
 }
 
-} // namespace
+}
 
 void appendSingle(std::string &out, float value)
 {
@@ -124,7 +121,6 @@ void appendGuid(std::string &out, const std::uint8_t *b)
         out.push_back(kHex[v >> 4]);
         out.push_back(kHex[v & 15]);
     };
-    // a = int32 at [4..7], b = int16 at [2..3], c = int16 at [0..1], all little-endian.
     hex(b[7]);
     hex(b[6]);
     hex(b[5]);
@@ -151,4 +147,4 @@ std::string formatGuid(const std::uint8_t *bytes)
     return out;
 }
 
-} // namespace engine::forge
+}

@@ -1,8 +1,3 @@
-// Ports the merge_ini_files cases from test_ini_merger.py /
-// test_ini_encoding_fallback.py, test_frontend_version_stamp.py,
-// test_applied_file_validator.py, test_user_cfg.py and the apply pipeline
-// (MainWindow.apply_to_game) against a fake Star Citizen folder.
-
 #include "core/apply/ApplyService.h"
 #include "core/apply/Backups.h"
 #include "core/apply/GameFile.h"
@@ -52,14 +47,13 @@ QString frontend(const IniMap &m)
     return m.value(kFrontendVersionKey);
 }
 
-} // namespace
+}
 
 class TestApply : public QObject
 {
     Q_OBJECT
 
 private slots:
-    // --- game file ------------------------------------------------------------
 
     void gameFileKeepsStructureAddsBomAndCrlf()
     {
@@ -77,7 +71,6 @@ private slots:
 
     void gameFileStripsKeyMetadataAndKeepsRawValues()
     {
-        // Keys lose ",P" and their padding; unmatched values stay byte-for-byte.
         const QByteArray out = renderGameFile(
             QStringLiteral(" key,P =  value with spaces  \nother,P=x\nno equals\n"), ini({{"other", "y"}}));
         QCOMPARE(out, kBom + QByteArray("key=  value with spaces  \r\nother=y\r\nno equals\r\n"));
@@ -100,8 +93,6 @@ private slots:
                                    QStringLiteral("é=ü\r\n").toUtf8());
     }
 
-    // --- stamps ---------------------------------------------------------------
-
     void frontendStamp()
     {
         IniMap m = ini({{"Frontend_PU_Version", "Star Citizen Alpha 4.8.0 PTU"}});
@@ -111,7 +102,7 @@ private slots:
                  QStringLiteral(
                      R"(Star Citizen Alpha 4.8.0 PTU\nLocalizations Enhanced with Smart Citizen v1.3.1)"));
         stampFrontendVersion(m, kApp, QStringLiteral("1.3.1"));
-        QCOMPARE(frontend(m), once); // idempotent
+        QCOMPARE(frontend(m), once);
         stampFrontendVersion(m, kApp, QStringLiteral("2.0.0"));
         QCOMPARE(frontend(m),
                  QStringLiteral(
@@ -162,11 +153,11 @@ private slots:
         const IniMap stock = ini({{"Journal_A_Content", "Stock text"},
                                   {"Journal_B_Content", "Stock B"},
                                   {"Journal_A_Title", "Title"}});
-        IniMap m = ini({{"Journal_A_Content", "Stock text"}, // unchanged: no stamp
-                        {"Journal_B_Content", "Edited B"},   // changed: stamped
-                        {"Journal_New_Content", "Added"},    // not in stock: stamped
-                        {"Journal_A_Title", "Edited title"}, // title keys never stamped
-                        {"Journal_C_From,P", "Sender"},      // nor "From" lines
+        IniMap m = ini({{"Journal_A_Content", "Stock text"},
+                        {"Journal_B_Content", "Edited B"},
+                        {"Journal_New_Content", "Added"},
+                        {"Journal_A_Title", "Edited title"},
+                        {"Journal_C_From,P", "Sender"},
                         {"ui_Thing", "Not a journal"}});
         stampJournalEntries(m, stock, kApp, QStringLiteral("2.3.1"));
         const QString stamp = QStringLiteral(R"(\n\n[Edited with Smart Citizen v2.3.1])");
@@ -177,20 +168,16 @@ private slots:
         QCOMPARE(m.value(QStringLiteral("Journal_C_From,P")), QStringLiteral("Sender"));
         QCOMPARE(m.value(QStringLiteral("ui_Thing")), QStringLiteral("Not a journal"));
 
-        // Idempotent, and a version bump rolls the stamp forward.
         stampJournalEntries(m, stock, kApp, QStringLiteral("2.3.1"));
         QCOMPARE(m.value(QStringLiteral("Journal_B_Content")), QStringLiteral("Edited B") + stamp);
         stampJournalEntries(m, stock, kApp, QStringLiteral("2.4.0"));
         QCOMPARE(m.value(QStringLiteral("Journal_B_Content")),
                  QStringLiteral(R"(Edited B\n\n[Edited with Smart Citizen v2.4.0])"));
 
-        // A stamped value that matches stock once unstamped loses the stamp.
         IniMap back = ini({{"Journal_A_Content", R"(Stock text\n\n[Edited with Smart Citizen v1.0])"}});
         stampJournalEntries(back, stock, kApp, QStringLiteral("2.3.1"));
         QCOMPARE(back.value(QStringLiteral("Journal_A_Content")), QStringLiteral("Stock text"));
     }
-
-    // --- validator ------------------------------------------------------------
 
     void validator()
     {
@@ -220,20 +207,17 @@ private slots:
         QVERIFY(validateGameFile(dir.filePath(QStringLiteral("nope.ini")), stock).isEmpty());
     }
 
-    // --- backups ----------------------------------------------------------------
-
     void backupsRotateAtFive()
     {
         QTemporaryDir dir;
         const QString game = dir.filePath(QStringLiteral("global.ini"));
         const GameFileBackups backups(dir.filePath(QStringLiteral("backups")));
-        QVERIFY(backups.backup(game).isEmpty()); // nothing to back up yet
+        QVERIFY(backups.backup(game).isEmpty());
 
         QDateTime when(QDate(2026, 1, 1), QTime(12, 0, 0));
         QStringList made;
         for (int i = 0; i < 7; ++i) {
             writeFile(game, QByteArray("v=") + QByteArray::number(i));
-            // Distinct mtimes so "oldest" is well defined.
             QFile f(game);
             if (!f.open(QIODevice::ReadWrite))
                 qFatal("cannot open %s", qPrintable(f.fileName()));
@@ -251,8 +235,6 @@ private slots:
         QVERIFY(GameFileBackups::restore(made[3], game).isEmpty());
         QCOMPARE(readAll(game), QByteArray("v=3"));
     }
-
-    // --- user.cfg ---------------------------------------------------------------
 
     void userCfgCreatesAndAppends()
     {
@@ -292,7 +274,7 @@ private slots:
         const QByteArray original = ("r_VSync = 1\n" + line + "\nr_Width = 1920\n").toUtf8();
         writeFile(dir.filePath(QStringLiteral("user.cfg")), original);
         QCOMPARE(ensureUserCfgLanguage(dir.path(), QStringLiteral("english")), UserCfgResult::Unchanged);
-        QCOMPARE(readAll(dir.filePath(QStringLiteral("user.cfg"))), original); // untouched
+        QCOMPARE(readAll(dir.filePath(QStringLiteral("user.cfg"))), original);
     }
 
     void userCfgUpdatesOtherLanguage()
@@ -306,8 +288,6 @@ private slots:
         QCOMPARE(ensureUserCfgLanguage(dir.filePath(QStringLiteral("nope")), QStringLiteral("english")),
                  UserCfgResult::Failed);
     }
-
-    // --- the whole apply --------------------------------------------------------
 
     void appliesToFakeInstall()
     {
@@ -362,7 +342,6 @@ private slots:
         writeFile(game, "previous=good\r\n");
 
         ApplyInputs in;
-        // Stock claims a key base.ini lacks, so validation must fail.
         in.sources.sources[kSourceGlobal] = ini({{"a", "1"}, {"b", "2"}, {"c", "3"}});
         in.sources.hierarchy = {kSourceGlobal};
         in.baseIniPath = base;
@@ -383,10 +362,10 @@ private slots:
         QList<StringEntry> entries(3);
         entries[0].key = QStringLiteral("b");
         entries[0].customValue = QStringLiteral("x");
-        entries[1].key = QStringLiteral("a"); // no custom value
+        entries[1].key = QStringLiteral("a");
         entries[2].key = QStringLiteral("c");
         entries[2].customValue = QStringLiteral("same");
-        entries[2].originalValue = QStringLiteral("same"); // still an override, like the Python
+        entries[2].originalValue = QStringLiteral("same");
         const IniMap m = userOverridesFrom(entries);
         QCOMPARE(m.size(), 2);
         QCOMPARE(m.entries().first().first, QStringLiteral("b"));

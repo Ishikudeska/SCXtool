@@ -15,36 +15,22 @@
 
 class AppController;
 
-// The Loadout page: pick a ship, see its stock loadout and what it adds up
-// to, swap items for ones that fit, split the power, save loadouts. The
-// catalog is built off the GUI thread the first time the page shows, and
-// again when the game data or the language changes. Figures reach QML
-// formatted.
 class LoadoutController : public QObject
 {
     Q_OBJECT
     QML_ELEMENT
 
     Q_PROPERTY(bool active READ active WRITE setActive NOTIFY activeChanged)
-    // "nodata" (no DataForge cache), "loading", "ready" or "idle".
     Q_PROPERTY(QString status READ status NOTIFY statusChanged)
-    // The cache has the vehicle definitions (caches from before the loadouts don't).
     Q_PROPERTY(bool hasVehicles READ hasVehicles NOTIFY catalogChanged)
-    // [{id, name, manufacturer, size, career, role, ground}], by name.
     Q_PROPERTY(QVariantList ships READ ships NOTIFY catalogChanged)
     Q_PROPERTY(QString shipId READ shipId WRITE setShipId NOTIFY loadoutChanged)
     Q_PROPERTY(QVariantMap ship READ ship NOTIFY loadoutChanged)
-    // [{key, title, cards: [card]}]; a card: {path, rows: [row]}, its slot
-    // first and then what the item holds; a row: {path, label, size, editable,
-    // depth, item: {id, name, maker, size, grade, cls, stats: [{label, value}]}
-    // or null}.
     Q_PROPERTY(QVariantList sections READ sections NOTIFY loadoutChanged)
     Q_PROPERTY(QVariantMap totals READ totals NOTIFY loadoutChanged)
-    // [{key, label, category, min, max, pips}].
     Q_PROPERTY(QVariantList power READ power NOTIFY loadoutChanged)
     Q_PROPERTY(bool nav READ nav WRITE setNav NOTIFY loadoutChanged)
     Q_PROPERTY(bool modified READ modified NOTIFY loadoutChanged)
-    // Names of this ship's saved loadouts.
     Q_PROPERTY(QStringList saved READ saved NOTIFY savedChanged)
 
 public:
@@ -66,7 +52,6 @@ public:
     bool modified() const { return modified_; }
     QStringList saved() const;
 
-    // Items that fit the slot: [{id, name, maker, size, grade, cls, summary, current}].
     Q_INVOKABLE QVariantList compatibleItems(const QString &path) const;
     Q_INVOKABLE void setItem(const QString &path, const QString &itemId);
     Q_INVOKABLE void resetLoadout();
@@ -75,13 +60,9 @@ public:
     Q_INVOKABLE void saveLoadout(const QString &name);
     Q_INVOKABLE void loadLoadout(const QString &name);
     Q_INVOKABLE void deleteLoadout(const QString &name);
-    // Quantum travel time over `gigametres`, spool included: "2 min 5 s".
     Q_INVOKABLE QString travelTime(double gigametres) const;
-    // This loadout's sustained fire against another ship's stock loadout:
-    // {target, shieldTime, killTime, deflected}.
     Q_INVOKABLE QVariantMap engage(const QString &targetShipId) const;
     Q_INVOKABLE void reload();
-    // Re-extracts the DataForge cache (for a missing or pre-loadout one).
     Q_INVOKABLE void extractGameData();
 
 signals:

@@ -10,11 +10,6 @@
 
 class AppController;
 
-// The Enhancements page: which enhancement categories are generated and
-// merged, the generator's options (mission body fields, stats placement,
-// ship names, RS annotations, mission header texts) and the Tag Builder.
-// Category toggles and Tag Builder edits are staged here and saved by
-// Apply / Save Tag Changes, as on the Python page.
 class EnhancementsController : public QObject
 {
     Q_OBJECT
@@ -66,20 +61,17 @@ public:
     Q_INVOKABLE void setMissionHeader(const QString &key, const QString &text);
     Q_INVOKABLE void generate();
 
-    // ── Tag Builder ──
-    Q_INVOKABLE QVariantList tagCategories() const; // [{id, label}]
+    Q_INVOKABLE QVariantList tagCategories() const;
     Q_INVOKABLE QVariantList elements(const QString &category) const;
     Q_INVOKABLE void setElementEnabled(const QString &category, int index, bool on);
     Q_INVOKABLE void setElementStyle(const QString &category, int index, const QString &style);
     Q_INVOKABLE void moveElement(const QString &category, int index, int delta);
-    // Field names: separator, enclosing, placement, usageSeparator,
-    // routeArrow, titleSeparator, locationDetail, rankSeparator.
     Q_INVOKABLE QString option(const QString &category, const QString &field) const;
     Q_INVOKABLE void setOption(const QString &category, const QString &field, const QString &value);
-    Q_INVOKABLE QVariantList choices(const QString &field) const;               // [{key, label}]
-    Q_INVOKABLE bool flag(const QString &category, const QString &field) const; // standardizeHauling, route
+    Q_INVOKABLE QVariantList choices(const QString &field) const;
+    Q_INVOKABLE bool flag(const QString &category, const QString &field) const;
     Q_INVOKABLE void setFlag(const QString &category, const QString &field, bool on);
-    Q_INVOKABLE QVariantList phraseOptions() const; // [{key, label}] shorten + remove + underline
+    Q_INVOKABLE QVariantList phraseOptions() const;
     Q_INVOKABLE bool phraseEnabled(const QString &key) const;
     Q_INVOKABLE void setPhraseEnabled(const QString &key, bool on);
     Q_INVOKABLE bool sizesShortened() const;
@@ -87,7 +79,6 @@ public:
     Q_INVOKABLE bool titleTag(const QString &field) const;
     Q_INVOKABLE void setTitleTag(const QString &field, bool on);
     Q_INVOKABLE QString preview(const QString &category) const;
-    // The Short/Medium/Long texts of a mapped element kind.
     Q_INVOKABLE QVariantList mapping(const QString &category, const QString &kind) const;
     Q_INVOKABLE void setMappingText(const QString &category, const QString &raw, int column,
                                     const QString &text);

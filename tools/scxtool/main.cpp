@@ -1,6 +1,3 @@
-// scxtool: developer CLI over the engine, for parity runs and timing.
-// Not shipped with the app.
-
 #include "engine/Parallel.h"
 #include "engine/cryxml/CryXml.h"
 #include "engine/forge/DataForge.h"
@@ -181,10 +178,6 @@ int cmdCat(const char *path, const char *entryName, const char *outPath)
     return 0;
 }
 
-// Decodes entries and checks them against the archive's own records: the
-// stored bytes against the 0x5003 SHA-256, the decoded size against the
-// central directory. `every` = 1 checks all entries; encrypted ones are always
-// checked.
 int cmdVerify(const char *path, std::size_t every)
 {
     auto archive = openArchive(path);
@@ -234,7 +227,6 @@ int cmdVerify(const char *path, std::size_t every)
     return failures ? 1 : 0;
 }
 
-// unp4k-style extraction: `filter` uses unp4k's rules unless --glob.
 int cmdExtract(int argc, char **argv)
 {
     auto archive = openArchive(argv[2]);
@@ -306,13 +298,11 @@ int cmdCryXml(const char *path, const char *entryName)
     return 0;
 }
 
-// Converts every CryXml entry and checks that the result is well-formed XML.
 int cmdCryXmlCheck(const char *path, std::size_t every)
 {
     auto archive = openArchive(path);
     if (!archive)
         return 1;
-    // Extensions CryEngine stores as XML (binary or text).
     static const std::vector<std::string_view> kXmlExtensions = {
         ".xml",  ".mtl",        ".chrparams", ".cdf", ".adb", ".bspace",
         ".comb", ".animevents", ".entxml",    ".rmp", ".lyr"};
@@ -371,11 +361,8 @@ int cmdCryXmlCheck(const char *path, std::size_t every)
     return failures.empty() ? 0 : 1;
 }
 
-// --- DataForge ---------------------------------------------------------------
-
 constexpr std::string_view kRecordsRoot = "libs/foundry/records/";
 
-// Smart Citizen's DATAFORGE_KEEP_SUBPATHS (src/utils/pak_extractor.py).
 const std::vector<std::string> kKeepSubpaths = {
     "entities/scitem",
     "entities/spaceships",
@@ -495,8 +482,6 @@ int cmdForge(int argc, char **argv)
     return stats->failures.empty() ? 0 : 1;
 }
 
-// unforge's output has a JIT-dependent extra stack frame in a few of its
-// null-pointer error messages; drop it so both forms compare equal.
 void normalizeUnforgeOutput(std::string &text)
 {
     static constexpr std::string_view kExtraFrame =
@@ -534,7 +519,6 @@ int cmdForgeCompare(int argc, char **argv)
     const std::filesystem::path root = toPath(argv[3]);
     const auto prefixes = subpathPrefixes(argc, argv, 4, true);
 
-    // Every cached file under the chosen subtrees.
     std::vector<std::string> cached;
     auto listed = io::forEachFile(root, [&](std::string_view path) {
         if (underAny(path, prefixes) && path.ends_with(".xml"))
@@ -588,7 +572,6 @@ int cmdForgeCompare(int argc, char **argv)
     for (auto &t : threads)
         t.join();
 
-    // Records the cache should have but doesn't.
     std::vector<std::string> missing;
     std::vector<std::string_view> sortedCached(cached.begin(), cached.end());
     for (const auto index : df->fileRecords()) {
@@ -623,9 +606,6 @@ int cmdForgeCompare(int argc, char **argv)
     return mismatches.empty() && noRecord.empty() && notWritten.empty() && missing.empty() ? 0 : 1;
 }
 
-// Prints records as XML, found by GUID or by a substring of their name or
-// path. Reaches records that share a file with another, which `forge` never
-// writes (tags, for one).
 int cmdRecord(const char *source, std::string_view query, std::size_t max)
 {
     const auto df = loadForge(source);
@@ -655,7 +635,6 @@ int cmdRecord(const char *source, std::string_view query, std::size_t max)
     return matched ? 0 : 1;
 }
 
-// sc.gamedata's CLI: game_data.json from the archive's (or a) Game2.dcb.
 int cmdGameData(int argc, char **argv)
 {
     gamedata::Options options;
@@ -694,7 +673,7 @@ int cmdGameData(int argc, char **argv)
     return 0;
 }
 
-} // namespace
+}
 
 int main(int argc, char **argv)
 {

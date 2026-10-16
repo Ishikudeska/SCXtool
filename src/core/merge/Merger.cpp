@@ -10,7 +10,6 @@ namespace core {
 
 namespace {
 
-// Order matters: the replacements run in this sequence, as in the Python.
 constexpr std::array kComponentCodes = {u"shld", u"powr", u"cool",  u"qdrv",
                                         u"jump", u"misl", u"gmisl", u"bomb"};
 
@@ -20,7 +19,7 @@ bool isItemKey(const QString &key)
            key.startsWith(u"item_desc", Qt::CaseInsensitive);
 }
 
-} // namespace
+}
 
 QString canonicalItemKey(const QString &key)
 {
@@ -38,14 +37,12 @@ QString canonicalItemKey(const QString &key)
 
     for (const char16_t *code : kComponentCodes)
         k.replace(QString::fromUtf16(code), QString(u'_') + QString::fromUtf16(code));
-    // Collapse runs of '_' and drop leading/trailing ones.
     const QStringList parts = k.split(u'_', Qt::SkipEmptyParts);
     return parts.join(u'_');
 }
 
 void syncKeyVariants(IniMap &merged, const QSet<QString> &userEditedKeys)
 {
-    // canonical form -> variants, both in first-seen order
     QHash<QString, qsizetype> groupIndex;
     QList<QList<QString>> groups;
     for (const auto &[key, value] : merged) {
@@ -72,7 +69,6 @@ void syncKeyVariants(IniMap &merged, const QSet<QString> &userEditedKeys)
         if (candidates.isEmpty())
             candidates = variants;
 
-        // Python's max(): the first of the longest.
         const QString *best = nullptr;
         qsizetype bestLength = -1;
         for (const QString &c : std::as_const(candidates)) {
@@ -113,4 +109,4 @@ IniMap mergeSourcesByHierarchy(const SourceMap &sources, const QStringList &hier
     return result;
 }
 
-} // namespace core
+}

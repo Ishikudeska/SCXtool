@@ -16,7 +16,7 @@ std::string write(const XmlTree &tree, XmlTree::NodeId root)
     return out;
 }
 
-} // namespace
+}
 
 class TestXml : public QObject
 {
@@ -65,8 +65,6 @@ private slots:
         QCOMPARE(write(t, root), std::string("<R v=\"20\xC2\xB0\" />"));
     }
 
-    // XmlAttributeCollection.Append moves a re-added name to the end;
-    // SetAttribute replaces in place.
     void attributeAppendSemantics()
     {
         XmlTree t;
@@ -81,7 +79,6 @@ private slots:
         QCOMPARE(t.attribute(root, "b").value_or(""), std::string_view("4"));
     }
 
-    // After CDATA the rest of the element is written without indentation.
     void mixedContent()
     {
         XmlTree t;

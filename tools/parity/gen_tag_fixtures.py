@@ -1,10 +1,3 @@
-"""Write tests/fixtures/tag_builder.json from the original tag_builder.py.
-
-The C++ TagBuilder test replays the same cases and must match these values.
-Re-run after changing a case:
-
-    python tools/parity/gen_tag_fixtures.py "Smart Citizen CPLusPLus"
-"""
 from __future__ import annotations
 
 import json
@@ -13,7 +6,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
-# Cases shared with tests/core/tst_tags.cpp; keep the order in step.
 TITLES = [
     "Rookie Rank - Small Cargo Haul",
     "~mission(ReputationRank) Rank - Direct ~mission(CargoGradeToken) Cargo Haul Circuit",

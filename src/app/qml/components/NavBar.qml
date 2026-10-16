@@ -3,11 +3,10 @@ import QtQuick
 import QtQuick.Controls.Basic
 import ScApp
 
-// The page tabs across the top, under the title.
 Rectangle {
     id: nav
 
-    property var pages: []      // [{id, title}]
+    property var pages: []
     property string current: ""
     signal selected(string id)
 

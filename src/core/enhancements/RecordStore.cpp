@@ -38,7 +38,7 @@ QString normalizedRel(QString rel)
     return rel == u"." ? QString() : rel;
 }
 
-} // namespace
+}
 
 bool RecordStore::ntfsLess(const QString &a, const QString &b)
 {
@@ -70,7 +70,6 @@ std::shared_ptr<const RecordStore> RecordStore::scan(const QString &recordsDir)
         QString dir = parentOf(rel);
         dirs[dir].files << nameOf(rel);
         ++store->fileCount_;
-        // Register the directory chain up to the root.
         while (!dir.isEmpty()) {
             const QString parent = parentOf(dir);
             Dir &p = dirs[parent];
@@ -128,7 +127,6 @@ QStringList RecordStore::indexRglob(const QString &relDir) const
         if (dir != prefix && !(prefix.isEmpty() ? false : dir.startsWith(prefix + u'/')))
             continue;
         QStringList files = dirs_.value(dir).files;
-        // The index sorts each directory's path strings.
         std::sort(files.begin(), files.end(),
                   [](const QString &a, const QString &b) { return py::less(a, b); });
         for (const QString &f : std::as_const(files))
@@ -171,4 +169,4 @@ QStringList RecordStore::glob(const QString &relDir, const QString &pattern) con
     return out;
 }
 
-} // namespace core::enh
+}

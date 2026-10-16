@@ -6,11 +6,6 @@ import QtQuick.Layouts
 import QtQml.Models
 import ScApp
 
-// The String Editor: every localization string with its stock, current and
-// custom values. A search box and filters across the top, per-column
-// filters under the header, inline editing of Custom Value and the ship
-// sort order, a side editor for long text and a rendered preview of the
-// selected row.
 Item {
     id: page
 
@@ -48,7 +43,6 @@ Item {
         anchors.margins: Theme.spacing
         spacing: Theme.spacing
 
-        // ── actions ──
         RowLayout {
             spacing: Theme.spacing
             objectName: "stringsToolbar"
@@ -111,7 +105,6 @@ Item {
             }
         }
 
-        // ── filters ──
         Flow {
             Layout.fillWidth: true
             spacing: Theme.spacing
@@ -216,7 +209,6 @@ Item {
             }
         }
 
-        // ── table + side editor ──
         SplitView {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -268,7 +260,6 @@ Item {
                     }
                 }
 
-                // Per-column filter boxes, kept aligned with the columns.
                 Row {
                     id: filterRow
                     objectName: "stringsFilterRow"
@@ -327,8 +318,6 @@ Item {
                         model: page.model
                         onCurrentChanged: (current) => page.currentRow = current.row
                     }
-                    // Spare width goes to the text columns the user has not
-                    // sized, in proportion; to the last column if all are sized.
                     readonly property var stretchColumns: [1, 2, 3, 6]
                     function baseWidth(column) {
                         const w = explicitColumnWidth(column)
@@ -365,7 +354,6 @@ Item {
                                 setColumnWidth(c, saved[c])
                         page.widthsRestored = true
                     }
-                    // Persist widths the user dragged (debounced).
                     Timer {
                         id: saveWidths
                         interval: 800
@@ -484,7 +472,6 @@ Item {
                 }
             }
 
-            // ── side editor ──
             Rectangle {
                 visible: page.editorOpen
                 SplitView.preferredWidth: 380
@@ -570,7 +557,6 @@ Item {
             }
         }
 
-        // ── preview ──
         Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: 120
@@ -628,7 +614,6 @@ Item {
         }
     }
 
-    // Restore Backup: pick one of the kept global.ini backups.
     Popup {
         id: backupPicker
         anchors.centerIn: Overlay.overlay

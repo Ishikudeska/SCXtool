@@ -35,7 +35,6 @@ enum class DataType : std::uint16_t {
     Reference = 0x0310,
 };
 
-// unforge's EDataType name ("varStrongPointer"), or the number if unknown.
 std::string dataTypeName(std::uint16_t type);
 
 enum class Conversion : std::uint8_t {
@@ -59,7 +58,7 @@ struct StructDef
 struct PropertyDef
 {
     std::uint32_t nameOffset = 0;
-    std::uint16_t index = 0; // struct index for Class properties
+    std::uint16_t index = 0;
     std::uint16_t dataType = 0;
     std::uint8_t conversion = 0;
     std::uint16_t variantIndex = 0;
@@ -75,14 +74,13 @@ struct RecordDef
 {
     std::uint32_t nameOffset = 0;
     std::uint32_t fileNameOffset = 0;
-    std::uint32_t teamOffset = 0; // version 8+
+    std::uint32_t teamOffset = 0;
     std::uint32_t structIndex = 0;
     GuidBytes id{};
     std::uint16_t variantIndex = 0;
     std::uint16_t recordSize = 0;
 };
 
-// Value pools, in file order.
 enum class Pool : std::uint8_t {
     Int8,
     Int16,
@@ -111,9 +109,6 @@ struct GuidHash
     std::size_t operator()(GuidBytes g) const noexcept;
 };
 
-// A DataForge database (Game2.dcb), held in memory and read in place.
-// Ports unforge's DataForge: non-legacy files, version 5 and later (LIVE is
-// version 8). Immutable after load, so it can be shared across threads.
 class DataForge
 {
 public:
@@ -127,43 +122,32 @@ public:
     const std::vector<DataMapping> &mappings() const { return mappings_; }
     const std::vector<RecordDef> &records() const { return records_; }
 
-    // Latin-1 C-strings from the text and blob tables. Empty optional when
-    // the offset is past the table, where unforge throws.
     std::optional<std::string_view> text(std::uint64_t offset) const;
     std::optional<std::string_view> blob(std::uint64_t offset) const;
     std::uint64_t textLength() const { return textLength_; }
 
-    // Struct and property names, converted to UTF-8 at load, and whether
-    // System.Xml accepts them as element/attribute names.
     const std::string &structName(std::uint32_t index) const { return structNames_[index]; }
     const std::string &propertyName(std::uint32_t index) const { return propertyNames_[index]; }
     bool structNameValid(std::uint32_t index) const { return structNameValid_[index]; }
     bool propertyNameValid(std::uint32_t index) const { return propertyNameValid_[index]; }
 
-    std::string_view recordName(std::uint32_t index) const;     // Latin-1
-    std::string_view recordFileName(std::uint32_t index) const; // Latin-1, e.g. libs/foundry/records/...
-    std::string_view recordTeam(std::uint32_t index) const;     // Latin-1
+    std::string_view recordName(std::uint32_t index) const;
+    std::string_view recordFileName(std::uint32_t index) const;
+    std::string_view recordTeam(std::uint32_t index) const;
 
-    // Properties of a struct including inherited ones, root ancestor first.
     const std::vector<std::uint32_t> &structProperties(std::uint32_t structIndex) const
     {
         return structProperties_[structIndex];
     }
 
-    // Offset into bytes() of instance `variant` of a struct, or nothing if
-    // the struct has no data mapping.
     std::optional<std::uint64_t> instanceOffset(std::uint32_t structIndex, std::uint32_t variant) const;
 
     std::uint64_t poolCount(Pool pool) const { return poolCounts_[static_cast<int>(pool)]; }
-    // Pointer to entry `index` of a value pool, or nullptr if out of range.
     const std::uint8_t *poolEntry(Pool pool, std::uint64_t index) const;
 
-    // unforge's maps: the last record with a given path or GUID wins.
     std::optional<std::uint32_t> recordByPath(std::string_view path) const;
     std::optional<std::uint32_t> recordByGuid(GuidBytes id) const;
 
-    // The record unforge writes for each distinct file path, in order of the
-    // path's first appearance.
     const std::vector<std::uint32_t> &fileRecords() const { return fileRecords_; }
 
 private:
@@ -183,7 +167,7 @@ private:
     std::uint64_t blobLength_ = 0;
     std::uint64_t dataOffset_ = 0;
 
-    std::vector<std::int64_t> structDataOffsets_; // relative to dataOffset_, -1 if unmapped
+    std::vector<std::int64_t> structDataOffsets_;
     std::vector<std::vector<std::uint32_t>> structProperties_;
     std::vector<std::string> structNames_;
     std::vector<std::string> propertyNames_;
@@ -195,4 +179,4 @@ private:
     std::vector<std::uint32_t> fileRecords_;
 };
 
-} // namespace engine::forge
+}

@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Controls.Basic
 import ScApp
 
-// One bundled Markdown document (About, FAQ, Legal, Help).
 Item {
     id: page
 

@@ -22,7 +22,6 @@ using enh::XmlDoc;
 
 namespace {
 
-// ~mission(Token) and ~mission(Token|Modifier).
 const QRegularExpression &tokenPattern()
 {
     static const QRegularExpression re(QStringLiteral(R"(~mission\(([^)|]*)(?:\|([^)]*))?\))"));
@@ -34,38 +33,33 @@ qint64 toAmount(std::string_view value)
     return qRound64(qs(value).toDouble());
 }
 
-// What a token stands for: localization references the game picks one of,
-// a location search, the organizations it can be, or a random NPC name.
 struct TokenValue
 {
     QStringList texts;
     int placeSet = -1;
-    QStringList organizations; // by name
+    QStringList organizations;
     bool randomName = false;
 };
 
 struct Organization
 {
-    QHash<QString, QString> strings; // by tag name: "Name" -> "@key"
-    QSet<QString> tags;              // with their ancestors
+    QHash<QString, QString> strings;
+    QSet<QString> tags;
 };
 
-// What one mission's properties and string params define.
 struct Tokens
 {
-    QHash<QString, TokenValue> values;   // lower-cased token -> value
-    std::vector<LocationSlot> locations; // in definition order
-    QString missionType;                 // a contract's missionTypeOverride
+    QHash<QString, TokenValue> values;
+    std::vector<LocationSlot> locations;
+    QString missionType;
 };
 
-// CIG pads some texts with runs of blank lines; keep one between paragraphs.
 QString tidy(QString text)
 {
     static const QRegularExpression blankRuns(QStringLiteral(R"(\n[ \t]*(?:\n[ \t]*){2,})"));
     return text.replace(blankRuns, QStringLiteral("\n\n")).trimmed();
 }
 
-// Whether `text` says anything beside unfilled [Tokens].
 bool hasText(const QString &text)
 {
     static const QRegularExpression tokens(QStringLiteral(R"(\[[^\]]*\])"));
@@ -78,7 +72,6 @@ QString slotKey(const LocationSlot &slot)
     return slot.variable.isEmpty() ? slot.token : slot.variable;
 }
 
-// "delivery" -> "Delivery", "pu_mercenary" -> "Pu mercenary".
 QString folderLabel(const QString &folder)
 {
     QString label = enh::humanizeKey(folder);
@@ -115,15 +108,15 @@ private:
     LocText loc_;
     TagTable tags_;
     PlaceIndex index_;
-    QStringList systems_;                        // known system names, for name hints
-    QHash<QString, int> placeSetByKey_;          // LocationSearch::key() -> placeSets index
-    QHash<QString, QString> typeNames_;          // MissionType __ref -> display name
-    QHash<QString, XmlDoc> templates_;           // contract template __ref -> record
-    QHash<QString, Organization> organizations_; // MissionOrganization __ref ->
-    QStringList organizationOrder_;              // their refs, by name
-    QHash<QString, qint64> reputation_;          // reputation reward __ref -> amount
-    QHash<QString, QString> factions_;           // FactionReputation __ref -> name
-    QHash<QString, QString> scopes_;             // SReputationScopeParams __ref -> track name
+    QStringList systems_;
+    QHash<QString, int> placeSetByKey_;
+    QHash<QString, QString> typeNames_;
+    QHash<QString, XmlDoc> templates_;
+    QHash<QString, Organization> organizations_;
+    QStringList organizationOrder_;
+    QHash<QString, qint64> reputation_;
+    QHash<QString, QString> factions_;
+    QHash<QString, QString> scopes_;
     enh::Standings standings_;
     enh::BlueprintPools pools_;
     Catalog catalog_;
@@ -178,7 +171,6 @@ Builder::Builder(const CatalogSources &sources, const enh::RecordStore &store)
             if (XmlDoc doc = XmlDoc::load(file))
                 templates_.insert(qs(getOr(doc.root(), "__ref")), std::move(doc));
 
-    // Reputation: amounts by reward, and the names of factions, tracks and ranks.
     reputation_ = enh::buildReputationLookup(store);
     standings_ = enh::buildStandings(store, sources.loc ? *sources.loc : noLoc_);
     const auto names = [&](const char *dir, std::string_view type, const char *nameAttr,
@@ -197,18 +189,15 @@ Builder::Builder(const CatalogSources &sources, const enh::RecordStore &store)
     };
     names("factions/factionreputation", "FactionReputation", "displayName", "__ref", factions_);
     for (auto it = factions_.begin(); it != factions_.end(); ++it)
-        if (it.value() == enh::humanizeKey(it.key())) // no display name: no use showing a GUID
+        if (it.value() == enh::humanizeKey(it.key()))
             it.value().clear();
     names("reputation/scopes", "SReputationScopeParams", "displayName", "scopeName", scopes_);
 
-    // Blueprint pools, with each blueprint's item named from the item record
-    // its file name matches ("bp_craft_<item>"). The generator reads all
-    // ~24k item records for those names; the blueprints need ~1.6k of them.
-    QHash<QString, QString> itemFiles; // lower-cased file stem -> path
+    QHash<QString, QString> itemFiles;
     if (store.dirExists(QStringLiteral("entities/scitem")))
         for (const auto files = store.rglob(QStringLiteral("entities/scitem")); const QString &file : files)
             itemFiles.insert(enh::fileStem(file).toLower(), file);
-    QHash<QString, QString> itemNames; // lower-cased item stem -> display name
+    QHash<QString, QString> itemNames;
     if (store.dirExists(QStringLiteral("crafting/blueprints/crafting")))
         for (const auto files = store.rglob(QStringLiteral("crafting/blueprints/crafting"));
              const QString &file : files) {
@@ -248,7 +237,6 @@ void Builder::addReputation(Mission &m, Node amount, bool success)
         m.reputation.push_back(reward);
 }
 
-// A contract's blueprint pools, merged where they share a rank and chance.
 void Builder::addBlueprints(Mission &m, Node contract)
 {
     for (const Node reward : enh::iter(contract, "BlueprintRewards")) {
@@ -274,7 +262,6 @@ void Builder::addBlueprints(Mission &m, Node contract)
     }
 }
 
-// "Rank (Track)" for a standing, "" when unknown.
 QString Builder::rankName(const QString &standing) const
 {
     const QString rank = standings_.ranks.value(standing);
@@ -305,7 +292,6 @@ void Builder::applyProperty(Tokens &t, Node prop)
     const Node value = held.front();
     const std::string_view type = enh::tag(value);
 
-    // A location, or (for a token) a combined value wrapping one.
     Node location;
     if (type == "MissionPropertyValue_Location")
         location = value;
@@ -328,7 +314,7 @@ void Builder::applyProperty(Tokens &t, Node prop)
             t.locations.push_back(slot);
         } else {
             if (slot.token.isEmpty())
-                slot.token = existing->token; // an override keeps the slot's token
+                slot.token = existing->token;
             *existing = slot;
         }
         if (!slot.token.isEmpty())
@@ -337,9 +323,6 @@ void Builder::applyProperty(Tokens &t, Node prop)
     }
     if (token.isEmpty())
         return;
-    // Each kind of value is kept beside the others: a contract can give its
-    // contractor as both a string and an organization, and either can lack
-    // text.
     if (type == "MissionPropertyValue_StringHash") {
         QStringList texts;
         for (const Node option : findAll(value, "options/MissionPropertyValueOption_StringHash"))
@@ -350,7 +333,6 @@ void Builder::applyProperty(Tokens &t, Node prop)
     } else if (type == "MissionPropertyValue_AIName") {
         t.values[token.toLower()].randomName = true;
     } else if (type == "MissionPropertyValue_Organization") {
-        // Named outright, or found by their tags.
         QSet<QString> named;
         for (const Node ref :
              findAll(value, ".//DataSetMatchCondition_SpecificOrganizationsDef/organizations/Reference"))
@@ -367,7 +349,6 @@ void Builder::applyProperty(Tokens &t, Node prop)
     }
 }
 
-// A contract generator's contractParams or a contract's paramOverrides.
 void Builder::applyParams(Tokens &t, Node params)
 {
     if (!params)
@@ -391,7 +372,7 @@ QString Builder::render(const QString &text, const Tokens &t, int depth) const
     QString clean = text;
     clean.replace(QStringLiteral("\\n"), QStringLiteral("\n"));
     clean.remove(markup);
-    if (depth > 4) // tokens that refer to each other
+    if (depth > 4)
         return clean;
     QString out;
     qsizetype last = 0;
@@ -415,7 +396,6 @@ QString Builder::tokenText(const QString &name, const QString &modifier, const T
             return loc_(organizations_.value(id).strings.value(kind));
         };
         const QString nameKind = QStringLiteral("Name");
-        // Who it can be: every name, when the game picks among several.
         if ((modifier.isEmpty() || modifier.compare(nameKind, Qt::CaseInsensitive) == 0) &&
             it->organizations.size() > 1) {
             QStringList names;
@@ -427,7 +407,6 @@ QString Builder::tokenText(const QString &name, const QString &modifier, const T
             if (!names.isEmpty())
                 return names.join(QStringLiteral(" / "));
         }
-        // Otherwise the first one's string the modifier names, else its name.
         for (const QString &kind : {modifier.isEmpty() ? nameKind : modifier, nameKind})
             for (const QString &id : it->organizations)
                 if (const QString text = string(id, kind); !text.isEmpty())
@@ -447,7 +426,6 @@ QString Builder::tokenText(const QString &name, const QString &modifier, const T
     return u'[' + name + u']';
 }
 
-// How many texts the game picks from when `text` is one token.
 int Builder::variants(const QString &text, const Tokens &t) const
 {
     const QRegularExpressionMatch m = tokenPattern().match(text.trimmed());
@@ -473,8 +451,6 @@ QString Builder::relative(const QString &file) const
 
 void Builder::finish(Mission &m, const Tokens &t, const QString &nameHints)
 {
-    // Slots with one search are one place to go, unless they name different
-    // tokens (pickup and drop-off can share a search).
     for (const LocationSlot &slot : t.locations) {
         const auto same =
             std::find_if(m.locations.begin(), m.locations.end(), [&slot](const LocationSlot &s) {
@@ -543,8 +519,6 @@ void Builder::addBrokerEntry(const QString &file)
     }
     m.payout.buyIn = toAmount(getOr(root, "missionBuyInAmount"));
     m.difficulty = enh::extractDifficulty(root);
-    // The first outcome's reputation is for success; the others (failure,
-    // abandoning) are mostly losses.
     const std::vector<Node> outcomes =
         findAll(root, ".//missionResultReputationRewards/SReputationAmountListParams");
     for (std::size_t i = 0; i < outcomes.size(); ++i)
@@ -577,7 +551,6 @@ void Builder::addContractGenerator(const QString &file)
             for (const Node contract : findAll(handler, contractPath)) {
                 if (getOr(contract, "notForRelease") == "1")
                     continue;
-                // Template, then the generator's params, then the contract's own.
                 Tokens t;
                 QString templateTitle, templateDesc, templateType;
                 if (const auto it = templates_.constFind(qs(getOr(contract, "template")));
@@ -609,7 +582,7 @@ void Builder::addContractGenerator(const QString &file)
                 Mission m;
                 m.title = render(title, t).trimmed();
                 if (m.title.isEmpty())
-                    continue; // nothing the game could list
+                    continue;
                 if (!hasText(m.title))
                     m.title = enh::humanizeKey(qs(getOr(contract, "debugName")));
                 m.contract = true;
@@ -637,7 +610,6 @@ void Builder::addContractGenerator(const QString &file)
                 }
                 m.payout.buyIn = toAmount(getOr(find(contract, "contractResults"), "contractBuyInAmount"));
                 m.difficulty = enh::extractDifficulty(contract);
-                // Reputation flagged for the first outcome is for success.
                 for (const Node legacy : findAll(contract, ".//ContractResult_LegacyReputation")) {
                     const Node amount = find(legacy, "contractResultReputationAmounts");
                     if (!amount)
@@ -651,7 +623,7 @@ void Builder::addContractGenerator(const QString &file)
                     if (onSuccess || flagged(1))
                         addReputation(m, amount, onSuccess);
                     else if (const auto it = reputation_.constFind(qs(getOr(amount, "reward")));
-                             it != reputation_.cend()) // no outcome flagged: by its sign
+                             it != reputation_.cend())
                         addReputation(m, amount, *it > 0);
                 }
                 m.requiredRank = rankName(qs(getOr(contract, "minStanding")));
@@ -683,13 +655,12 @@ bool cancelled(const std::atomic<bool> *cancel)
     return cancel && cancel->load();
 }
 
-} // namespace
+}
 
 Catalog buildCatalog(const CatalogSources &sources, const std::atomic<bool> *cancel)
 {
     const auto store = enh::RecordStore::scan(sources.recordsDir);
     Builder builder(sources, *store);
-    // A record the readers trip over is left out, not the whole catalog.
     const auto each = [&](const QString &dir, void (Builder::*add)(const QString &)) {
         if (!store->dirExists(dir))
             return;
@@ -755,7 +726,6 @@ std::vector<int> filterMissions(const Catalog &catalog, const Filter &filter)
         out.push_back(static_cast<int>(i));
     }
 
-    // Titles by their first word, past any leading quote or bracket.
     const auto sortTitle = [](const QString &title) {
         qsizetype i = 0;
         while (i < title.size() && !title[i].isLetterOrNumber())
@@ -771,7 +741,6 @@ std::vector<int> filterMissions(const Catalog &catalog, const Filter &filter)
             return c < 0;
         return x.giver.compare(y.giver, Qt::CaseInsensitive) < 0;
     };
-    // Fixed payouts by amount, then calculated ones, then none.
     const auto byPayout = [&catalog, &byTitle](bool highFirst) {
         return [&catalog, &byTitle, highFirst](int a, int b) {
             const Payout &x = catalog.missions[std::size_t(a)].payout;
@@ -802,4 +771,4 @@ std::vector<int> filterMissions(const Catalog &catalog, const Filter &filter)
     return out;
 }
 
-} // namespace core::missions
+}

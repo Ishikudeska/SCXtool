@@ -6,16 +6,11 @@
 
 #include <atomic>
 
-// Fetching remote INI sources (a language's global.ini, a custom source's
-// URL). Conditional GET from the cached copy's timestamp and ETag, so an
-// unchanged file costs one round trip; the file is replaced atomically, and
-// an HTML page (a github.com /blob/ link instead of a raw one) is refused
-// rather than saved as an INI.
 namespace core::net {
 
 struct DownloadOptions
 {
-    int timeoutMs = 60'000; // per transfer stall, as the Python's socket timeout
+    int timeoutMs = 60'000;
     const std::atomic<bool> *cancel = nullptr;
 };
 
@@ -30,14 +25,10 @@ struct DownloadResult
     bool ok() const { return status == Status::Downloaded || status == Status::Unchanged; }
 };
 
-// "<App>/<version>": some hosts reject requests without a real User-Agent.
 QByteArray userAgent();
 
-// True when `body` (or its Content-Type) is a web page, not a data file.
 bool looksLikeHtml(const QByteArray &contentType, QByteArrayView body);
 
-// Blocking: runs its own event loop, so call it from a worker thread (any
-// thread works). `dest`'s ETag is kept in "<dest>.etag".
 DownloadResult downloadIfChanged(const QUrl &url, const QString &dest, DownloadOptions options = {});
 
-} // namespace core::net
+}

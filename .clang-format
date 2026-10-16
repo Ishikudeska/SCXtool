@@ -19,11 +19,18 @@ IncludeBlocks: Regroup
 IncludeCategories:
   - Regex: '^"'
     Priority: 1
+    SortPriority: 1
   - Regex: '^<Q'
     Priority: 2
+    SortPriority: 2
+  - Regex: '^<windows\.h>$'
+    Priority: 3
+    SortPriority: 3
   - Regex: '^<.*\.(h|hpp)>'
     Priority: 3
+    SortPriority: 4
   - Regex: '^<'
     Priority: 4
+    SortPriority: 5
 NamespaceIndentation: None
-FixNamespaceComments: true
+FixNamespaceComments: false

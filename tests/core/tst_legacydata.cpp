@@ -29,7 +29,6 @@ QByteArray readAll(const QString &path)
     return f.open(QIODevice::ReadOnly) ? f.readAll() : QByteArray();
 }
 
-// A layout like Linux's: <config>/<org>/<app>/settings.ini.
 LegacyDataLocations locationsIn(const QTemporaryDir &tmp)
 {
     LegacyDataLocations where;
@@ -41,7 +40,7 @@ LegacyDataLocations locationsIn(const QTemporaryDir &tmp)
     return where;
 }
 
-} // namespace
+}
 
 class TestLegacyData : public QObject
 {
@@ -66,7 +65,6 @@ private slots:
             tmp.filePath(QStringLiteral("local/") + kNew + QStringLiteral("/LIVE/cache/dataforge/x"))));
         QVERIFY(!QFileInfo::exists(tmp.filePath(QStringLiteral("docs/") + kOld)));
         QVERIFY(!QFileInfo::exists(tmp.filePath(QStringLiteral("local/") + kOld)));
-        // The emptied <old> organization folder goes too.
         QVERIFY(!QFileInfo::exists(tmp.filePath(QStringLiteral("config/") + kOld)));
     }
 
@@ -91,7 +89,6 @@ private slots:
         const QString movedData = tmp.filePath(QStringLiteral("elsewhere/") + kNew);
         QCOMPARE(settings.userDataDirOverride(), movedData);
         QVERIFY(QFileInfo::exists(QDir(movedData).filePath(QStringLiteral("LIVE/user.ini"))));
-        // A folder the user named themselves keeps its name.
         QCOMPARE(settings.cacheDirOverride(), customCache);
         QVERIFY(QFileInfo::exists(QDir(customCache).filePath(QStringLiteral("x"))));
     }
@@ -113,7 +110,6 @@ private slots:
         QCOMPARE(readAll(newRoot + QStringLiteral("/LIVE/backups/user.ini.bak_1")), QByteArray("backup"));
         QCOMPARE(readAll(newRoot + QStringLiteral("/PTU/user.ini")), QByteArray("ptu"));
         QCOMPARE(readAll(newRoot + QStringLiteral("/logs/app.log")), QByteArray("log"));
-        // The one clash stays behind; everything else has gone.
         QCOMPARE(readAll(oldRoot + QStringLiteral("/LIVE/user.ini")), QByteArray("old"));
         QVERIFY(!QFileInfo::exists(oldRoot + QStringLiteral("/LIVE/backups")));
         QVERIFY(!QFileInfo::exists(oldRoot + QStringLiteral("/PTU")));

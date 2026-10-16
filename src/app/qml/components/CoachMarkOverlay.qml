@@ -3,14 +3,11 @@ import QtQuick.Controls.Basic
 import QtQuick.Layouts
 import ScApp
 
-// The guided tour's coach marks: dims the window, cuts a spotlight around
-// the step's target (found by objectName among the visible items) and
-// floats a callout with Back / Next / Skip beside it.
 Item {
     id: overlay
 
     required property TutorialController tutorial
-    required property Item searchRoot   // where targets are looked up
+    required property Item searchRoot
     signal showPage(string page)
 
     readonly property int pad: 6
@@ -34,7 +31,6 @@ Item {
         }
         return null
     }
-    // Scrolls the nearest Flickable so `item` is in view.
     function bringIntoView(item) {
         for (let p = item.parent; p; p = p.parent) {
             if (p instanceof Flickable && p.contentHeight > p.height) {
@@ -74,15 +70,12 @@ Item {
             overlay.forceActiveFocus()
         }
     }
-    // Let the page switch and layouts settle before measuring.
     Timer { id: settle; interval: 150; onTriggered: overlay.locate() }
     onWidthChanged: if (visible) settle.restart()
     onHeightChanged: if (visible) settle.restart()
 
-    // Swallow input outside the callout.
     MouseArea { anchors.fill: parent; acceptedButtons: Qt.AllButtons; hoverEnabled: true; onWheel: (wheel) => wheel.accepted = true }
 
-    // ── dim layer with a hole ──
     readonly property color dim: Qt.rgba(0, 0, 0, 170 / 255)
     Rectangle { color: overlay.dim; x: 0; y: 0; width: overlay.width; height: overlay.hasSpot ? overlay.spot.y : overlay.height }
     Rectangle {
@@ -113,7 +106,6 @@ Item {
         border.width: 3
     }
 
-    // ── callout ──
     Rectangle {
         id: callout
         readonly property int gap: 16
@@ -168,7 +160,7 @@ Item {
             }
         }
 
-        MouseArea { anchors.fill: parent } // keep clicks off the dim layer
+        MouseArea { anchors.fill: parent }
 
         ColumnLayout {
             id: content

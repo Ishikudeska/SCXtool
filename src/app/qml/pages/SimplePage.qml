@@ -3,8 +3,6 @@ import QtQuick.Controls.Basic
 import QtQuick.Layouts
 import ScApp
 
-// Simple mode: one button that generates enhancements with the current
-// settings and applies them, and a way back to the full interface.
 Item {
     id: page
 

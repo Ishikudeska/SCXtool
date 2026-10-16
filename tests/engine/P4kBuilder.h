@@ -1,10 +1,5 @@
 #pragma once
 
-// Builds small P4K archives the way CIG lays out Data.p4k: ZIP64 everywhere,
-// the fixed 206-byte central-directory extra field (lengths include their
-// headers), AES-encrypted ZSTD entries, a "CIG" comment followed by zero
-// padding, and a ZIP64 directory size that is 1,024 bytes too large.
-
 #include "engine/crypto/Aes128.h"
 #include "engine/crypto/Sha256.h"
 #include "engine/p4k/Archive.h"
@@ -20,7 +15,7 @@ namespace testing {
 
 struct P4kEntry
 {
-    std::string name; // written with backslashes, as CIG does
+    std::string name;
     std::vector<std::uint8_t> content;
     std::uint16_t method = 100;
     bool encrypted = false;
@@ -96,22 +91,18 @@ public:
             put32(out, 0xFFFFFFFF);
             out.insert(out.end(), name.begin(), name.end());
 
-            // 0x0001: ZIP64 sizes + offset + disk (length 0x20 includes the header)
             put16(out, 0x0001);
             put16(out, 0x20);
             put64(out, e.content.size());
             put64(out, p.stored.size());
             put64(out, p.offset);
             put32(out, 0);
-            // 0x5000: 128 opaque bytes
             put16(out, 0x5000);
             put16(out, 0x84);
             out.insert(out.end(), 128, 0xAB);
-            // 0x5002: encryption flag
             put16(out, 0x5002);
             put16(out, 6);
             put16(out, e.encrypted ? 1 : 0);
-            // 0x5003: SHA-256 of the stored bytes
             put16(out, 0x5003);
             put16(out, 0x24);
             const auto sha = engine::crypto::Sha256::hash(p.stored);
@@ -128,7 +119,7 @@ public:
         put32(out, 0);
         put64(out, entries_.size());
         put64(out, entries_.size());
-        put64(out, cdSize + 1024); // wrong on purpose, like Data.p4k
+        put64(out, cdSize + 1024);
         put64(out, cdOffset);
 
         put32(out, 0x07064b50);
@@ -150,7 +141,6 @@ public:
         return out;
     }
 
-    // What the archive stores for an entry: compressed, then encrypted.
     static std::vector<std::uint8_t> encode(const P4kEntry &e)
     {
         std::vector<std::uint8_t> data;
@@ -207,4 +197,4 @@ private:
     std::vector<P4kEntry> entries_;
 };
 
-} // namespace testing
+}

@@ -29,7 +29,7 @@ int levelForType(int type)
     return 20;
 }
 
-} // namespace
+}
 
 LogModel::LogModel(QObject *parent) : QAbstractListModel(parent)
 {

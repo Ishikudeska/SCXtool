@@ -9,8 +9,6 @@
 #include <atomic>
 #include <stdexcept>
 
-// The job queue behind the progress overlay: one job at a time, results on
-// the GUI thread, cancellation, and failures surfaced.
 class TestTaskRunner : public QObject
 {
     Q_OBJECT
@@ -66,7 +64,6 @@ private slots:
         QVERIFY(!queuedRan);
     }
 
-    // A `done` that queues two jobs must not get them run side by side.
     void jobsChainedFromDoneRunOneAtATime()
     {
         TaskRunner runner;

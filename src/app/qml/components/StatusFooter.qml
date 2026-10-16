@@ -3,7 +3,6 @@ import QtQuick.Controls.Basic
 import QtQuick.Layouts
 import ScApp
 
-// The status bar: the last status message, counts, channel and version.
 Rectangle {
     implicitHeight: 26
     color: Theme.panel

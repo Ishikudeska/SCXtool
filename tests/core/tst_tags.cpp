@@ -1,7 +1,3 @@
-// TagBuilder against values produced by the original tag_builder.py
-// (tests/fixtures/tag_builder.json, from tools/parity/gen_tag_fixtures.py;
-// the cases here mirror that script's), plus the settings-load migrations.
-
 #include "core/tags/TagBuilder.h"
 
 #include <QFile>
@@ -38,7 +34,7 @@ QSet<QString> keys(std::initializer_list<const char *> list)
     return s;
 }
 
-} // namespace
+}
 
 class TestTags : public QObject
 {
@@ -207,24 +203,22 @@ private slots:
                               {QStringLiteral("old"), QStringLiteral("old"), QStringLiteral("old")});
         migrateMapping(QStringLiteral("ship_weapons"), c);
         QVERIFY(!c.classMapping.contains(QStringLiteral("Phys")));
-        QCOMPARE(c.classMapping.value(QStringLiteral("Physical"))[0], QStringLiteral("X")); // renamed
-        QVERIFY(!c.classMapping.contains(QStringLiteral("Bio")));                           // orphan dropped
+        QCOMPARE(c.classMapping.value(QStringLiteral("Physical"))[0], QStringLiteral("X"));
+        QVERIFY(!c.classMapping.contains(QStringLiteral("Bio")));
         QCOMPARE(c.classMapping.value(QStringLiteral("Biochemical"))[0], QStringLiteral("B"));
     }
 
     void newElementsAreBackfilledInPlace()
     {
-        // A pre-2.1 commodities config: no "usage" between label and collection.
         TagConfig c;
         c.elements = {{QStringLiteral("label"), true, QStringLiteral("short")},
                       {QStringLiteral("collection"), true, QStringLiteral("long")}};
         backfillNewElements(QStringLiteral("commodities"), c);
         QCOMPARE(c.elements.size(), 3);
         QCOMPARE(c.elements[1].kind, QStringLiteral("usage"));
-        QVERIFY(!c.elements[1].enabled); // inherits the default (off)
+        QVERIFY(!c.elements[1].enabled);
         QVERIFY(c.classMapping.contains(QStringLiteral("Quantum Drive")));
 
-        // A pre-1.4.2 components config gains "type", disabled, at the end.
         TagConfig comp = defaultConfig(QStringLiteral("components"));
         comp.elements.removeLast();
         comp.classMapping.clear();

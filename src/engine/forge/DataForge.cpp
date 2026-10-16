@@ -11,27 +11,8 @@ namespace {
 constexpr std::uint64_t kHeaderSize = 0x78;
 constexpr std::uint64_t kLegacySizeLimit = 0x0e2e00;
 
-// Entry sizes of the value pools, in Pool order.
 constexpr std::uint64_t kPoolEntrySize[] = {
-    1,  // Int8
-    2,  // Int16
-    4,  // Int32
-    8,  // Int64
-    1,  // UInt8
-    2,  // UInt16
-    4,  // UInt32
-    8,  // UInt64
-    1,  // Boolean
-    4,  // Single
-    8,  // Double
-    16, // Guid
-    4,  // String
-    4,  // Locale
-    4,  // Enum
-    8,  // StrongPointer
-    8,  // WeakPointer
-    20, // Reference
-    4,  // EnumOption
+    1, 2, 4, 8, 1, 2, 4, 8, 1, 4, 8, 16, 4, 4, 4, 8, 8, 20, 4,
 };
 static_assert(std::size(kPoolEntrySize) == static_cast<std::size_t>(Pool::Count));
 
@@ -66,7 +47,7 @@ std::string toUtf8(std::string_view latin1)
     return out;
 }
 
-} // namespace
+}
 
 std::string dataTypeName(std::uint16_t type)
 {
@@ -138,7 +119,6 @@ Result<DataForge> DataForge::load(std::vector<std::uint8_t> bytes)
         return fail(Errc::Unsupported,
                     "DataForge version " + std::to_string(df.version_) + " is not supported");
 
-    // Header: u16, u16, i32 version, 4 x u16, then 24 i32 counts.
     std::int64_t counts[24];
     for (int i = 0; i < 24; ++i) {
         counts[i] = static_cast<std::int32_t>(u32(d + 16 + i * 4));
@@ -180,13 +160,12 @@ Result<DataForge> DataForge::load(std::vector<std::uint8_t> bytes)
     pos += std::uint64_t(counts[cStruct]) * 16;
     const std::uint64_t propertiesAt = pos;
     pos += std::uint64_t(counts[cProperty]) * 12;
-    pos += std::uint64_t(counts[cEnum]) * 8; // enum definitions: not needed for export
+    pos += std::uint64_t(counts[cEnum]) * 8;
     const std::uint64_t mappingsAt = pos;
     pos += std::uint64_t(counts[cMapping]) * 8;
     const std::uint64_t recordsAt = pos;
     pos += std::uint64_t(counts[cRecord]) * recordSize;
 
-    // Pools are stored in a different order from the header's counts.
     const int poolCountIndex[] = {cI8,        cI16,    cI32,    cI64,       cU8,        cU16,    cU32,
                                   cU64,       cBool,   cSingle, cDouble,    cGuid,      cString, cLocale,
                                   cEnumValue, cStrong, cWeak,   cReference, cEnumOption};
@@ -236,9 +215,6 @@ Result<DataForge> DataForge::load(std::vector<std::uint8_t> bytes)
         r.recordSize = u16(p + 22);
     }
 
-    // Instance data: struct i's instances follow those of every earlier
-    // mapping. unforge keys this by the mapping's struct index but takes the
-    // record size from the struct at the mapping's own position.
     if (df.mappings_.size() > df.structs_.size())
         return fail(Errc::Format, "DataForge has more data mappings than structs");
     df.structDataOffsets_.assign(df.structs_.size(), -1);
@@ -252,7 +228,6 @@ Result<DataForge> DataForge::load(std::vector<std::uint8_t> bytes)
     if (df.dataOffset_ + dataSize > size)
         return fail(Errc::Format, "DataForge instance data runs past the end of the file");
 
-    // Names.
     df.structNames_.resize(df.structs_.size());
     df.structNameValid_.resize(df.structs_.size());
     for (std::size_t i = 0; i < df.structs_.size(); ++i) {
@@ -268,7 +243,6 @@ Result<DataForge> DataForge::load(std::vector<std::uint8_t> bytes)
         df.propertyNameValid_[i] = !xml::dotNetNameError(name).has_value();
     }
 
-    // Flattened property lists: the root ancestor's properties first.
     df.structProperties_.resize(df.structs_.size());
     for (std::size_t i = 0; i < df.structs_.size(); ++i) {
         std::vector<std::uint32_t> chain;
@@ -292,7 +266,6 @@ Result<DataForge> DataForge::load(std::vector<std::uint8_t> bytes)
         }
     }
 
-    // Path and GUID maps, last record wins.
     df.byPath_.reserve(df.records_.size());
     df.byGuid_.reserve(df.records_.size());
     std::vector<std::uint32_t> firstSeen;
@@ -370,4 +343,4 @@ std::optional<std::uint32_t> DataForge::recordByGuid(GuidBytes id) const
     return std::nullopt;
 }
 
-} // namespace engine::forge
+}

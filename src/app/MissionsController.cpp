@@ -24,7 +24,6 @@ QString text(const char *key, const QVariantHash &args = {})
     return core::i18n::tr(key, args);
 }
 
-// "PickupLocation" -> "Pickup Location", "Destination1" -> "Destination 1".
 QString slotLabel(const QString &name)
 {
     QString out;
@@ -44,16 +43,14 @@ QString slotLabel(const QString &name)
     return out.simplified();
 }
 
-// What the game shows for a record's currencyType.
 QString currencyName(const QString &currency)
 {
     return currency.isEmpty() || currency == u"UEC" ? QStringLiteral("aUEC") : currency;
 }
 
-// Places listed per location in the details; the rest are counted.
 constexpr int kPlacesShown = 300;
 
-} // namespace
+}
 
 MissionsController::MissionsController(QObject *parent) : QObject(parent)
 {
@@ -137,7 +134,7 @@ void MissionsController::build()
         },
         [this](std::shared_ptr<const Catalog> catalog) {
             building_ = false;
-            if (!catalog) { // cancelled, or the build threw
+            if (!catalog) {
                 builtKey_.clear();
                 setStatus(catalog_ ? QStringLiteral("ready") : QStringLiteral("idle"));
                 return;
@@ -148,7 +145,7 @@ void MissionsController::build()
             refilter();
             emit catalogChanged();
             setStatus(QStringLiteral("ready"));
-            sourcesChanged(); // changed while building
+            sourcesChanged();
         });
 }
 
@@ -301,7 +298,6 @@ QVariantMap MissionsController::details(int mission) const
         QVariantList places;
         for (std::size_t i = 0; i < set.size() && i < std::size_t(kPlacesShown); ++i) {
             const Place &p = catalog_->places[std::size_t(set[i])];
-            // The address usually says more ("Gundo" -> "Gundo around Daymar").
             const QString label = p.address.isEmpty() || p.address == p.name ? p.name
                                   : p.address.contains(p.name, Qt::CaseInsensitive)
                                       ? p.address
@@ -315,7 +311,6 @@ QVariantMap MissionsController::details(int mission) const
             {QStringLiteral("more"), static_cast<int>(set.size()) - static_cast<int>(places.size())},
             {QStringLiteral("tags"), slot.searchTags.join(QStringLiteral(", "))}};
     }
-    // "+1,000  Covalex · Courier", success and the rest apart.
     const QLocale locale;
     QStringList repSuccess, repFailure;
     for (const ReputationReward &r : m.reputation) {

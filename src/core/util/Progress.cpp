@@ -80,7 +80,6 @@ void ProgressSink::emitProgress(bool force)
         lastEmitMs_ = now;
         lastEmitted_ = payload;
     }
-    // Outside the lock: the callback may post to the UI or call back in.
     std::apply(callback_, payload);
 }
 
@@ -96,4 +95,4 @@ PerfTimer::~PerfTimer()
         qCDebug(lcPerf, "%s: %.3fs", name_, double(timer_.nsecsElapsed()) / 1e9);
 }
 
-} // namespace core
+}

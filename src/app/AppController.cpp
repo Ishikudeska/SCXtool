@@ -61,7 +61,7 @@ struct LoadResult
     QSet<QString> knownItemNames;
 };
 
-} // namespace
+}
 
 AppController::AppController(MainInstance, QObject *parent)
     : QObject(parent), settings_(std::make_unique<Settings>()), paths_(std::make_unique<Paths>(*settings_)),
@@ -107,8 +107,6 @@ AppController *AppController::create(QQmlEngine *engine, QJSEngine *)
     g_instance->setEngine(engine);
     return g_instance;
 }
-
-// ── simple properties ─────────────────────────────────────────────────────
 
 QString AppController::appName() const
 {
@@ -201,7 +199,6 @@ void AppController::setFavoritePrefix(const QString &prefix)
     const QString old = favoritePrefix();
     if (prefix == old || prefix.isEmpty())
         return;
-    // Re-prefix favourites in memory and on disk (#140).
     for (StringEntry &e : strings_->mutableEntries())
         if (e.customValue.startsWith(old))
             e.customValue = prefix + e.customValue.sliced(old.size());
@@ -330,8 +327,6 @@ QUrl AppController::pathToUrl(const QString &path) const
     return QUrl::fromLocalFile(path);
 }
 
-// ── channel, install and language ────────────────────────────────────────
-
 void AppController::setInstallRoot(const QString &root)
 {
     const QString normalized = normalizeInstallRoot(root);
@@ -369,7 +364,7 @@ void AppController::setChannel(const QString &channel)
 {
     if (channel == this->channel() || !core::channels().contains(channel))
         return;
-    saveUserIni(); // the old channel's edits belong to the old user.ini
+    saveUserIni();
     settings_->setActiveChannel(channel);
     enhancementsPrompted_ = false;
     emit channelChanged();
@@ -435,8 +430,6 @@ void AppController::setLanguage(const QString &language)
         },
         [afterBase](bool) { afterBase(); });
 }
-
-// ── startup ───────────────────────────────────────────────────────────────
 
 void AppController::startup()
 {
@@ -555,8 +548,6 @@ void AppController::checkEnhancementsFreshness()
     });
 }
 
-// ── loading ───────────────────────────────────────────────────────────────
-
 void AppController::reload()
 {
     loadEntries(text("dialogs.merging_sources"));
@@ -608,7 +599,6 @@ void AppController::loadEntries(const QString &message, std::function<void()> th
             blueprintMeta_ = std::move(r.blueprintMeta);
             knownItemNames_ = std::move(r.knownItemNames);
             if (!knownItemNames_.isEmpty()) {
-                // Names another localization editor left in the owned set (#372).
                 const auto repair =
                     blueprints::repairForeignOwnedNames(settings_->ownedItems(), knownItemNames_);
                 if (!repair.renamed.isEmpty()) {
@@ -681,8 +671,6 @@ bool AppController::saveUserIni()
         qCWarning(lcApp) << "could not save" << ini.path();
     return saved.has_value();
 }
-
-// ── applying ──────────────────────────────────────────────────────────────
 
 void AppController::applyToGame()
 {
@@ -769,7 +757,6 @@ void AppController::applyToGame()
                                 text("apply.failed_body", {{QStringLiteral("error"), out.error}}));
                 return;
             }
-            // Biggest category first, as Counter.most_common orders them.
             QList<std::pair<QString, int>> cats;
             for (auto it = enhancementCounts.cbegin(); it != enhancementCounts.cend(); ++it)
                 cats.push_back({it.key(), it.value()});
@@ -975,8 +962,6 @@ void AppController::exportLocPack(const QUrl &target)
                                               {QStringLiteral("zip_size"), QFileInfo(out).size()}}));
 }
 
-// ── extraction and generation ─────────────────────────────────────────────
-
 void AppController::extractFromP4k(bool thenGenerate)
 {
     const QString p4k = p4kPath();
@@ -1097,7 +1082,6 @@ void AppController::generateEnhancements()
     options.englishBaseIni = paths_->baseIni(kDefaultLanguage);
     options.forgeDir = dataForgeDir();
     options.patchesDir = QStringLiteral(":/patches");
-    // The generator writes beside its base.ini; a language's INIs go to its folder.
     tasks_->run<QString>(
         text("progress.generating_enhancements_title"), true,
         [options](TaskRunner::Job &job) -> QString {
@@ -1131,8 +1115,6 @@ void AppController::simpleApply()
 {
     if (busy())
         return;
-    // Applying needs the game folder, and Config (where it is set) is hidden
-    // in Simple mode, so send the user to Advanced rather than do nothing.
     if (installRoot().isEmpty() || channelInstallDir().isEmpty()) {
         prompts_->info(text("simple_mode.set_game_folder_title"), text("simple_mode.set_game_folder_body"));
         setUiMode(QStringLiteral("advanced"));
@@ -1144,8 +1126,6 @@ void AppController::simpleApply()
                           if (busy())
                               return;
                           simpleRunActive_ = true;
-                          // Without a current base.ini there is nothing to apply over:
-                          // extract it first (which continues into DataForge and generation).
                           const QString base = p4kStatus();
                           if ((base == u"missing" || base == u"stale" || strings_->totalCount() == 0) &&
                               base != u"noarchive")
@@ -1155,14 +1135,8 @@ void AppController::simpleApply()
                       });
 }
 
-// ── closing ───────────────────────────────────────────────────────────────
-
 bool AppController::requestClose()
 {
-    // Quitting mid-job would hide the window but keep the process alive
-    // until the job ended (Qt waits for the thread pool on exit). Cancel it
-    // instead and close once idle; a job that cannot be cancelled (applying)
-    // finishes its writes first.
     if (tasks_->running()) {
         if (!closeWhenIdle_) {
             closeWhenIdle_ = true;
@@ -1196,11 +1170,9 @@ void AppController::onTasksRunningChanged()
     if (!closeWhenIdle_)
         return;
     if (tasks_->running()) {
-        tasks_->cancel(); // a job chained by the cancelled one's `done`
+        tasks_->cancel();
         return;
     }
-    // Deferred so the finished job's `done`, which runs after this signal,
-    // can chain another job first.
     QTimer::singleShot(0, this, [this] {
         if (!closeWhenIdle_ || tasks_->running())
             return;

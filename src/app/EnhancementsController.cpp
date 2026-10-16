@@ -85,7 +85,7 @@ const char *const kMissionFieldLabels[][2] = {
     {"resource_signatures", "enhancements.mission_field_resource_signatures"},
 };
 
-} // namespace
+}
 
 EnhancementsController::EnhancementsController(QObject *parent) : QObject(parent)
 {
@@ -116,8 +116,6 @@ AppController &EnhancementsController::app() const
 {
     return *AppController::instance();
 }
-
-// ── categories and options ────────────────────────────────────────────────
 
 QVariantList EnhancementsController::categories() const
 {
@@ -282,13 +280,10 @@ void EnhancementsController::markGenerateDirty()
 
 void EnhancementsController::generate()
 {
-    // Unsaved category toggles count: generate what the page shows.
     for (auto it = stagedCategories_.cbegin(); it != stagedCategories_.cend(); ++it)
         app().settings().setEnhancementCategoryEnabled(it.key(), it.value());
     app().generateEnhancements();
 }
-
-// ── Tag Builder ───────────────────────────────────────────────────────────
 
 tg::TagConfig &EnhancementsController::config(const QString &category)
 {

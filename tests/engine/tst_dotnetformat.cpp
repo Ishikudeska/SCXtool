@@ -16,7 +16,6 @@ private slots:
     {
         QTest::addColumn<float>("value");
         QTest::addColumn<QString>("expected");
-        // Samples from unforge's real output first.
         QTest::newRow("plain") << 1.67f << "1.67";
         QTest::newRow("small exponent") << 1e-05f << "1E-05";
         QTest::newRow("negative small") << -1.000196e-05f << "-1.000196E-05";
@@ -63,7 +62,6 @@ private slots:
         QCOMPARE(QString::fromStdString(formatDouble(value)), expected);
     }
 
-    // System.Guid(a, b, c, d..k) from DataForge's byte order.
     void guidByteOrder()
     {
         std::uint8_t bytes[16];

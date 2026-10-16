@@ -1,7 +1,3 @@
-// The mission catalog over a small DataForge cache written by the test:
-// tags, places, organizations, a mission type, mission broker entries and a
-// contract generator with a template.
-
 #include "core/missions/Catalog.h"
 #include "core/missions/Places.h"
 #include "core/text/IniFile.h"
@@ -31,7 +27,6 @@ void writeFile(const QString &path, const QByteArray &bytes)
     f.write(bytes);
 }
 
-// guid, name, parent. Tag ids need not look like GUIDs.
 const QByteArray kTags = "root\tLocationType\t\n"
                          "sys\tSystem\troot\n"
                          "stanton\tStanton\tsys\n"
@@ -85,7 +80,6 @@ QByteArray place(const char *name, const char *tags, const char *strings, const 
         .toUtf8();
 }
 
-// A location search property: positive and negative General tags.
 QByteArray locationValue(const char *positive, const char *negative = "", const char *produces = "")
 {
     QString conditions =
@@ -119,7 +113,6 @@ void writeCache(const QString &root)
         place(
             "Gundo", ref("hub") + ref("stanton") + ref("stanton2") + ref("stanton2b"),
             R"(<MissionStringVariant tag="name" string="@loc_gundo" /><MissionStringVariant tag="address" string="@loc_gundo_addr" />)"));
-    // No system tags: placed by its record name, on Stanton 1.
     writeFile(r + s("missiondata/pu_locations/outposts/outpost_stanton1_bravo.xml"),
               place("Bravo", ref("outpost"), nameOnly));
     writeFile(
@@ -142,7 +135,6 @@ void writeCache(const QString &root)
         r + s("missiontype/missiontype.delivery.xml"),
         R"(<MissionType.Delivery __type="MissionType" __ref="type-delivery" LocalisedTypeName="@mt_delivery" />)");
 
-    // Reputation: amounts, a faction, a track and a rank.
     writeFile(r + s("reputation/rewards/missionrewards_reputation/gain.xml"),
               R"(<SReputationRewardAmount.Gain __ref="rep-gain" reputationAmount="150" />)");
     writeFile(r + s("reputation/rewards/missionrewards_reputation/loss.xml"),
@@ -157,7 +149,6 @@ void writeCache(const QString &root)
         r + s("reputation/standings/courier_rank2.xml"),
         R"(<SReputationStandingParams.Rank2 __ref="standing-2" displayName="@RepStanding_Courier_Rank2" />)");
 
-    // A blueprint pool: its item named from the item record its file matches.
     writeFile(
         r + s("crafting/blueprints/crafting/bp_craft_test_rifle.xml"),
         R"(<CraftingBlueprintRecord.R __ref="bp-rifle"><process><CraftingProcess_Creation entityClass="ent-rifle" /></process></CraftingBlueprintRecord.R>)");
@@ -272,7 +263,7 @@ QStringList titles(const Catalog &catalog, const std::vector<int> &shown)
     return out;
 }
 
-} // namespace
+}
 
 class TestMissions : public QObject
 {
@@ -307,8 +298,8 @@ private slots:
     {
         const LocText text(loc_);
         QCOMPARE(text(u"@loc_gundo"), s("Covalex Station Gundo"));
-        QCOMPARE(text(u"loc_charlie"), s("Charlie Outpost")); // the key's case differs
-        QCOMPARE(text(u"@loc_nope"), QString());              // CIG's placeholder
+        QCOMPARE(text(u"loc_charlie"), s("Charlie Outpost"));
+        QCOMPARE(text(u"@loc_nope"), QString());
         QCOMPARE(text(u"@LOC_UNINITIALIZED"), QString());
         QCOMPARE(text(u"@missing"), QString());
     }
@@ -316,13 +307,13 @@ private slots:
     void places()
     {
         QVERIFY(catalog_.hasPlaces);
-        QCOMPARE(catalog_.places.size(), std::size_t(3)); // the disabled one is left out
+        QCOMPARE(catalog_.places.size(), std::size_t(3));
         QCOMPARE(catalog_.places[0].name, s("Bravo Outpost"));
-        QCOMPARE(catalog_.places[0].system, s("Stanton")); // from its record name
+        QCOMPARE(catalog_.places[0].system, s("Stanton"));
         QCOMPARE(catalog_.places[2].name, s("Covalex Station Gundo"));
         QCOMPARE(catalog_.places[2].address, s("Covalex Station Gundo around Daymar"));
         QCOMPARE(catalog_.systems, (QStringList{s("Pyro"), s("Stanton")}));
-        QCOMPARE(catalog_.missions.size(), std::size_t(4)); // not-for-release entries are left out
+        QCOMPARE(catalog_.missions.size(), std::size_t(4));
     }
 
     void brokerEntry()
@@ -330,7 +321,7 @@ private slots:
         const Mission *m = byTitle(catalog_, s("Deliver to Covalex Station Gundo"));
         QVERIFY(m);
         QVERIFY(!m->contract);
-        QCOMPARE(m->titleVariants, 2); // the missing option doesn't count
+        QCOMPARE(m->titleVariants, 2);
         QCOMPARE(m->description, s("Go to Covalex Station Gundo around Daymar.\nPick up at Bravo Outpost."));
         QCOMPARE(m->giver, s("Couriers Guild"));
         QCOMPARE(m->category, s("Delivery"));
@@ -340,14 +331,11 @@ private slots:
         QCOMPARE(m->payout.buyIn, 250);
         QCOMPARE(m->systems, QStringList{s("Stanton")});
         QCOMPARE(m->file, s("missionbroker/pu_missions/delivery/a.xml"));
-        // The combined value and the property inside it are one place to go.
         QCOMPARE(m->locations.size(), std::size_t(2));
         QCOMPARE(m->locations[0].token, s("Destination"));
         QCOMPARE(placeNames(catalog_, m->locations[0]), QStringList{s("Covalex Station Gundo")});
         QCOMPARE(m->locations[1].token, s("Location"));
-        // A search for Stanton finds a place on Stanton 1; Charlie is on Pyro.
         QCOMPARE(placeNames(catalog_, m->locations[1]), QStringList{s("Bravo Outpost")});
-        // The first outcome is success; failing and abandoning lose the same, listed once.
         QCOMPARE(m->reputation.size(), std::size_t(2));
         QCOMPARE(m->reputation[0], (ReputationReward{s("Covalex Shipping"), s("Courier"), 150, true}));
         QCOMPARE(m->reputation[1], (ReputationReward{s("Covalex Shipping"), s("Courier"), -100, false}));
@@ -359,8 +347,7 @@ private slots:
     {
         const Mission *m = byTitle(catalog_, s("Clear the outpost"));
         QVERIFY(m);
-        QCOMPARE(placeNames(catalog_, m->locations.front()),
-                 QStringList{s("Bravo Outpost")}); // not the lawless one
+        QCOMPARE(placeNames(catalog_, m->locations.front()), QStringList{s("Bravo Outpost")});
         QCOMPARE(m->category, s("Mercenary"));
         QCOMPARE(m->payout.kind, Payout::Kind::None);
         QCOMPARE(m->locations.front().searchTags, QStringList{s("Outpost")});
@@ -372,21 +359,18 @@ private slots:
         QVERIFY(m);
         QVERIFY(m->contract);
         QCOMPARE(m->id, s("One"));
-        // The contract's search replaces the template's: an outpost that produces hydrogen.
         QCOMPARE(m->description, s("Pick up at Charlie Outpost."));
         QCOMPARE(m->locations.size(), std::size_t(1));
-        QCOMPARE(m->locations[0].token, s("Location")); // kept from the template
-        QCOMPARE(m->giver, s("Contract Co"));           // the generator's string param
-        QCOMPARE(m->category, s("Delivery"));           // the template's type
+        QCOMPARE(m->locations[0].token, s("Location"));
+        QCOMPARE(m->giver, s("Contract Co"));
+        QCOMPARE(m->category, s("Delivery"));
         QCOMPARE(m->payout.kind, Payout::Kind::Calculated);
         QCOMPARE(m->difficulty, s("Combat 3/7"));
         QCOMPARE(m->systems, QStringList{s("Pyro")});
-        // Reputation by its outcome flags; the rank from minStanding.
         QCOMPARE(m->reputation.size(), std::size_t(2));
         QCOMPARE(m->reputation[0], (ReputationReward{s("Covalex Shipping"), s("Courier"), 150, true}));
         QCOMPARE(m->reputation[1], (ReputationReward{s("Covalex Shipping"), s("Courier"), -100, false}));
         QCOMPARE(m->requiredRank, s("Jr. Runner (Courier)"));
-        // The pool's item is named from its item record; an unknown pool is skipped.
         QCOMPARE(m->blueprints.size(), std::size_t(1));
         QCOMPARE(m->blueprints[0].label, s("Rank 2–4"));
         QCOMPARE(m->blueprints[0].chance, 0.4);
@@ -401,9 +385,8 @@ private slots:
         QCOMPARE(m->payout.amount, 1000);
         QCOMPARE(m->payout.max, 2000);
         QCOMPARE(m->payout.buyIn, 100);
-        // Found by tag: either organization, so both names.
         QCOMPARE(m->giver, s("Couriers Guild / Second Couriers"));
-        QCOMPARE(m->category, s("Guild")); // no type: the generator's folder
+        QCOMPARE(m->category, s("Guild"));
     }
 
     void filtering()
@@ -412,7 +395,7 @@ private slots:
         QCOMPARE(titles(catalog_, filterMissions(catalog_, f)),
                  (QStringList{s("Clear the outpost"), s("Deliver to Covalex Station Gundo"), s("Fixed job"),
                               s("Template title")}));
-        f.search = s("charlie"); // a place name only
+        f.search = s("charlie");
         QCOMPARE(titles(catalog_, filterMissions(catalog_, f)), QStringList{s("Template title")});
         f.search = s("COURIERS");
         QCOMPARE(titles(catalog_, filterMissions(catalog_, f)),
@@ -432,9 +415,9 @@ private slots:
         f.blueprintsOnly = true;
         QCOMPARE(titles(catalog_, filterMissions(catalog_, f)), QStringList{s("Template title")});
         f = {};
-        f.search = s("test rifle"); // a blueprint
+        f.search = s("test rifle");
         QCOMPARE(titles(catalog_, filterMissions(catalog_, f)), QStringList{s("Template title")});
-        f.search = s("covalex shipping"); // a reputation faction
+        f.search = s("covalex shipping");
         QCOMPARE(titles(catalog_, filterMissions(catalog_, f)),
                  (QStringList{s("Deliver to Covalex Station Gundo"), s("Template title")}));
 
@@ -447,7 +430,6 @@ private slots:
         QCOMPARE(titles(catalog_, filterMissions(catalog_, f)).first(), s("Fixed job"));
     }
 
-    // A cache from before the catalog: missions, but no places.
     void oldCacheHasNoPlaces()
     {
         QTemporaryDir old;

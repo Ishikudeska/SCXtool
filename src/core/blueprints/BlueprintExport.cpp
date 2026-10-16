@@ -19,7 +19,6 @@ namespace {
 
 constexpr int kFormatVersion = 1;
 
-// sorted(owned, key=str.lower)
 QStringList sortedCaseInsensitive(const QSet<QString> &names)
 {
     QStringList sorted(names.cbegin(), names.cend());
@@ -37,7 +36,6 @@ QString displayName(const QString &name, const QMap<QString, BlueprintItem> &met
     return it != meta.cend() && !it->taggedName.isEmpty() ? it->taggedName : name;
 }
 
-// csv.writer's QUOTE_MINIMAL field.
 QString csvField(const QString &s)
 {
     if (!s.contains(u',') && !s.contains(u'"') && !s.contains(u'\n') && !s.contains(u'\r'))
@@ -47,8 +45,6 @@ QString csvField(const QString &s)
     return u'"' + quoted + u'"';
 }
 
-// csv.reader with the excel dialect: records end at CR, LF or CRLF outside
-// quotes; a blank line is an empty record.
 QList<QStringList> parseCsv(QStringView text)
 {
     QList<QStringList> records;
@@ -65,7 +61,7 @@ QList<QStringList> parseCsv(QStringView text)
         const QChar c = text[i];
         const bool newline = c == u'\r' || c == u'\n';
         if (newline && c == u'\r' && i + 1 < text.size() && text[i + 1] == u'\n' && state != InQuoted)
-            ++i; // CRLF is one terminator
+            ++i;
         switch (state) {
         case StartRecord:
             if (newline) {
@@ -115,7 +111,7 @@ QList<QStringList> parseCsv(QStringView text)
                 fields << std::exchange(field, {});
                 endRecord();
             } else {
-                field += c; // not strict: text after the closing quote is kept
+                field += c;
                 state = InField;
             }
             break;
@@ -129,7 +125,6 @@ QList<QStringList> parseCsv(QStringView text)
     return records;
 }
 
-// str(value) for a JSON scalar, the way the Python reads a "name".
 QString pyStr(const QJsonValue &v)
 {
     switch (v.type()) {
@@ -146,7 +141,6 @@ QString pyStr(const QJsonValue &v)
     }
     case QJsonValue::Array:
     case QJsonValue::Object:
-        // Never seen in an export; the name would not normalize to an item.
         return QString();
     default:
         return QString();
@@ -159,7 +153,6 @@ std::expected<QSet<QString>, QString> parseJsonNames(const QString &path, const 
     if (!file.open(QIODevice::ReadOnly))
         return std::unexpected(QStringLiteral("Could not read JSON file: %1").arg(file.errorString()));
     const QByteArray bytes = file.readAll();
-    // json.load rejects a BOM; Qt would skip it.
     if (bytes.startsWith("\xEF\xBB\xBF"))
         return std::unexpected(QStringLiteral("Could not read JSON file: Unexpected UTF-8 BOM"));
     QJsonParseError error;
@@ -187,8 +180,6 @@ std::expected<QSet<QString>, QString> parseCsvNames(const QString &path, const E
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly))
         return std::unexpected(QStringLiteral("Could not read CSV file: %1").arg(file.errorString()));
-    // Skips one leading BOM, like utf-8-sig; stateless so a truncated final
-    // sequence counts as an error.
     QStringDecoder decoder(QStringDecoder::Utf8, QStringDecoder::Flag::Stateless);
     const QString text = decoder.decode(file.readAll());
     if (decoder.hasError())
@@ -203,9 +194,7 @@ std::expected<QSet<QString>, QString> parseCsvNames(const QString &path, const E
     for (qsizetype r = 1; r < records.size(); ++r) {
         const QStringList &row = records[r];
         if (row.isEmpty())
-            continue; // DictReader skips blank lines
-        // dict(zip(fieldnames, row)): the last "name" column wins, and one
-        // past the end of a short row is None.
+            continue;
         QString value;
         for (qsizetype i = 0; i < header.size(); ++i)
             if (header[i] == u"name")
@@ -217,7 +206,7 @@ std::expected<QSet<QString>, QString> parseCsvNames(const QString &path, const E
     return names;
 }
 
-} // namespace
+}
 
 QString exportOwnedBlueprintsJson(const QSet<QString> &owned, const QMap<QString, BlueprintItem> &meta,
                                   const QDateTime &now)
@@ -266,7 +255,6 @@ std::expected<QSet<QString>, QString> parseImportNames(const QString &path, cons
 ImportMatch matchImportNames(const QSet<QString> &imported, const QSet<QString> &known,
                              const QSet<QString> &catalogue, const Enclosings &enclosings)
 {
-    // Normalize the known side too, so the comparison stays symmetric.
     QStringList knownSorted(known.cbegin(), known.cend());
     std::sort(knownSorted.begin(), knownSorted.end(),
               [](const QString &a, const QString &b) { return py::less(a, b); });
@@ -292,4 +280,4 @@ ImportMatch matchImportNames(const QSet<QString> &imported, const QSet<QString> 
     return result;
 }
 
-} // namespace core::blueprints
+}

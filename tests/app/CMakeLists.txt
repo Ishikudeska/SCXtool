@@ -1,4 +1,3 @@
-# Launches the real executable headlessly and expects a clean exit.
 add_test(NAME app_smoke COMMAND scapp --smoke-test)
 set_tests_properties(app_smoke PROPERTIES
     ENVIRONMENT "QT_QPA_PLATFORM=offscreen;${SC_TEST_ENV}"
@@ -7,7 +6,6 @@ set_tests_properties(app_smoke PROPERTIES
     TIMEOUT 30
 )
 
-# The app layer is an executable, so its units compile straight into the test.
 sc_add_test(tst_app_taskrunner
     SOURCES tst_taskrunner.cpp ${PROJECT_SOURCE_DIR}/src/app/TaskRunner.cpp ${PROJECT_SOURCE_DIR}/src/app/TaskRunner.h
     LIBS sccore Qt6::Qml

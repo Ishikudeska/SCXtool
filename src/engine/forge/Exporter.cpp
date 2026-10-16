@@ -35,7 +35,7 @@ Result<ExportStats> exportRecords(const DataForge &forge, const std::filesystem:
     const std::vector<std::uint32_t> records = selectRecords(forge, options.include);
 
     ExportStats stats;
-    std::mutex mutex; // guards stats.failures and createdDirs
+    std::mutex mutex;
     std::unordered_set<std::filesystem::path::string_type> createdDirs;
     std::atomic<std::size_t> written{0};
     std::atomic<std::size_t> skipped{0};
@@ -55,7 +55,7 @@ Result<ExportStats> exportRecords(const DataForge &forge, const std::filesystem:
             std::lock_guard lock(mutex);
             createdDirs.insert(dir.native());
         }
-        return io::writeFile(path, xml, /*atomic=*/false);
+        return io::writeFile(path, xml, false);
     };
 
     parallelFor(
@@ -93,4 +93,4 @@ Result<ExportStats> exportRecords(const DataForge &forge, const std::filesystem:
     return stats;
 }
 
-} // namespace engine::forge
+}

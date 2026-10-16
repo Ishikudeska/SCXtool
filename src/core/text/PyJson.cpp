@@ -43,4 +43,4 @@ QString jsonString(QStringView s, bool ensureAscii)
     return out;
 }
 
-} // namespace core::py
+}

@@ -12,7 +12,6 @@ namespace core::enh {
 
 namespace {
 
-// Path parts below the records root, lower-cased, file name included.
 QSet<QString> relativeParts(const RecordStore &store, const QString &path)
 {
     QString rel = path.mid(store.recordsDir().size());
@@ -31,7 +30,7 @@ std::string_view lstripAt(std::string_view s)
     return s;
 }
 
-} // namespace
+}
 
 RecordLookup buildAmmoLookup(const RecordStore &store, const QString &relDir)
 {
@@ -58,7 +57,6 @@ ScitemLookups buildScitemLookups(const RecordStore &store, const Loc &loc,
     if (!store.dirExists(scitem))
         return out;
     const std::optional<tags::TagConfig> miningCfg = miningLaserTagConfig(componentsConfig);
-    // Subdir -> component type, in the Python dict's order.
     static const std::array<std::pair<const char *, const char *>, 5> subdirTypes = {{
         {"shieldgenerator", "Shield Generator"},
         {"cooler", "Cooler"},
@@ -116,8 +114,6 @@ ScitemLookups buildScitemLookups(const RecordStore &store, const Loc &loc,
         const QString desc = loc.value(descKey);
         const QSet<QString> parts = relativeParts(store, file);
         const bool inWeapons = parts.contains(QStringLiteral("weapons"));
-        // Weapons never carry a component tag (#220), except ship-mounted
-        // mining lasers (#266).
         const bool miningLaser = inWeapons && findDescendant(root, "SEntityComponentMiningLaserParams");
         if (desc.isEmpty() || (inWeapons && !miningLaser))
             continue;
@@ -135,7 +131,6 @@ ScitemLookups buildScitemLookups(const RecordStore &store, const Loc &loc,
             if (tag.isEmpty())
                 tag = bareTypeTagFromDesc(desc, componentsConfig);
         }
-        // A typeless "[S1-A]" means nothing in a blueprint list (#160).
         if (!tag.isEmpty() && !typeless.match(tag).hasMatch())
             out.entityNameTags.insert(ref, tag);
     }
@@ -186,7 +181,7 @@ QHash<QString, qint64> buildReputationLookup(const RecordStore &store)
         if (uuid.empty() || amount.empty())
             continue;
         if (const std::optional<double> v = toFloat(amount); v && std::isfinite(*v))
-            out.insert(qs(uuid), qint64(std::trunc(*v))); // int(float(...))
+            out.insert(qs(uuid), qint64(std::trunc(*v)));
     }
     return out;
 }
@@ -219,4 +214,4 @@ Standings buildStandings(const RecordStore &store, const Loc &englishLoc)
     return out;
 }
 
-} // namespace core::enh
+}

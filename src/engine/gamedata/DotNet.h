@@ -6,42 +6,24 @@
 #include <string_view>
 #include <vector>
 
-// .NET behaviours sc.gamedata's output depends on: number parsing and
-// rounding, string trimming, List<T>.Sort's introsort, and culture-aware
-// (ICU root) string ordering.
 namespace engine::gamedata::dotnet {
 
-// Double.TryParse(s, NumberStyles.Float, InvariantCulture).
 std::optional<double> parseDouble(std::string_view s);
-// Int32.TryParse(s, NumberStyles.Integer, InvariantCulture).
 std::optional<std::int32_t> parseInt32(std::string_view s);
 
-// Math.Round(value, decimals): half to even, via value * 10^d.
 double round(double value, int decimals);
 
-// Char.IsWhiteSpace for one code point.
 bool isWhiteSpace(char32_t c);
-// String.Trim() / TrimEnd() over UTF-8.
 std::string_view trim(std::string_view s);
 std::string_view trimEnd(std::string_view s);
 
-// String.Compare(a, b, StringComparison.Ordinal) over UTF-8 (UTF-16 code
-// unit order).
 int compareOrdinal(std::string_view a, std::string_view b);
 
-// String.Compare(a, b) under the invariant culture: ICU root collation at
-// tertiary strength, as .NET 5+ uses on Windows (icu.dll). Falls back to a
-// case-insensitive-then-ordinal order where ICU is unavailable.
 int compareCulture(std::string_view a, std::string_view b);
 
-// List<T>.Sort(Comparison<T>): ArraySortHelper's introspective sort, whose
-// order for equal elements the output depends on.
 template <class T, class Cmp> void introSort(std::vector<T> &items, Cmp cmp);
 
-// DateTime.UtcNow.ToString("o").
 std::string utcNowRoundTrip();
-
-// ── implementation of introSort ──────────────────────────────────────────
 
 namespace detail {
 
@@ -145,7 +127,7 @@ void introSortRange(std::vector<T> &k, Cmp &cmp, std::size_t lo, std::size_t n, 
     }
 }
 
-} // namespace detail
+}
 
 template <class T, class Cmp> void introSort(std::vector<T> &items, Cmp cmp)
 {
@@ -157,4 +139,4 @@ template <class T, class Cmp> void introSort(std::vector<T> &items, Cmp cmp)
     detail::introSortRange(items, cmp, 0, items.size(), 2 * (log2 + 1));
 }
 
-} // namespace engine::gamedata::dotnet
+}

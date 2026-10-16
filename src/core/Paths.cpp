@@ -21,7 +21,6 @@ QString appName()
 
 QString expand(const QString &path)
 {
-    // %VAR% references, as os.path.expandvars accepts on Windows.
     QString out = path;
     qsizetype start = 0;
     while ((start = out.indexOf(u'%', start)) >= 0) {
@@ -40,7 +39,7 @@ QString expand(const QString &path)
     return QDir::cleanPath(QDir::fromNativeSeparators(out));
 }
 
-} // namespace
+}
 
 PathRoots PathRoots::defaults()
 {
@@ -93,7 +92,6 @@ QString Paths::baseIni(const QString &requested) const
 
 QString Paths::enhancementsDir(const QString &requested) const
 {
-    // Enhancements sit next to the base.ini they were generated from.
     return QFileInfo(baseIni(requested)).path();
 }
 
@@ -147,4 +145,4 @@ QString Paths::gameGlobalIni(const QString &requested) const
         QStringLiteral("data/Localization/%1/global.ini").arg(scLanguageId(language(requested))));
 }
 
-} // namespace core
+}

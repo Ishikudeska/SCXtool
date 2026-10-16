@@ -1,6 +1,3 @@
-// Ports test_ini_merger.py, test_status_classification.py and the category
-// cases from test_core.py / string_model.py, plus load_source_files.
-
 #include "core/merge/Merger.h"
 #include "core/merge/SourceLoader.h"
 #include "core/model/Enhancements.h"
@@ -43,14 +40,13 @@ const StringEntry *findEntry(const QList<StringEntry> &entries, const QString &k
     return nullptr;
 }
 
-} // namespace
+}
 
 class TestMerge : public QObject
 {
     Q_OBJECT
 
 private slots:
-    // --- categories --------------------------------------------------------
 
     void categories_data()
     {
@@ -104,9 +100,6 @@ private slots:
         QVERIFY(isShipNameKey(u"TheCollector_ShipMod_A_VehicleNameShort"));
     }
 
-    // --- sync_key_variants -------------------------------------------------
-
-    // The 7SA pair: the short untagged sibling must not win.
     void shortUntaggedSiblingLoses()
     {
         IniMap m = ini({{"item_Name_SHLD_BEHR_S01_7SA", "[SHLD-S1-B] BEHR Shield"},
@@ -116,7 +109,6 @@ private slots:
         QCOMPARE(v(m, "item_NameSHLD_BEHR_S01_7sa"), QStringLiteral("[SHLD-S1-B] BEHR Shield"));
     }
 
-    // The Taiga pair: the _SCItem variant can be the right one.
     void scitemVariantCanWin()
     {
         IniMap m = ini({{"item_Name_COOL_WCPR_S02_Taiga", "Taiga Cooler"},
@@ -146,7 +138,6 @@ private slots:
         QCOMPARE(v(m, "item_Name_SHLD_BEHR_S01_7SA"), QStringLiteral("A Longer Deliberate Edit"));
     }
 
-    // Python's max() keeps the first of equal-length candidates.
     void tieKeepsFirstInOrder()
     {
         IniMap m = ini({{"item_Name_SHLD_A", "AAAA"}, {"item_NameSHLDa", "BBBB"}});
@@ -154,7 +145,6 @@ private slots:
         QCOMPARE(v(m, "item_NameSHLDa"), QStringLiteral("AAAA"));
     }
 
-    // #255: only item_Name*/item_Desc* keys take part.
     void scopeGuards_data()
     {
         QTest::addColumn<QString>("keyA");
@@ -197,18 +187,14 @@ private slots:
 
     void canonicalKeys()
     {
-        // Expected values computed with the original Python _get_canonical_key.
         QCOMPARE(canonicalItemKey(QStringLiteral("item_Name_QDRV_RSI_S02_Hemera")),
                  QStringLiteral("itemname_qdrvrsis02hemera"));
         QCOMPARE(canonicalItemKey(QStringLiteral("item_nameQDRV_RSI_S02_Hemera_SCItem")),
                  QStringLiteral("itemname_qdrvrsis02hemera"));
-        // "gmisl" is replaced after "misl", which has already split it.
         QCOMPARE(canonicalItemKey(QStringLiteral("item_Name_GMISL_X")), QStringLiteral("itemnameg_mislx"));
         QCOMPARE(canonicalItemKey(QStringLiteral("item_Name_Plain")), QStringLiteral("itemnameplain"));
         QCOMPARE(canonicalItemKey(QStringLiteral("item_NameSHLDa")), QStringLiteral("itemname_shlda"));
     }
-
-    // --- merge_sources_by_hierarchy -------------------------------------------
 
     void laterSourcesWinUserLast()
     {
@@ -222,7 +208,7 @@ private slots:
         QCOMPARE(v(r, "key1"), QStringLiteral("user_val"));
         QCOMPARE(v(r, "key2"), QStringLiteral("val2"));
         QCOMPARE(v(r, "key3"), QStringLiteral("val3"));
-        QCOMPARE(r.entries().first().first, QStringLiteral("key1")); // first source's order leads
+        QCOMPARE(r.entries().first().first, QStringLiteral("key1"));
     }
 
     void userOverrideToShortVariantSurvivesMerge()
@@ -234,8 +220,6 @@ private slots:
         const IniMap r = mergeSourcesByHierarchy(sources, {kSourceGlobal}, &user);
         QCOMPARE(v(r, "item_NameSHLD_BEHR_S01_7sa"), QStringLiteral("My Renamed Shield"));
     }
-
-    // --- status ---------------------------------------------------------------
 
     void status()
     {
@@ -250,8 +234,6 @@ private slots:
         QCOMPARE(statusFromSource(kSourceEnhancements, g, false, true), EntryStatus::New);
         QCOMPARE(statusFromSource(kSourceEnhancements, g, true, false), EntryStatus::New);
     }
-
-    // --- load_source_files ----------------------------------------------------
 
     void buildsEntriesWithStatusAndCategory()
     {
@@ -268,7 +250,7 @@ private slots:
         loaded.enhancementCategories.insert(QStringLiteral("discovered_key"), category::kGear);
 
         const QList<StringEntry> entries = buildEntries(loaded);
-        QVERIFY(!findEntry(entries, QStringLiteral("vehicle_NameANVL_Carrack_short"))); // short names skipped
+        QVERIFY(!findEntry(entries, QStringLiteral("vehicle_NameANVL_Carrack_short")));
 
         const StringEntry *ship = findEntry(entries, QStringLiteral("vehicle_NameANVL_Carrack"));
         QVERIFY(ship);
@@ -313,7 +295,7 @@ private slots:
         SourceFiles files;
         files.baseIni = dir.filePath(QStringLiteral("base.ini"));
         files.enhancementsDir = dir.path();
-        files.enhancementFileIds = {QStringLiteral("component_descs")}; // ships disabled
+        files.enhancementFileIds = {QStringLiteral("component_descs")};
         files.userIni = dir.filePath(QStringLiteral("user.ini"));
 
         const LoadedSources loaded = loadSources(files);

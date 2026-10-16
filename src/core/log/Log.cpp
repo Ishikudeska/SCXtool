@@ -11,7 +11,7 @@ namespace core::log {
 namespace {
 
 QtMessageHandler g_previous = nullptr;
-thread_local bool t_inHandler = false; // a slot that logs must not recurse
+thread_local bool t_inHandler = false;
 
 void handler(QtMsgType type, const QMessageLogContext &context, const QString &message)
 {
@@ -19,17 +19,15 @@ void handler(QtMsgType type, const QMessageLogContext &context, const QString &m
         t_inHandler = true;
         LogHub::instance().record(type, QString::fromUtf8(context.category ? context.category : "default"),
                                   message);
-        // qFatal aborts once the handler returns.
         if (type == QtFatalMsg)
             crash::reportFatal(QStringLiteral("Fatal error: ") + message);
         t_inHandler = false;
     }
-    // Console output stays for development runs.
     if (g_previous)
         g_previous(type, context, message);
 }
 
-} // namespace
+}
 
 QString levelName(QtMsgType type)
 {
@@ -50,14 +48,13 @@ QString levelName(QtMsgType type)
 
 QString formatLine(const QDateTime &time, QtMsgType type, const QString &category, const QString &message)
 {
-    // Python logging's asctime: "2026-10-01 12:00:00,123".
     return QStringLiteral("%1 - %2 - %3 - %4")
         .arg(time.toString(QStringLiteral("yyyy-MM-dd HH:mm:ss,zzz")), category, levelName(type), message);
 }
 
 LogHub &LogHub::instance()
 {
-    static LogHub *hub = new LogHub; // never destroyed: logging runs until exit
+    static LogHub *hub = new LogHub;
     return *hub;
 }
 
@@ -119,10 +116,10 @@ void LogHub::record(QtMsgType type, const QString &category, const QString &mess
         if (file_) {
             file_->write(line.toUtf8());
             file_->write("\n");
-            file_->flush(); // the file is what survives a hard crash
+            file_->flush();
         }
     }
     emit lineLogged(line, int(type));
 }
 
-} // namespace core::log
+}

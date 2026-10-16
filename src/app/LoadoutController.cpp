@@ -31,7 +31,6 @@ QString text(const char *key, const QVariantHash &args = {})
     return core::i18n::tr(key, args);
 }
 
-// 1234.5 -> "1,235"; with decimals, trailing zeros go: "4.6", "11".
 QString num(double v, int decimals = 0)
 {
     if (!std::isfinite(v))
@@ -69,7 +68,6 @@ QString percent(double fraction)
     return num(fraction * 100) + u'%';
 }
 
-// 1.1 -> "+10%", 0.9 -> "-10%".
 QString signedPercent(double multiplier)
 {
     const double p = (multiplier - 1) * 100;
@@ -84,7 +82,6 @@ QString sizeText(const Port &p)
                                                     : QStringLiteral("S%1–%2").arg(p.minSize).arg(p.maxSize);
 }
 
-// "hardpoint_weapon_class2_nose" -> "Weapon Class2 Nose".
 QString portLabel(const Port &p)
 {
     if (!p.label.isEmpty())
@@ -116,7 +113,6 @@ QVariantMap statRow(const char *labelKey, const QString &value)
     return {{QStringLiteral("label"), text(labelKey)}, {QStringLiteral("value"), value}};
 }
 
-// The page section an item type shows in; "" for the ones it doesn't.
 QString sectionOfType(const QString &t)
 {
     if (t == u"WeaponGun" || t == u"Turret" || t == u"TurretBase" || t == u"WeaponMount")
@@ -153,7 +149,6 @@ QString sectionOf(const Slot &s)
     if (!s.item)
         return s.port.types.empty() ? QString() : sectionOfType(s.port.types.front().type);
     const QString own = sectionOfType(s.item->type);
-    // A turret is armament when it holds guns, utility when it holds tools.
     if (own == u"armament" && s.item->type != u"WeaponGun") {
         QString held;
         const auto look = [&](const auto &self, const std::vector<Slot> &list) -> void {
@@ -185,13 +180,13 @@ QString categoryLabel(const QString &category)
     return text(key.constData());
 }
 
-} // namespace
+}
 
 LoadoutController::LoadoutController(QObject *parent) : QObject(parent)
 {
     connect(&app(), &AppController::pathsChanged, this, &LoadoutController::sourcesChanged);
     connect(&app(), &AppController::pathsChanged, this, [this] {
-        loadSaved(); // the user data folder may have moved
+        loadSaved();
         emit savedChanged();
     });
     connect(&app(), &AppController::languageChanged, this, &LoadoutController::sourcesChanged);
@@ -283,7 +278,7 @@ void LoadoutController::build()
         },
         [this](std::shared_ptr<const Catalog> catalog) {
             building_ = false;
-            if (!catalog) { // cancelled, or the build threw
+            if (!catalog) {
                 builtKey_.clear();
                 setStatus(catalog_ ? QStringLiteral("ready") : QStringLiteral("idle"));
                 return;
@@ -309,7 +304,7 @@ void LoadoutController::build()
             selectShip(pick);
             setStatus(QStringLiteral("ready"));
             emit savedChanged();
-            sourcesChanged(); // changed while building
+            sourcesChanged();
         });
 }
 
@@ -342,7 +337,7 @@ void LoadoutController::setNav(bool nav)
     if (plan_.nav == nav)
         return;
     plan_.nav = nav;
-    plan_.pips.clear(); // the modes split power differently
+    plan_.pips.clear();
     refresh();
 }
 
@@ -382,7 +377,6 @@ void LoadoutController::refresh()
         emit loadoutChanged();
         return;
     }
-    // Pips for consumers the loadout no longer has go.
     const std::vector<Consumer> consumers = core::loadout::consumers(loadout_, plan_);
     for (auto it = plan_.pips.begin(); it != plan_.pips.end();) {
         const bool present = std::any_of(consumers.begin(), consumers.end(),
@@ -420,7 +414,6 @@ void LoadoutController::refresh()
         {QStringLiteral("otherHp"), num(t.hullHp - t.vitalHp)},
     };
 
-    // Sections of cards, in page order.
     QHash<QString, QVariantList> cards;
     for (const Slot &s : loadout_.roots()) {
         const QString section = sectionOf(s);
@@ -448,7 +441,6 @@ void LoadoutController::refresh()
             {QStringLiteral("max"), c.max},
             {QStringLiteral("pips"), c.pips}};
 
-    // Damage.
     QVariantList groups;
     const std::pair<const char *, const Totals::Group *> named[] = {{"loadout.group_pilot", &t.pilot},
                                                                     {"loadout.group_manned", &t.manned},
@@ -476,7 +468,6 @@ void LoadoutController::refresh()
         {QStringLiteral("distortion"), num(t.burstByType.distortion)},
     };
 
-    // Defense.
     const auto three = [](const Damage &d, auto fmt) {
         return QVariantMap{{QStringLiteral("physical"), fmt(d.physical)},
                            {QStringLiteral("energy"), fmt(d.energy)},
@@ -562,8 +553,6 @@ void LoadoutController::refresh()
 
 QVariantMap LoadoutController::card(const Slot &slot) const
 {
-    // The slot, then what its item holds (a gimbal's gun, a rack's missiles,
-    // a turret's guns), flattened with their depth.
     QVariantList rows;
     const auto add = [&](const auto &self, const Slot &s, int depth) -> void {
         rows << QVariantMap{{QStringLiteral("path"), s.path},
@@ -697,8 +686,6 @@ QVariantMap LoadoutController::engage(const QString &targetShipId) const
             {QStringLiteral("killTime"), seconds(e.killTime)},
             {QStringLiteral("deflected"), e.deflected}};
 }
-
-// ── saved loadouts ──────────────────────────────────────────────────────────
 
 QString LoadoutController::savedFile() const
 {

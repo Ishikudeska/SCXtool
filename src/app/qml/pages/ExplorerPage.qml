@@ -6,12 +6,9 @@ import QtQuick.Layouts
 import QtQml.Models
 import ScApp
 
-// The P4K Explorer: browse, search, preview and extract a Data.p4k, browse
-// its DataForge records as XML, and export game data.
 Item {
     id: page
 
-    // True while this page is showing; the archive opens on the first visit.
     property bool active: false
     property bool triedOpen: false
     onActiveChanged: {
@@ -21,8 +18,6 @@ Item {
         }
     }
 
-    // An archive path to show once the archive is open (--explorer); a path
-    // inside "<dcb> (records)" loads the DataForge records first.
     property string revealPath: ""
 
     ExplorerController {
@@ -52,8 +47,7 @@ Item {
     }
     function reveal(node) {
         const idx = ex.tree.indexOfNode(node)
-        // The linter has no members for QModelIndex; valid exists at run time.
-        if (!idx.valid) // qmllint disable missing-property
+        if (ex.tree.nodeAt(idx) < 0)
             return
         tree.expandToIndex(idx)
         tree.forceLayout()
@@ -73,7 +67,6 @@ Item {
         anchors.margins: Theme.spacing
         spacing: 8
 
-        // ── archive ──
         RowLayout {
             Layout.fillWidth: true
             spacing: 8
@@ -124,7 +117,6 @@ Item {
             Layout.fillHeight: true
             orientation: Qt.Horizontal
 
-            // ── tree / search ──
             ColumnLayout {
                 SplitView.preferredWidth: page.width * 0.5
                 SplitView.minimumWidth: 320
@@ -156,7 +148,6 @@ Item {
                     radius: Theme.radius
                     clip: true
 
-                    // The archive tree.
                     ColumnLayout {
                         anchors.fill: parent
                         anchors.margins: 1
@@ -243,7 +234,6 @@ Item {
                         }
                     }
 
-                    // Search results.
                     ColumnLayout {
                         anchors.fill: parent
                         anchors.margins: 6
@@ -328,7 +318,6 @@ Item {
                 }
             }
 
-            // ── preview ──
             ColumnLayout {
                 SplitView.fillWidth: true
                 SplitView.minimumWidth: 300
@@ -425,7 +414,6 @@ Item {
         onAccepted: ex.openUrl(selectedFile)
     }
 
-    // ── extract options ──
     Popup {
         id: extractPopup
         property var nodes: []
@@ -475,7 +463,6 @@ Item {
         onAccepted: outputField.text = App.urlToPath(selectedFolder)
     }
 
-    // ── game data export ──
     Popup {
         id: gameDataPopup
         modal: true

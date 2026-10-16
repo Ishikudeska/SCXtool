@@ -15,8 +15,6 @@ namespace {
 using NodeId = xml::XmlTree::NodeId;
 constexpr NodeId kNone = xml::XmlTree::kNone;
 
-// A .NET exception in flight. unforge catches these at three levels and
-// writes either ToString() (type, message, stack) or just the message.
 struct DotNetException
 {
     std::string type;
@@ -34,11 +32,6 @@ struct DotNetException
     }
 };
 
-// The stack .NET reports for a bad index inside ReadArrayValueAsXml. It is
-// the only exception the LIVE data raises (a null pointer inside an array),
-// so this text is what lands in the cache. In 69 of ~27k cases the JIT had
-// not yet inlined ReadDataMappingAtIndex and an extra frame appears; that is
-// nondeterministic, so the single-frame form is the one reproduced.
 constexpr const char *kArrayFrame = "   at unforge.DataForgeStructDefinition.ReadArrayValueAsXml(XmlNode "
                                     "parentNode, DataForgePropertyDefinition "
                                     "propertyDefinition, UInt32 firstIndex, UInt16 offset)";
@@ -85,7 +78,6 @@ bool isNullGuid(const std::uint8_t *g)
     return true;
 }
 
-// "{StructName}[{variant:X4}]", what unforge writes for weak pointers.
 std::string pointerText(const std::string &structName, std::uint16_t variant)
 {
     char hex[8];
@@ -103,7 +95,7 @@ template <class F> struct ScopeExit
 };
 template <class F> ScopeExit(F) -> ScopeExit<F>;
 
-} // namespace
+}
 
 RecordBuilder::RecordBuilder(const DataForge &forge, BuildOptions options) : forge_(forge), options_(options)
 {}
@@ -117,8 +109,6 @@ NodeId RecordBuilder::build(std::uint32_t index, xml::XmlTree &tree)
     recordStack_.clear();
     return readRecordAtIndex(index);
 }
-
-// --- Primitive reads -------------------------------------------------------
 
 const std::uint8_t *RecordBuilder::take(std::size_t n)
 {
@@ -143,7 +133,6 @@ std::string_view RecordBuilder::textAt(std::uint32_t offset) const
 {
     const auto text = forge_.text(offset);
     if (!text) {
-        // ReadTextAtOffset's own message; its stack can't be reproduced.
         throwIndexOutOfRange(
             "   at unforge.DataForge.ReadTextAtOffset(Int64 offset)",
             "Offset " + std::to_string(offset) +
@@ -151,8 +140,6 @@ std::string_view RecordBuilder::textAt(std::uint32_t offset) const
     }
     return *text;
 }
-
-// --- Node creation (XmlDocument validates names) ---------------------------
 
 NodeId RecordBuilder::newPropertyElement(std::uint32_t property)
 {
@@ -177,17 +164,12 @@ NodeId RecordBuilder::newLatin1Element(std::string_view latin1)
     return tree_->createElement(scratch_);
 }
 
-// Extensions.CreateElementWithValue: adds value="..." and returns null when
-// the value is empty.
 NodeId RecordBuilder::withValue(NodeId element, std::string_view value)
 {
     tree_->appendAttribute(element, "value", value);
     return value.empty() ? kNone : element;
 }
 
-// Extensions.CreateAttributeWithValue, appended straight to its parent: the
-// .NET code appends each attribute as soon as it is produced, so this is the
-// same order.
 RecordBuilder::Child RecordBuilder::appendPropertyAttribute(NodeId target, std::uint32_t property,
                                                             std::string_view value)
 {
@@ -199,9 +181,6 @@ RecordBuilder::Child RecordBuilder::appendPropertyAttribute(NodeId target, std::
     return {ChildKind::Attribute};
 }
 
-// --- Records --------------------------------------------------------------
-
-// DataForge.ReadRecordAtIndexAsXml
 NodeId RecordBuilder::readRecordAtIndex(std::uint32_t index)
 {
     const std::uint64_t saved = pos_;
@@ -221,7 +200,6 @@ NodeId RecordBuilder::readRecordAtIndex(std::uint32_t index)
     return result;
 }
 
-// DataForgeRecordDefinition.ReadAsXml
 NodeId RecordBuilder::recordAsXml(std::uint32_t index)
 {
     const RecordDef &record = forge_.records()[index];
@@ -255,9 +233,6 @@ NodeId RecordBuilder::readRecordByReference(const std::uint8_t *guid)
     return readRecordAtIndex(*index);
 }
 
-// --- Structs --------------------------------------------------------------
-
-// DataForge.ReadStructAtIndexAsXml
 NodeId RecordBuilder::readStructAtIndex(NodeId node, std::uint32_t structIndex, std::uint32_t variant)
 {
     const std::uint64_t saved = pos_;
@@ -290,7 +265,6 @@ NodeId RecordBuilder::readStructAtIndex(NodeId node, std::uint32_t structIndex, 
     return readStructAs(node, structIndex);
 }
 
-// DataForge.ReadStructAsXml
 NodeId RecordBuilder::readStructAs(NodeId node, std::uint32_t structIndex)
 {
     int count = 0;
@@ -304,8 +278,6 @@ NodeId RecordBuilder::readStructAs(NodeId node, std::uint32_t structIndex)
     return tree_->hasContent(node) ? node : kNone;
 }
 
-// DataForgeStructDefinition.ReadAsXml, a lazy generator in C#: `consume`
-// sees each child as it is produced and can stop the walk.
 template <class Consume>
 void RecordBuilder::structChildren(NodeId target, std::uint32_t structIndex, Consume &&consume)
 {
@@ -318,7 +290,7 @@ void RecordBuilder::structChildren(NodeId target, std::uint32_t structIndex, Con
             const NodeId array = newPropertyElement(property);
             readArray(array, property);
             if (!tree_->hasContent(array))
-                continue; // skips the node count, as the C# `continue` does
+                continue;
             child = {ChildKind::Element, array};
         }
         if (!consume(child))
@@ -328,9 +300,6 @@ void RecordBuilder::structChildren(NodeId target, std::uint32_t structIndex, Con
     }
 }
 
-// --- Values ---------------------------------------------------------------
-
-// DataForgeStructDefinition.ReadValueAsXml
 RecordBuilder::Child RecordBuilder::readValue(NodeId target, std::uint32_t property)
 {
     const PropertyDef &prop = forge_.properties()[property];
@@ -414,7 +383,7 @@ RecordBuilder::Child RecordBuilder::readValue(NodeId target, std::uint32_t prope
         scratch_.clear();
         switch (static_cast<DataType>(prop.dataType)) {
         case DataType::Boolean:
-            scratch_ = std::to_string(*take(1)); // the raw byte, not normalized
+            scratch_ = std::to_string(*take(1));
             break;
         case DataType::Single: {
             float v;
@@ -467,15 +436,11 @@ RecordBuilder::Child RecordBuilder::readValue(NodeId target, std::uint32_t prope
     }
 }
 
-// --- Arrays ---------------------------------------------------------------
-
-// DataForgeStructDefinition.ReadArrayAsXml (and the append loop around it)
 void RecordBuilder::readArray(NodeId array, std::uint32_t property)
 {
     const std::uint8_t *header = take(8);
     const std::uint32_t count = u32(header);
     const std::uint32_t first = u32(header + 4);
-    // The C# loop counter is a UInt16, so the offset passed on wraps like it would.
     for (std::uint32_t i = 0; i < count; ++i) {
         const NodeId child = readArrayValue(property, first, static_cast<std::uint16_t>(i));
         if (child != kNone)
@@ -485,11 +450,10 @@ void RecordBuilder::readArray(NodeId array, std::uint32_t property)
     }
 }
 
-// DataForgeStructDefinition.ReadArrayValueAsXml
 NodeId RecordBuilder::readArrayValue(std::uint32_t property, std::uint32_t first, std::uint16_t offset)
 {
     const PropertyDef &prop = forge_.properties()[property];
-    const std::uint32_t index = first + offset; // UInt32 arithmetic, as in C#
+    const std::uint32_t index = first + offset;
     try {
         auto simple = [this](const char *name, std::string_view value) {
             return withValue(tree_->createElement(name), value);
@@ -557,8 +521,6 @@ NodeId RecordBuilder::readArrayValue(std::uint32_t property, std::uint32_t first
             const std::uint16_t variant = u16(ptr + 4);
             if (!options_.nullArrayErrors && structIndex == 0xFFFFFFFFu)
                 return kNone;
-            // DataMapping.Name: the name of the mapping's struct. A null
-            // pointer (0xFFFFFFFF) fails right here in unforge.
             if (structIndex >= forge_.mappings().size() ||
                 forge_.mappings()[structIndex].structIndex >= forge_.structs().size())
                 throwIndexOutOfRange(kArrayFrame);
@@ -594,4 +556,4 @@ bool writeRecordXml(RecordBuilder &builder, xml::XmlTree &tree, std::uint32_t in
     return true;
 }
 
-} // namespace engine::forge
+}

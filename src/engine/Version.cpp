@@ -8,7 +8,7 @@ namespace engine {
 
 LibraryVersions libraryVersions()
 {
-    const int pugi = PUGIXML_VERSION; // e.g. 1150 for 1.15
+    const int pugi = PUGIXML_VERSION;
     return LibraryVersions{
         .zstd = ZSTD_versionString(),
         .zlib = zlibVersion(),
@@ -16,4 +16,4 @@ LibraryVersions libraryVersions()
     };
 }
 
-} // namespace engine
+}

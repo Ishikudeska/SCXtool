@@ -7,7 +7,6 @@ namespace core {
 
 namespace {
 
-// Windows-1252 0x80..0x9F. 0x81, 0x8D, 0x8F, 0x90 and 0x9D are undefined.
 constexpr char16_t kCp1252High[32] = {
     0x20AC, 0xFFFD, 0x201A, 0x0192, 0x201E, 0x2026, 0x2020, 0x2021, 0x02C6, 0x2030, 0x0160,
     0x2039, 0x0152, 0xFFFD, 0x017D, 0xFFFD, 0xFFFD, 0x2018, 0x2019, 0x201C, 0x201D, 0x2022,
@@ -21,7 +20,7 @@ QByteArrayView withoutBom(const QByteArray &bytes)
     return QByteArrayView(bytes);
 }
 
-} // namespace
+}
 
 QString decodeWindows1252(QByteArrayView bytes)
 {
@@ -67,4 +66,4 @@ std::optional<IniText> readIniText(const QString &path)
     return decodeIniText(file.readAll());
 }
 
-} // namespace core
+}

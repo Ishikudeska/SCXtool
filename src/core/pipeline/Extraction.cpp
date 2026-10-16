@@ -39,8 +39,6 @@ std::optional<std::size_t> findEntry(const engine::p4k::Archive &archive,
     return std::nullopt;
 }
 
-// Renames a folder, retrying for a few seconds: a virus scanner or the
-// search indexer briefly holds files that were just written.
 bool renameDir(const QString &from, const QString &to)
 {
     for (int attempt = 0; attempt < 30; ++attempt) {
@@ -65,7 +63,7 @@ bool iendsWith(std::string_view s, std::string_view suffix)
     return true;
 }
 
-} // namespace
+}
 
 const QStringList &dataForgeKeepSubpaths()
 {
@@ -84,15 +82,11 @@ const QStringList &dataForgeKeepSubpaths()
         QStringLiteral("ammoparams/fps"),
         QStringLiteral("reputation/rewards/missionrewards_reputation"),
         QStringLiteral("reputation/standings"),
-        // The mission catalog: the places missions send you, contractor,
-        // type, faction and reputation track names.
         QStringLiteral("missiondata/pu_locations"),
         QStringLiteral("missiondata/pu_organizations"),
         QStringLiteral("missiontype"),
         QStringLiteral("factions/factionreputation"),
         QStringLiteral("reputation/scopes"),
-        // The ship loadouts: ground vehicles beside the spaceships, and the
-        // manufacturers ships and items name.
         QStringLiteral("entities/groundvehicles"),
         QStringLiteral("scitemmanufacturer"),
     };
@@ -254,7 +248,6 @@ engine::Result<DataForgeExtraction> extractDataForge(const engine::p4k::Archive 
             progress(step, done, total);
     };
 
-    // The database is Data/Game2.dcb today (Game.dcb in older builds).
     const auto dcb = findEntry(archive, [](std::string_view name) { return iendsWith(name, ".dcb"); });
     if (!dcb)
         return fail(Errc::NotFound, "no DataForge database (.dcb) in " + archive.path().string());
@@ -311,7 +304,6 @@ engine::Result<DataForgeExtraction> extractDataForge(const engine::p4k::Archive 
         return std::unexpected(vehicles.error());
     }
 
-    // Swap the new tree in; the old one is kept until the swap succeeds.
     report(QStringLiteral("Replacing the DataForge cache"), 0, 1);
     SC_TRY(engine::io::removeAll(fsPath(previous)));
     if (QFileInfo::exists(raw) && !renameDir(raw, previous)) {
@@ -348,7 +340,6 @@ bool dataForgeCacheIsFresh(const QString &p4kPath, const QString &cacheDir)
     const auto stamped = P4kStamp::read(QDir(cacheDir).filePath(kP4kStampName));
     if (!current || !stamped || current->size != stamped->size)
         return false;
-    // A stamp without content (an interrupted first run) is not fresh.
     QDirIterator it(dataForgeRecordsDir(cacheDir), {QStringLiteral("*.xml")}, QDir::Files,
                     QDirIterator::Subdirectories);
     return it.hasNext();
@@ -390,4 +381,4 @@ engine::Result<QStringList> exportGameData(const engine::p4k::Archive &archive, 
     return lines;
 }
 
-} // namespace core
+}

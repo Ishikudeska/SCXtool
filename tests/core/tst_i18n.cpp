@@ -1,6 +1,3 @@
-// UI text lookup. Ports test_i18n.py and test_available_languages.py, and
-// loads every shipped ui.json.
-
 #include "core/i18n/Translator.h"
 
 #include <QCoreApplication>
@@ -45,7 +42,7 @@ QString shipped()
     return QStringLiteral(SC_SOURCE_DIR "/resources/languages");
 }
 
-} // namespace
+}
 
 class TestI18n : public QObject
 {
@@ -58,7 +55,7 @@ private slots:
         QCOMPARE(en.lookup(s("toolbar.apply_btn")), s("Apply to Game"));
         QVERIFY(en.lookup(s("toolbar.nope")).isNull());
         QVERIFY(en.lookup(s("toolbar.apply_btn.deeper")).isNull());
-        QVERIFY(en.lookup(s("toolbar")).isNull()); // a section is not text
+        QVERIFY(en.lookup(s("toolbar")).isNull());
     }
 
     void overlayFallsBackToEnglish()
@@ -142,7 +139,6 @@ private slots:
         QCOMPARE(core::i18n::tr("status.ready", {{s("key"), s("some_loc_key")}}), s("Ready"));
         QCOMPARE(core::i18n::tr("dialogs.export_complete", {{s("path"), s("C:/out.zip")}, {s("size"), 42}}),
                  s("Exported to C:/out.zip (42 bytes)"));
-        // Qt's own English source strings pass through.
         QCOMPARE(QCoreApplication::translate("QPlatformTheme", "Cancel"), s("Cancel"));
         translator.setCatalog(nullptr);
         QCOMPARE(core::i18n::tr("toolbar.apply_btn"), s("toolbar.apply_btn"));
@@ -165,7 +161,6 @@ private slots:
         QCOMPARE(availableLanguages(stub.filePath(s("missing"))), QStringList{s("english")});
     }
 
-    // Every shipped language parses and resolves.
     void shippedLanguages()
     {
         const QStringList langs = availableLanguages(shipped());

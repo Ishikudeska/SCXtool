@@ -1,9 +1,5 @@
-# Third-party libraries, built from source with the same toolchain as the app.
-# Pinned by URL + SHA-256 so builds are reproducible.
-
 include(FetchContent)
 
-# --- zstd (P4K entries are ZSTD frames) -------------------------------------
 set(ZSTD_BUILD_PROGRAMS       OFF CACHE BOOL "" FORCE)
 set(ZSTD_BUILD_TESTS          OFF CACHE BOOL "" FORCE)
 set(ZSTD_BUILD_CONTRIB        OFF CACHE BOOL "" FORCE)
@@ -18,7 +14,6 @@ FetchContent_Declare(zstd
     EXCLUDE_FROM_ALL
 )
 
-# --- zlib (raw DEFLATE entries; zip writer) ---------------------------------
 set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(SKIP_INSTALL_ALL    ON  CACHE BOOL "" FORCE)
 FetchContent_Declare(zlib
@@ -27,7 +22,6 @@ FetchContent_Declare(zlib
     EXCLUDE_FROM_ALL
 )
 
-# --- pugixml (XML DOM + XPath for DataForge records) ------------------------
 set(PUGIXML_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(PUGIXML_INSTALL     OFF CACHE BOOL "" FORCE)
 FetchContent_Declare(pugixml
@@ -38,14 +32,11 @@ FetchContent_Declare(pugixml
 
 FetchContent_MakeAvailable(zstd zlib pugixml)
 
-# zlib's CMakeLists does not attach include directories to its targets, and
-# zconf.h is generated into the binary dir.
 target_include_directories(zlibstatic INTERFACE
     $<BUILD_INTERFACE:${zlib_SOURCE_DIR}>
     $<BUILD_INTERFACE:${zlib_BINARY_DIR}>
 )
 
-# Third-party code is not ours to warn about.
 foreach(_dep libzstd_static zlibstatic pugixml-static)
     if(TARGET ${_dep})
         set_target_properties(${_dep} PROPERTIES AUTOMOC OFF AUTOUIC OFF AUTORCC OFF)

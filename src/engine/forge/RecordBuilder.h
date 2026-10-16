@@ -12,28 +12,17 @@ namespace engine::forge {
 
 struct BuildOptions
 {
-    int maxPointerDepth = 100; // unforge's MaxPointerDepth
-    int maxReferenceDepth = 1; // unforge's MaxReferenceDepth: references stay GUID strings
-    int maxNodes = 10000;      // children per struct and elements per array
-    // The unforge build Smart Citizen bundles throws on null pointers inside
-    // arrays and writes the .NET exception text as an element. On (default)
-    // reproduces that, so the cache matches it byte for byte. Off skips null
-    // entries, as upstream unp4k does since.
+    int maxPointerDepth = 100;
+    int maxReferenceDepth = 1;
+    int maxNodes = 10000;
     bool nullArrayErrors = true;
 };
 
-// Turns one DataForge record into an XML tree the way unforge's
-// ReadRecordByPathAsXml does: property order, pruning of empty nodes, pointer
-// and reference handling, depth limits and error text. Not thread-safe; use
-// one builder per thread over a shared DataForge.
 class RecordBuilder
 {
 public:
     explicit RecordBuilder(const DataForge &forge, BuildOptions options = {});
 
-    // Builds record `index` into `tree` (cleared first). Returns the root
-    // element, or XmlTree::kNone when the record renders empty and unforge
-    // would skip it.
     xml::XmlTree::NodeId build(std::uint32_t index, xml::XmlTree &tree);
 
 private:
@@ -84,7 +73,6 @@ private:
     std::string scratch_;
 };
 
-// The bytes unforge writes for record `index`, or false if it skips it.
 bool writeRecordXml(RecordBuilder &builder, xml::XmlTree &tree, std::uint32_t index, std::string &out);
 
-} // namespace engine::forge
+}

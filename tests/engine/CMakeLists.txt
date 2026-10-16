@@ -22,7 +22,6 @@ sc_add_test(tst_engine_xml
     LABELS unit engine
 )
 
-# These build their own fixtures, so they compress with zstd/zlib directly.
 sc_add_test(tst_engine_p4k
     SOURCES tst_p4k.cpp P4kBuilder.h
     LIBS scengine libzstd_static zlibstatic

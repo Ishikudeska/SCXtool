@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Controls.Basic
 import ScApp
 
-// A check box drawn in the theme's colours, with an optional tooltip.
 CheckBox {
     id: control
 

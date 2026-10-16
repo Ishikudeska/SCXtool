@@ -65,7 +65,7 @@ bool TutorialController::shouldAutoStart() const
 
 void TutorialController::start()
 {
-    load(); // re-read, so a language switch shows in a replay
+    load();
     if (steps_.isEmpty()) {
         emit finished(false);
         return;

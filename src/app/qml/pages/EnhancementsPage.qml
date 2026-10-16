@@ -4,14 +4,11 @@ import QtQuick.Controls.Basic
 import QtQuick.Layouts
 import ScApp
 
-// The Enhancements page: categories and generation, generator options,
-// mission header labels and the Tag Builder.
 Item {
     id: page
 
     EnhancementsController { id: enh }
 
-    // A combo over [{key, label}] bound to one Tag Builder option.
     component OptionCombo: ComboBox {
         id: combo
         property string category
@@ -40,7 +37,6 @@ Item {
             Label { text: qsTr("enhancements.title"); color: Theme.title; font.pixelSize: 20; font.bold: true }
             Label { text: qsTr("enhancements.desc"); color: Theme.dim; wrapMode: Text.WordWrap; Layout.fillWidth: true }
 
-            // ── categories ──
             Section {
                 Layout.fillWidth: true
                 title: qsTr("enhancements.enhancements_group")
@@ -118,7 +114,6 @@ Item {
                 }
             }
 
-            // ── mission labels ──
             Section {
                 Layout.fillWidth: true
                 objectName: "missionLabels"
@@ -178,7 +173,6 @@ Item {
                 }
             }
 
-            // ── Tag Builder ──
             Section {
                 id: tagSection
                 Layout.fillWidth: true
@@ -204,7 +198,6 @@ Item {
                 }
                 readonly property string category: enh.tagCategories()[tagTabs.currentIndex].id
 
-                // Element tags (components, missiles, ship weapons, commodities).
                 ColumnLayout {
                     visible: tagSection.category !== "mission_titles"
                     Layout.fillWidth: true
@@ -259,7 +252,6 @@ Item {
                     }
                 }
 
-                // Mission titles.
                 ColumnLayout {
                     visible: tagSection.category === "mission_titles"
                     Layout.fillWidth: true
@@ -365,7 +357,6 @@ Item {
         }
     }
 
-    // Short / Medium / Long texts for one mapped element kind.
     Popup {
         id: mappingEditor
         property string category

@@ -19,13 +19,11 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
     core::applyIdentity();
-    // Matches the installed .desktop file, so Wayland shells pair the window with it.
     QGuiApplication::setDesktopFileName(QString::fromLatin1(core::identity::kExeName));
     QQuickStyle::setStyle(QStringLiteral("Basic"));
 
     const QStringList args = QCoreApplication::arguments();
     const bool smokeTest = args.contains(QStringLiteral("--smoke-test"));
-    // --screenshot <file.png> [page]: render the window and exit (docs, checks).
     QString screenshot, screenshotPage;
     if (const qsizetype i = args.indexOf(QStringLiteral("--screenshot")); i >= 0 && i + 1 < args.size()) {
         screenshot = args[i + 1];
@@ -33,8 +31,6 @@ int main(int argc, char *argv[])
             screenshotPage = args[i + 2];
     }
 
-    // Before anything reads settings. Not under the smoke test, which runs
-    // against the real folders.
     QStringList migrated;
     if (!smokeTest && !qEnvironmentVariableIsSet("SCX_SETTINGS_FILE"))
         migrated = core::migrateLegacyData(core::legacyDataLocations());
@@ -53,18 +49,15 @@ int main(int argc, char *argv[])
     QObject::connect(
         &engine, &QQmlApplicationEngine::objectCreationFailed, &app,
         [] { QCoreApplication::exit(EXIT_FAILURE); }, Qt::QueuedConnection);
-    // --load: read the cached strings without the startup prompts (with --screenshot).
     const bool loadOnly = args.contains(QStringLiteral("--load"));
     if (loadOnly)
         QTimer::singleShot(0, &controller, &AppController::reload);
-    // --explorer <archive path>: open the P4K Explorer at that file or folder.
     QString explorerPath;
     if (const qsizetype i = args.indexOf(QStringLiteral("--explorer")); i >= 0 && i + 1 < args.size()) {
         explorerPath = args[i + 1];
         if (screenshotPage.isEmpty())
             screenshotPage = QStringLiteral("explorer");
     }
-    // --tour [n]: start the guided tour, n steps in (with --screenshot).
     int tourStep = -1;
     if (const qsizetype i = args.indexOf(QStringLiteral("--tour")); i >= 0) {
         bool ok = false;
@@ -90,7 +83,6 @@ int main(int argc, char *argv[])
             if (wh.size() == 2 && window)
                 window->resize(wh[0].toInt(), wh[1].toInt());
         }
-        // Shoot once no job has run for a second (at most two minutes in).
         auto *poll = new QTimer(&app);
         auto idleTicks = std::make_shared<int>(0);
         auto elapsed = std::make_shared<int>(0);

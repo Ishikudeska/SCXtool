@@ -1,21 +1,3 @@
-; Inno Setup 6 script for the installed (per-user) build.
-;
-; Built by packaging/package.ps1, which passes:
-;   /DAppVersion=<x.y.z>   APP_VERSION  \
-;   /DAppName=<name>       APP_NAME      } from cmake/AppIdentity.cmake
-;   /DAppExeName=<name>    APP_EXE_NAME /
-;   /DSourceDir=<dir>      the `cmake --install` output (exe + Qt + licenses)
-;   /DOutputDir=<dir>      where the Setup.exe goes
-;
-; Per-user install (no admin): %LOCALAPPDATA%\Programs\<AppName>. The wizard
-; asks for the UI language, Simple or Advanced mode, the Star Citizen folder
-; and the data/cache folders, and writes them to the app's settings file
-; (%APPDATA%\<AppName>\settings.ini). Uninstalling removes the program only;
-; user data, settings and caches stay.
-;
-; The Setup.exe is named <AppExeName>-<version>-Setup.exe: the in-app update
-; check picks the release asset by that pattern.
-
 #ifndef AppVersion
   #define AppVersion "0.0.0"
 #endif
@@ -33,7 +15,6 @@
 #endif
 
 #define AppExe AppExeName + ".exe"
-; Settings live in %APPDATA%\<APP_ORG>; APP_ORG is the app name.
 #define AppOrg AppName
 
 [Setup]
@@ -62,7 +43,6 @@ CloseApplications=yes
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [InstallDelete]
-; A clean program folder on upgrade (user data lives elsewhere).
 Type: filesandordirs; Name: "{app}\*"
 
 [Files]
@@ -77,8 +57,6 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Run]
 Filename: "{app}\{#AppExe}"; Description: "{cm:LaunchProgram,{#AppName}}"; Flags: nowait postinstall skipifsilent
-; In-app update: the app runs the installer with /SILENT /AUTOUPDATE=1 and
-; quits; this relaunches it when the silent install is done.
 Filename: "{app}\{#AppExe}"; Flags: nowait; Check: IsAutoUpdate
 
 [Code]
@@ -106,7 +84,6 @@ begin
   Result := GetIniString('General', Key, Default, SettingsFile());
 end;
 
-{ QSettings reads '\' in INI values as an escape: store forward slashes. }
 function ForSettings(const Path: String): String;
 begin
   Result := RemoveBackslash(Path);
@@ -143,10 +120,6 @@ begin
   end;
 end;
 
-{ OneDrive-synced folders make cache extraction slow and cleanup fail; the
-  app warns too, but catching it here saves a move later. Mirrors
-  core::onedrive::isOneDrivePath: under a OneDrive root from the
-  environment, or any path segment named OneDrive / "OneDrive - Org". }
 function IsOneDriveSegment(const Seg: String): Boolean;
 var
   Low: String;
@@ -236,7 +209,6 @@ end;
 
 function ShouldSkipPage(PageID: Integer): Boolean;
 begin
-  { A silent update keeps every saved choice. }
   Result := IsAutoUpdate() and ((PageID = LanguagePage.ID) or (PageID = ModePage.ID) or
     (PageID = ScDirPage.ID) or (PageID = DataDirPage.ID));
 end;
@@ -280,7 +252,6 @@ begin
     WriteSetting('ui_mode', 'simple');
   if DirExists(ScDirPage.Values[0]) then
     WriteSetting('sc_install_root', ForSettings(ScDirPage.Values[0]));
-  { Defaults are left unset, so the app's own default applies. }
   if CompareText(RemoveBackslash(DataDirPage.Values[0]), DefaultDataDir()) = 0 then
     DeleteSetting('user_data_dir')
   else

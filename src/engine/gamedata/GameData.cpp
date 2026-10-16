@@ -27,8 +27,6 @@ using xml::XmlTree;
 using NodeId = XmlTree::NodeId;
 constexpr NodeId kNone = XmlTree::kNone;
 
-// ── strings ───────────────────────────────────────────────────────────────
-
 std::string utf8(std::string_view latin1)
 {
     std::string out;
@@ -111,8 +109,6 @@ std::string_view trimChar(std::string_view s, char c)
     return s;
 }
 
-// ── navigating a record (System.Xml semantics) ───────────────────────────
-
 struct Record
 {
     XmlTree tree;
@@ -124,8 +120,6 @@ bool isElement(const XmlTree &t, NodeId n, std::string_view name)
     return t.kind(n) == XmlTree::Kind::Element && t.name(n) == name;
 }
 
-// XmlElement.GetElementsByTagName(name): descendants, document order.
-// visit(NodeId) -> bool: false stops.
 template <class Visit> void forDescendants(const XmlTree &t, NodeId n, std::string_view name, Visit &&visit)
 {
     NodeId cur = t.firstChild(n);
@@ -236,15 +230,12 @@ std::optional<double> roundOpt(std::optional<double> v, int decimals)
     return dotnet::round(*v, decimals);
 }
 
-// The Localization child of the item's AttachDef, which names it.
 std::optional<std::string> attachLocKey(const XmlTree &t, NodeId attach)
 {
     if (const NodeId loc = child(t, attach, "Localization"); loc != kNone)
         return attr(t, loc, "Name");
     return std::nullopt;
 }
-
-// ── models (Models.cs) ────────────────────────────────────────────────────
 
 struct Damage
 {
@@ -379,8 +370,6 @@ struct AmmoEntry
 
 using Loc = std::unordered_map<std::string, std::string>;
 
-// ── NameResolver (XmlHelpers.cs) ──────────────────────────────────────────
-
 bool isAllUpperAlpha(std::string_view s)
 {
     return std::all_of(s.begin(), s.end(), [](char c) { return c >= 'A' && c <= 'Z'; });
@@ -470,8 +459,6 @@ std::string resolveName(const std::optional<std::string> &locKey, const Loc &loc
     return fallback;
 }
 
-// ── the passes ────────────────────────────────────────────────────────────
-
 class Extraction
 {
 public:
@@ -481,8 +468,6 @@ public:
             paths_.push_back({source.paths[i], i});
     }
 
-    // Every record whose path starts with `prefix` (ignoring case), in
-    // PathToRecordMap order.
     template <class Visit> void forEach(std::string_view prefix, Visit &&visit)
     {
         Record rec;
@@ -498,7 +483,7 @@ public:
 
     std::unordered_map<std::string, AmmoEntry> ammo()
     {
-        std::unordered_map<std::string, AmmoEntry> result; // keys lower-cased: OrdinalIgnoreCase
+        std::unordered_map<std::string, AmmoEntry> result;
         forEach("libs/foundry/records/ammoparams/vehicle/", [&](std::string_view, const Record &r) {
             const XmlTree &t = r.tree;
             const auto guid = attr(t, r.root, "__ref");
@@ -815,7 +800,6 @@ std::optional<Weapon> Extraction::parseGun(const Record &r,
     std::optional<double> timeToOverheat;
     if (overheat && heatCapacity && *heatCapacity > 0 && heatPerShot && *heatPerShot > 0) {
         const double f = std::floor(*heatCapacity / *heatPerShot);
-        // (Int32) of a double: saturating on .NET 9+, and nothing real gets near it.
         shots = f >= 2147483647.0    ? std::numeric_limits<std::int32_t>::max()
                 : f <= -2147483648.0 ? std::numeric_limits<std::int32_t>::min()
                                      : static_cast<std::int32_t>(f);
@@ -914,8 +898,6 @@ std::optional<Weapon> Extraction::parseMissile(const Record &r)
         w.missileSubtype = attr(t, attach, "SubType");
     return w;
 }
-
-// ── vehicles (VehicleExtractor.cs, PhysicsAggregator.cs) ─────────────────
 
 const std::regex &nonPlayerIdRe()
 {
@@ -1294,8 +1276,6 @@ std::vector<Vehicle> Extraction::vehicles(const Indexes &ix)
     return result;
 }
 
-// ── overlay (OverlayApplier.cs) ───────────────────────────────────────────
-
 std::optional<double> asDouble(const json::Value &v)
 {
     if (v.type == json::Value::Type::Number && std::isfinite(v.number))
@@ -1303,8 +1283,6 @@ std::optional<double> asDouble(const json::Value &v)
     return std::nullopt;
 }
 
-// JsonSerializer.Deserialize<T> of a physics shape: missing members stay 0,
-// a non-number member makes the whole value null.
 template <class T, std::size_t N>
 std::optional<T> deserialize(const json::Value &v,
                              const std::array<std::pair<const char *, double T::*>, N> &members)
@@ -1419,8 +1397,6 @@ int applyOverlay(const std::string &path, std::vector<Vehicle> &vehicles, const 
             " vehicle(s). Extraction couldn't resolve these \xE2\x80\x94 investigate per-ship coverage.");
     return updated;
 }
-
-// ── output ────────────────────────────────────────────────────────────────
 
 void writeDamage(json::Writer &w, const char *name, const Damage &d)
 {
@@ -1605,7 +1581,6 @@ void writeRack(json::Writer &w, const Rack &r)
     w.endObject();
 }
 
-// File.ReadAllLines(path, UTF8) into the key=value map.
 Loc loadLocalization(const std::string &path, const LogSink &log)
 {
     Loc loc;
@@ -1648,7 +1623,7 @@ Loc loadLocalization(const std::string &path, const LogSink &log)
     return loc;
 }
 
-} // namespace
+}
 
 Result<std::string> buildGameDataJson(const forge::DataForge &forge, const Options &options,
                                       const LogSink &log)
@@ -1693,7 +1668,6 @@ Result<std::string> buildGameDataJson(const RecordSource &records, const Options
     std::vector<Weapon> weapons = guns;
     weapons.insert(weapons.end(), missiles.begin(), missiles.end());
 
-    // ToDictionary throws on a duplicate key; the first wins here instead.
     Extraction::Indexes ix;
     for (const Weapon &w : weapons) {
         if (w.guid)
@@ -1728,10 +1702,9 @@ Result<std::string> buildGameDataJson(const RecordSource &records, const Options
     const std::vector<Rack> racks = ex.racks();
     say("Missile racks: " + std::to_string(racks.size()));
 
-    // Reconcile each missile bay's parent against the racks catalog.
     {
         std::unordered_set<std::string> rackIds;
-        std::unordered_map<std::string, std::string> rackByGuid; // lower-cased guid -> first id
+        std::unordered_map<std::string, std::string> rackByGuid;
         for (const Rack &r : racks) {
             rackIds.insert(r.id);
             if (r.guid && !r.guid->empty())
@@ -1772,7 +1745,6 @@ Result<std::string> buildGameDataJson(const RecordSource &records, const Options
         say("Overlay applied: " + std::to_string(overlaid) + " vehicles updated from " + options.overlayPath);
     }
 
-    // LINQ OrderBy/ThenBy: stable, culture-aware names.
     std::stable_sort(weapons.begin(), weapons.end(), [](const Weapon &a, const Weapon &b) {
         if (a.size != b.size)
             return a.size < b.size;
@@ -1816,4 +1788,4 @@ Result<std::string> buildGameDataJson(const RecordSource &records, const Options
     return w.text() + "\r\n";
 }
 
-} // namespace engine::gamedata
+}

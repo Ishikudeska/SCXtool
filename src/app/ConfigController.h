@@ -7,8 +7,6 @@
 
 class AppController;
 
-// The Config page: game install and data folders, user.ini tools (import,
-// reset, restore a snapshot, preview), settings backups and preferences.
 class ConfigController : public QObject
 {
     Q_OBJECT
@@ -45,13 +43,9 @@ public:
     Q_INVOKABLE void resetDataForgeBase();
 
     Q_INVOKABLE void resetUserIni();
-    Q_INVOKABLE void restoreUserIni(); // picks a snapshot through a prompt
+    Q_INVOKABLE void restoreUserIni();
     Q_INVOKABLE void previewApply();
 
-    // Import INI from a file path or URL: new keys are added, conflicts are
-    // published in importConflicts for the QML dialog, which then calls
-    // finishImport with one resolution per conflict
-    // ("keep" / "use" / "append" / "prepend" / "custom:<text>").
     Q_INVOKABLE void importIni(const QString &source);
     Q_INVOKABLE void finishImport(const QVariantList &resolutions);
     Q_INVOKABLE void cancelImport();
@@ -60,14 +54,13 @@ public:
     Q_INVOKABLE void exportSettings(const QUrl &target);
     Q_INVOKABLE void importSettings(const QUrl &source);
 
-    // Per-language base.ini URL overrides (Map Language File).
-    Q_INVOKABLE QVariantList languageSources() const; // [{id, name, url, bundled}]
+    Q_INVOKABLE QVariantList languageSources() const;
     Q_INVOKABLE void setLanguageSource(const QString &language, const QString &url);
 
 signals:
     void changed();
     void importConflictsChanged();
-    void importReady(); // conflicts to resolve: open the dialog
+    void importReady();
 
 private:
     AppController &app() const;

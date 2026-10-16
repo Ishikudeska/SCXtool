@@ -1,7 +1,5 @@
 #pragma once
 
-// Generated from cmake/AppIdentity.cmake. Do not edit.
-
 namespace core::identity {
 
 inline constexpr const char *kAppName = "@APP_NAME@";
@@ -11,6 +9,6 @@ inline constexpr const char *kVersion = "@APP_VERSION@";
 inline constexpr const char *kUserModelId = "@APP_USER_MODEL_ID@";
 inline constexpr bool kPortable = @APP_PORTABLE_BOOL@;
 inline constexpr const char *kExeName = "@APP_EXE_NAME@";
-inline constexpr const char *kUpdateRepo = "@APP_UPDATE_REPO@"; // GitHub owner/repo; empty = no update check
+inline constexpr const char *kUpdateRepo = "@APP_UPDATE_REPO@";
 
-} // namespace core::identity
+}

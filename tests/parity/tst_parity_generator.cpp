@@ -1,19 +1,3 @@
-// Enhancements generator parity against the original Python: the
-// nine *_enhancements.ini files must be byte-equal to what
-// scripts/generate_enhancements_ini.py writes from the same base.ini and
-// DataForge cache, for the app's default options and a customised set.
-//
-//   SCX_SC_CACHE     folder holding base.ini, default
-//                    %USERPROFILE%\Documents\Smart Citizen\LIVE\cache
-//   SCX_FORGE_CACHE  DataForge cache, default
-//                    %LOCALAPPDATA%\Smart Citizen\LIVE\cache\dataforge
-// Needs the reference checkout ("Smart Citizen CPLusPLus/", git-ignored) and
-// a Python with lxml; skips otherwise.
-//
-// Three courier titles take their route modifiers from Python set order, so
-// they change with PYTHONHASHSEED; for those only the modifier-free text has
-// to match.
-
 #include "core/enhancements/Generator.h"
 
 #include <QDir>
@@ -32,7 +16,6 @@ namespace {
 
 const QString kReference = QStringLiteral(SC_SOURCE_DIR "/Smart Citizen CPLusPLus");
 
-// Keys whose Python value depends on the hash seed.
 const QSet<QByteArray> kSeedDependentKeys = {
     "Covalex_courier_dc_small_title_001",
     "UDM_courier_dc_small_title_001",
@@ -45,7 +28,6 @@ QByteArray withoutRouteModifiers(QByteArray line)
     return QString::fromUtf8(line).replace(re, QStringLiteral("~mission(\\1)")).toUtf8();
 }
 
-// The first difference between two INI files, empty when they match.
 QString compareIni(const QString &expectedPath, const QString &actualPath)
 {
     QFile a(expectedPath), b(actualPath);
@@ -74,7 +56,7 @@ QString compareIni(const QString &expectedPath, const QString &actualPath)
     return {};
 }
 
-} // namespace
+}
 
 class TestParityGenerator : public QObject
 {
@@ -109,7 +91,6 @@ private slots:
     {
         QTest::addColumn<QByteArray>("options");
         QTest::newRow("defaults") << QByteArray("{}");
-        // Partial TagConfig dicts: from_dict fills the rest with defaults.
         QTest::newRow("custom") << QByteArray(R"js({
             "tag_configs": {
                 "components": {"elements": [{"kind": "type", "style": "long"}, {"kind": "size", "style": "size_n"},

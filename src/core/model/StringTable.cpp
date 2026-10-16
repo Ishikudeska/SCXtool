@@ -25,7 +25,7 @@ bool isMission(const StringEntry &e)
     return e.category == category::kMissions;
 }
 
-} // namespace
+}
 
 QString sortOrder(const QString &customValue, const QString &favoritePrefix)
 {
@@ -52,9 +52,8 @@ QString withSortOrder(const QString &customValue, const QString &originalValue, 
         bool ok = false;
         const int n = py::strip(normalized).toInt(&ok);
         if (!ok)
-            return customValue; // int() would raise; the editor rejects it
-        normalized =
-            n < 0 ? QString::number(n) : QStringLiteral("%1").arg(n, 2, 10, QLatin1Char('0')); // {:02d}
+            return customValue;
+        normalized = n < 0 ? QString::number(n) : QStringLiteral("%1").arg(n, 2, 10, QLatin1Char('0'));
     }
     const QString fav = hasFav ? favoritePrefix : QString();
     const QString result = normalized.isEmpty() ? fav + base : fav + normalized + u'-' + base;
@@ -92,8 +91,6 @@ QList<int> filterEntryIndices(const QList<StringEntry> &entries, const IniMap &d
                               const FilterCriteria &c)
 {
     const QString star = QStringLiteral("★");
-    // Case-insensitive search of the stored text: a refilter runs on the GUI
-    // thread over ~90k rows, too many to lower-case a copy of each value.
     auto columnContains = [&](const StringEntry &e, int column, const QString &needle) {
         const auto has = [&](QStringView text) { return text.contains(needle, Qt::CaseInsensitive); };
         switch (column) {
@@ -175,8 +172,6 @@ std::pair<QString, int> groupSortKey(const QString &key)
     static const QRegularExpression commodity(
         QStringLiteral(R"(\A(items_commodities_\w+?)(?:_(desc?|description))?\z)"),
         QRegularExpression::CaseInsensitiveOption | QRegularExpression::UseUnicodePropertiesOption);
-    // Each pattern needs a literal its guard tests first: a grouped sort runs
-    // this for every row, and most keys match none of them.
     constexpr auto ci = Qt::CaseInsensitive;
     if (key.startsWith(u"item_", ci))
         if (const auto m = item.match(key); m.hasMatch())
@@ -223,9 +218,6 @@ void sortIndices(QList<int> &indices, const QList<StringEntry> &entries, const I
 {
     if (indices.isEmpty())
         return;
-    // (int, text, text, int) covers every key shape the Python builds. Keys
-    // are stored by position and a permutation sorted, so each comparison is
-    // two array reads rather than two hash lookups.
     using Key = std::tuple<int, QString, QString, int>;
     std::vector<Key> keys;
     keys.reserve(static_cast<std::size_t>(indices.size()));
@@ -379,4 +371,4 @@ int restorePendingEdits(QList<StringEntry> &entries, const QHash<QString, QStrin
     return restored;
 }
 
-} // namespace core::table
+}

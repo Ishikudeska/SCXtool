@@ -42,8 +42,6 @@ QString paramValue(Node contract, std::string_view param)
     return p ? qs(lstripAt(getOr(p, "value"))) : QString();
 }
 
-// Manual labels for pools CIG puts behind one shared description (#360),
-// keyed by the pool's exact item set. English only by construction.
 const std::vector<std::pair<QSet<QString>, QString>> &poolLabelOverrides()
 {
     static const std::vector<std::pair<QSet<QString>, QString>> table = {
@@ -71,7 +69,6 @@ QString poolLabelOverride(const QStringList &items, bool allowOverrides)
     for (const auto &[set, label] : poolLabelOverrides())
         if (set == key)
             return label;
-    // A near miss means CIG changed a tracked pool: worth a maintainer's look.
     for (const auto &[set, label] : poolLabelOverrides()) {
         const QSet<QString> overlap = QSet<QString>(key).intersect(set);
         const qsizetype smaller = std::min(key.size(), set.size());
@@ -90,13 +87,13 @@ QString bulletList(const QStringList &items)
     return lines.join(kNl);
 }
 
-} // namespace
+}
 
 QString stripCigSizePrefix(const QString &name)
 {
     static const QRegularExpression re = py::re(QStringLiteral(R"(^S(\d+)\s+)"));
     const QRegularExpressionMatch m = re.match(name);
-    if (m.hasMatch() && m.capturedView(1).toLongLong() <= 20) // larger is part of a name ("S71 Rifle")
+    if (m.hasMatch() && m.capturedView(1).toLongLong() <= 20)
         return name.sliced(m.capturedEnd());
     return name;
 }
@@ -149,8 +146,8 @@ BlueprintPools buildBlueprintPoolLookup(const RecordStore &store, const QHash<QS
     struct Blueprint
     {
         QString entityClass;
-        QString stem;     // lower-cased, bp_ prefix removed
-        QString fallback; // filename-derived name
+        QString stem;
+        QString fallback;
     };
     QHash<QString, Blueprint> byRef;
     for (const auto files = store.rglob(bpDir); const QString &file : files) {
@@ -189,8 +186,6 @@ BlueprintPools buildBlueprintPoolLookup(const RecordStore &store, const QHash<QS
             const auto bp = byRef.constFind(bpRef);
             if (bpRef.isEmpty() || bp == byRef.cend())
                 continue;
-            // The entity's own name by UUID, else by file stem, else the
-            // file name made readable.
             QString name;
             if (const auto it = entityNames.constFind(bp->entityClass); it != entityNames.cend())
                 name = stripCigSizePrefix(*it);
@@ -272,8 +267,6 @@ QStringList buildBlueprintBodyParts(const FingerprintMap &uniqueFps, bool allowO
             {labels.isEmpty() ? sys : sys + QStringLiteral(", ") + labels.join(QStringLiteral(", ")), fp,
              sortedKeys});
     }
-    // By (system/label keys, header, fingerprint): deterministic whatever
-    // order the contracts were scanned in.
     std::sort(entries.begin(), entries.end(), [](const Entry &a, const Entry &b) {
         const bool keysLess = std::lexicographical_compare(
             a.sortedKeys.begin(), a.sortedKeys.end(), b.sortedKeys.begin(), b.sortedKeys.end(),
@@ -292,7 +285,6 @@ QStringList buildBlueprintBodyParts(const FingerprintMap &uniqueFps, bool allowO
         return lessList(a.fp, b.fp);
     });
 
-    // Colliding headers are told apart by their first item, then a number.
     QHash<QString, int> headerCounts;
     for (const Entry &e : entries)
         ++headerCounts[e.header];
@@ -317,11 +309,8 @@ QStringList buildBlueprintBodyParts(const FingerprintMap &uniqueFps, bool allowO
     return parts;
 }
 
-// ── resource signatures ──────────────────────────────────────────────────
-
 namespace {
 
-// Curated per-ore base RS values (not in DataForge).
 const OrderedMap<int> &mineableRsValues()
 {
     static const OrderedMap<int> table = [] {
@@ -342,7 +331,7 @@ const OrderedMap<int> &mineableRsValues()
     return table;
 }
 
-} // namespace
+}
 
 std::vector<int> rsValueSteps(const QString &ore)
 {
@@ -402,8 +391,6 @@ QString formatRsTag(const QStringList &ores)
     return values.isEmpty() ? QString() : QStringLiteral("[RS %1]").arg(values.join(u'/'));
 }
 
-// ── contract generators ─────────────────────────────────────────────────
-
 namespace {
 
 struct TemplateKeys
@@ -445,7 +432,7 @@ QHash<QString, TemplateKeys> buildTemplateLookup(const RecordStore &store)
     return lookup;
 }
 
-} // namespace
+}
 
 QStringList battagliaContractOres(Node contract)
 {
@@ -471,7 +458,6 @@ QStringList battagliaContractOres(Node contract)
 
 namespace {
 
-// Concatenated .//CareerContract and .//Contract matches.
 std::vector<Node> allContracts(Node root)
 {
     std::vector<Node> contracts = findAll(root, ".//CareerContract");
@@ -482,8 +468,8 @@ std::vector<Node> allContracts(Node root)
 
 struct RsTags
 {
-    QHash<QString, QString> titleTags;    // title key -> "[RS ####/...]"
-    QHash<QString, QStringList> descOres; // desc key -> ores
+    QHash<QString, QString> titleTags;
+    QHash<QString, QStringList> descOres;
 };
 
 RsTags buildBattagliaRsTags(const RecordStore &store, const QHash<QString, TemplateKeys> &templates)
@@ -528,7 +514,6 @@ RsTags buildBattagliaRsTags(const RecordStore &store, const QHash<QString, Templ
     return out;
 }
 
-// The region or distinguishing token of a contract debugName.
 QString variantLabelShort(const QString &debugName)
 {
     if (debugName.isEmpty())
@@ -556,7 +541,6 @@ struct ContractVariant
     QString repTrack;
 };
 
-// title -> system -> pool identity -> (label, items).
 struct PoolEntry
 {
     QString label;
@@ -638,8 +622,6 @@ ContractScan scanContractGenerators(const Context &ctx, const BlueprintPools &po
                         handlerFlags << QStringLiteral("Unique");
                     if (!findAll(handler, ".//ContractPrerequisite_CompletedContractTags").empty())
                         handlerFlags << QStringLiteral("Chain");
-                    // Handler-scope spawns only, not the union of every
-                    // child contract's roster (#186).
                     const SpawnBreakdown handlerSpawns = extractSpawnCounts(
                         handler, {QStringLiteral("CareerContract"), QStringLiteral("Contract")});
 
@@ -661,8 +643,6 @@ ContractScan scanContractGenerators(const Context &ctx, const BlueprintPools &po
                                             descKey = it->desc;
                                     }
                             }
-                            // Never augment CIG's sentinel keys: their text
-                            // shows wherever a reference fails to bind.
                             if (isSentinelKey(titleKey))
                                 titleKey.clear();
                             if (isSentinelKey(descKey))
@@ -670,13 +650,10 @@ ContractScan scanContractGenerators(const Context &ctx, const BlueprintPools &po
                             if (titleKey.isEmpty())
                                 continue;
 
-                            // This contract's pools, grouped by rank label;
-                            // keyed below by its own pool set (#360).
                             bool hasBp = false;
                             double chance = 0;
                             const QString bpVariant = contractName;
-                            OrderedMap<std::pair<QStringList, QStringList>>
-                                byLabel; // label -> (uuids, items)
+                            OrderedMap<std::pair<QStringList, QStringList>> byLabel;
                             for (const Node bpElem : iter(contract, "BlueprintRewards")) {
                                 const QString poolId = qs(getOr(bpElem, "blueprintPool"));
                                 if (poolId.isEmpty() || poolId == nullUuid || !pools.items.contains(poolId))
@@ -719,8 +696,6 @@ ContractScan scanContractGenerators(const Context &ctx, const BlueprintPools &po
                                     scan.items.insert(titleKey, itemNames);
                             }
 
-                            // XP: the first positive legacy reward is success,
-                            // the first negative failure.
                             qint64 successXp = 0, failureXp = 0;
                             for (const Node legacy :
                                  findAll(contract, ".//ContractResult_LegacyReputation")) {
@@ -777,7 +752,6 @@ ContractScan scanContractGenerators(const Context &ctx, const BlueprintPools &po
                                                                spawns, difficulty, hasBp, chance, bpVariant,
                                                                rankName, repTrack});
 
-                            // Sub-contracts override title/desc only.
                             for (const Node sub : findAll(contract, ".//subContracts/SubContract")) {
                                 const QString subTitle = paramValue(sub, "Title");
                                 QString subDesc = paramValue(sub, "Description");
@@ -798,7 +772,6 @@ ContractScan scanContractGenerators(const Context &ctx, const BlueprintPools &po
                                 }
                             }
                         } catch (const PyError &) {
-                            // One malformed contract is skipped, as in the Python.
                         }
                     }
                 }
@@ -808,7 +781,6 @@ ContractScan scanContractGenerators(const Context &ctx, const BlueprintPools &po
         qCWarning(lcEnh) << "Error scanning contract generators:" << e.what();
     }
 
-    // Stanton first, then the rest alphabetically.
     for (auto &[title, variants] : scan.missions)
         std::stable_sort(variants.begin(), variants.end(),
                          [](const ContractVariant &a, const ContractVariant &b) {
@@ -826,13 +798,12 @@ QString xpText(qint64 v)
     return py::integer(v, true);
 }
 
-} // namespace
+}
 
 Loc generateMissions(const Context &ctx)
 {
     const RecordStore &store = *ctx.store;
     const Loc &loc = *ctx.loc;
-    // Overrides are keyed on English names: only on an English run.
     const bool overridesOk = ctx.tagLoc == ctx.loc;
     const QString &repLabel = ctx.repXpLabel;
     const QString em = ctx.missionHeaderEm;
@@ -852,7 +823,6 @@ Loc generateMissions(const Context &ctx)
     const QString puDir = QStringLiteral("missionbroker/pu_missions");
     const QStringList puFiles = store.dirExists(puDir) ? store.indexRglob(puDir) : QStringList();
 
-    // #165: descriptions shared by missions with different hostile rosters.
     QSet<QString> spawnAmbiguous;
     {
         QHash<QString, QSet<QString>> signatures;
@@ -903,7 +873,6 @@ Loc generateMissions(const Context &ctx)
     ContractScan scan = scanContractGenerators(ctx, pools, templates);
     const RsTags rs = buildBattagliaRsTags(store, templates);
 
-    // pu_missions titles -> their descriptions; haul descriptions (#102).
     QHash<QString, QSet<QString>> puTitleToDescs;
     QSet<QString> puCargoDeliveryDescs;
     for (const QString &file : puFiles) {
@@ -924,7 +893,6 @@ Loc generateMissions(const Context &ctx)
             puCargoDeliveryDescs.insert(descKey);
     }
 
-    // Route bodies in a fixed order: the Python iterates a set here.
     const auto sortedDescs = [](const QSet<QString> &set) {
         QStringList list(set.cbegin(), set.cend());
         std::sort(list.begin(), list.end(),
@@ -978,7 +946,6 @@ Loc generateMissions(const Context &ctx)
         for (const ContractVariant &v : variants)
             if (!v.descKey.isEmpty())
                 cgDescKeys.insert(v.descKey);
-        // Any PU cargo-delivery description of this title outside the CG ones.
         bool survivingNoBpCargo = false;
         for (const auto descs = puTitleToDescs.value(titleKey); const QString &d : descs)
             if (puCargoDeliveryDescs.contains(d) && !cgDescKeys.contains(d)) {
@@ -1054,7 +1021,6 @@ Loc generateMissions(const Context &ctx)
                 title += QStringLiteral(" <EM4>%1</EM4>").arg(rsTag);
         out.insert(titleKey, title);
 
-        // #151: a description key equal to the title key gets no body.
         QStringList descKeys;
         for (const ContractVariant &v : variants)
             if (!v.descKey.isEmpty() && v.descKey != titleKey && !descKeys.contains(v.descKey))
@@ -1150,7 +1116,7 @@ Loc generateMissions(const Context &ctx)
 
             QStringList sections = {baseDesc};
             if (anyHasBp && hasBlueprints && ctx.showField(QStringLiteral("blueprints"))) {
-                const int pct = int(variantChance * 100); // truncates, as int() does
+                const int pct = int(variantChance * 100);
                 QString bpHeader;
                 if (allVariantsHaveBp)
                     bpHeader = pct < 100 ? QStringLiteral("<EM4>Blueprint Reward:</EM4> %1% chance").arg(pct)
@@ -1216,11 +1182,10 @@ Loc generateMissions(const Context &ctx)
             if (!existing)
                 out.insert(descKey, text);
             else if (newHasBp && !existing->contains(bpHeaderTag))
-                out.insert(descKey, text); // a later title has the blueprints
+                out.insert(descKey, text);
         }
     }
 
-    // Drop pu-only descriptions under BP titles, except hauls (#31, #102).
     for (const auto &[titleKey, variants] : scan.missions) {
         if (!scan.blueprints.contains(titleKey))
             continue;
@@ -1228,8 +1193,6 @@ Loc generateMissions(const Context &ctx)
         for (const ContractVariant &v : variants)
             if (!v.descKey.isEmpty())
                 cg.insert(v.descKey);
-        // A named copy: subtract() returns a reference into its object, and a
-        // temporary in a range-for initializer dies before the loop body runs.
         QSet<QString> orphans = puTitleToDescs.value(titleKey);
         orphans.subtract(cg);
         for (const QString &orphan : std::as_const(orphans))
@@ -1237,7 +1200,6 @@ Loc generateMissions(const Context &ctx)
                 out.remove(orphan);
     }
 
-    // XP for titles only pu_missions reach.
     OrderedMap<std::vector<qint64>> puTitleXps;
     for (const QString &file : puFiles) {
         const XmlDoc doc = XmlDoc::load(file);
@@ -1298,4 +1260,4 @@ Loc generateMissions(const Context &ctx)
     return out;
 }
 
-} // namespace core::enh
+}

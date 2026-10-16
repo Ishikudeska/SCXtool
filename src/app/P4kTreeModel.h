@@ -11,29 +11,21 @@
 #include <string>
 #include <vector>
 
-// What the P4K Explorer browses: an open archive, optionally its DataForge
-// database, and the tree over both. Items [0, archiveItems) are archive
-// entries; the rest are DataForge records, listed as a virtual
-// "<dcb> (records)/libs/foundry/records/..." folder beside the .dcb.
-// Immutable once built, so worker threads can share it.
 struct ExplorerData
 {
     std::shared_ptr<const engine::p4k::Archive> archive;
     std::shared_ptr<const engine::forge::DataForge> forge;
-    std::string dcbName;                  // "Data/Game2.dcb"
-    std::vector<std::string> recordPaths; // full virtual paths (the tree views into these)
-    std::vector<std::uint32_t> records;   // record index per virtual item
+    std::string dcbName;
+    std::vector<std::string> recordPaths;
+    std::vector<std::uint32_t> records;
     std::uint32_t archiveItems = 0;
     engine::p4k::TreeIndex index;
 
     bool isRecord(std::uint32_t item) const { return item >= archiveItems; }
     std::uint32_t recordOf(std::uint32_t item) const { return records[item - archiveItems]; }
-    // The record's own path ("libs/foundry/records/...").
     std::string_view recordPath(std::uint32_t item) const;
 };
 
-// The explorer's tree for QML's TreeView: name, size, compressed size and
-// method/encryption per node. The node id is the index's internal id.
 class P4kTreeModel : public QAbstractItemModel
 {
     Q_OBJECT

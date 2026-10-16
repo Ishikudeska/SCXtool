@@ -1,5 +1,3 @@
-# Application logic: settings, INI pipeline, enhancements generator, blueprints, i18n.
-
 configure_file(AppIdentity.h.in ${CMAKE_CURRENT_BINARY_DIR}/generated/core/AppIdentity.h @ONLY)
 
 add_library(sccore STATIC
@@ -134,7 +132,7 @@ target_include_directories(sccore PUBLIC
 )
 target_link_libraries(sccore PUBLIC scengine Qt6::Core Qt6::Network Qt6::Concurrent)
 if(WIN32)
-    target_link_libraries(sccore PRIVATE dbghelp) # minidumps
+    target_link_libraries(sccore PRIVATE dbghelp)
 endif()
 sc_set_warnings(sccore)
 sc_precompile(sccore <QJsonArray> <QJsonDocument> <QJsonObject> <pugixml.hpp>)

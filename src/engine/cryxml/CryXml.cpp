@@ -55,7 +55,6 @@ private:
     bool swap_;
 };
 
-// .NET's char.IsWhiteSpace over Latin-1.
 bool isBlank(std::string_view latin1)
 {
     for (const char ch : latin1) {
@@ -71,7 +70,7 @@ Error formatError(std::string message)
     return Error{Errc::Format, "CryXml: " + std::move(message)};
 }
 
-} // namespace
+}
 
 bool isCryXml(std::span<const std::uint8_t> data)
 {
@@ -98,7 +97,6 @@ Result<xml::XmlTree::NodeId> parse(std::span<const std::uint8_t> data, xml::XmlT
     if (data.empty() || data[0] != 'C')
         return std::unexpected(formatError("Unknown File Format"));
 
-    // ReadFString(7): up to 7 bytes, cut at the first NUL.
     const std::size_t fixedLen = std::min<std::size_t>(7, data.size());
     std::size_t magicLen = 0;
     while (magicLen < fixedLen && data[magicLen] != 0)
@@ -107,8 +105,6 @@ Result<xml::XmlTree::NodeId> parse(std::span<const std::uint8_t> data, xml::XmlT
 
     std::size_t headerLength = fixedLen;
     if (magic == "CryXml" || magic == "CryXmlB") {
-        // ReadCString: through the next NUL. For the 6-character "CryXml"
-        // this over-reads into the header, as unforge does.
         while (headerLength < data.size() && data[headerLength] != 0)
             ++headerLength;
         if (headerLength < data.size())
@@ -119,8 +115,6 @@ Result<xml::XmlTree::NodeId> parse(std::span<const std::uint8_t> data, xml::XmlT
         return std::unexpected(formatError("Unknown File Format"));
     }
 
-    // unforge's "BigEndian" read is really a plain little-endian read; it
-    // falls back to swapped order when the length field doesn't match.
     std::int32_t fileLength = 0;
     bool swap = false;
     if (!Reader(data, false).i32(headerLength, fileLength))
@@ -160,8 +154,6 @@ Result<xml::XmlTree::NodeId> parse(std::span<const std::uint8_t> data, xml::XmlT
             return std::unexpected(formatError("attribute table is truncated"));
     }
 
-    // The string table runs from its offset to the end of the file (the
-    // size field is ignored). Empty strings map to null.
     struct Str
     {
         std::string_view text;
@@ -248,4 +240,4 @@ Result<std::string> toXml(std::span<const std::uint8_t> data)
     return out;
 }
 
-} // namespace engine::cryxml
+}

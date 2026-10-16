@@ -84,4 +84,4 @@ ApplyOutcome applyToGame(const ApplyInputs &in)
     return out;
 }
 
-} // namespace core
+}

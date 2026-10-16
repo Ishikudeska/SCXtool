@@ -12,10 +12,6 @@
 
 class AppController;
 
-// The P4K Explorer: browse a Data.p4k (any channel's, or another file),
-// search it, preview entries (CryXML as XML, text, or hex), extract a
-// selection, browse the DataForge records as XML, and export game data.
-// The unp4k features the Python app only used behind the scenes.
 class ExplorerController : public QObject
 {
     Q_OBJECT
@@ -63,7 +59,6 @@ public:
     int maxReferenceDepth() const { return maxReferenceDepth_; }
     void setMaxReferenceDepth(int v);
 
-    // Opens `path`, or the current channel's Data.p4k when empty.
     Q_INVOKABLE void open(const QString &path = {});
     Q_INVOKABLE void openUrl(const QUrl &url);
     Q_INVOKABLE void close();
@@ -72,10 +67,7 @@ public:
     Q_INVOKABLE void select(int node);
     Q_INVOKABLE QString nodePath(int node) const;
     Q_INVOKABLE bool isFolder(int node) const;
-    // The node at an archive path (case-insensitive), or -1.
     Q_INVOKABLE int findNode(const QString &path) const;
-    // Writes the files at or beneath `nodes` under `outputDir`, keeping
-    // their archive paths. CryXML can be converted to text XML on the way.
     Q_INVOKABLE void extract(const QVariantList &nodes, const QUrl &outputDir, bool convertCryXml,
                              bool skipExisting);
     Q_INVOKABLE QString defaultExtractDir() const;
@@ -102,7 +94,6 @@ private:
     QVariantList results_;
     QString resultsNote_;
     bool searching_ = false;
-    // Shared with the search worker, which stops once a newer search starts.
     std::shared_ptr<std::atomic<quint64>> searchSerial_ = std::make_shared<std::atomic<quint64>>(0);
     quint64 previewSerial_ = 0;
     int currentNode_ = -1;

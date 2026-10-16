@@ -7,8 +7,6 @@
 
 namespace engine::crypto {
 
-// SHA-256 (FIPS 180-4). P4K entries carry a SHA-256 of their stored bytes in
-// CIG's 0x5003 extra field; this verifies them.
 class Sha256
 {
 public:
@@ -30,4 +28,4 @@ private:
     std::uint64_t length_ = 0;
 };
 
-} // namespace engine::crypto
+}

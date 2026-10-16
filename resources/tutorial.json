@@ -1,5 +1,4 @@
 {
-  "_comment": "The guided tour. Each step names the page to show ('' keeps the current one) and the objectName of the item to spotlight ('' for none). Order here is tour order. Translations override title/description with tutorial.<id>.title / .description in their ui.json. {app} is the app's name. Allowed side values: above, below, left, right, auto.",
   "steps": [
     {
       "id": "welcome",

@@ -13,16 +13,11 @@
 
 namespace engine::zip {
 
-// Writes a plain (non-ZIP64) ZIP file, deflate or stored, with UTF-8 names.
-// Used for loc-pack exports and settings backups; ZIPs are read back with
-// p4k::Archive. The file only appears at `path` once finish() succeeds.
 class ZipWriter
 {
 public:
     static Result<ZipWriter> create(const std::filesystem::path &path);
 
-    // `level` is a zlib level 1-9; 0 stores the data uncompressed.
-    // `modified` is written as the entry's DOS timestamp (local time).
     Result<void> add(std::string_view name, std::span<const std::uint8_t> data, int level = 9,
                      std::time_t modified = std::time(nullptr));
     Result<void> add(std::string_view name, std::string_view text, int level = 9,
@@ -32,7 +27,6 @@ public:
                    modified);
     }
 
-    // Writes the central directory and moves the file into place.
     Result<void> finish();
 
 private:
@@ -55,4 +49,4 @@ private:
     std::uint64_t offset_ = 0;
 };
 
-} // namespace engine::zip
+}

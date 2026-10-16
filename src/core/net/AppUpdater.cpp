@@ -29,7 +29,6 @@ std::optional<Version> parseVersion(const QString &text)
     Version v{0, 0, 0};
     for (qsizetype i = 0; i < std::min<qsizetype>(parts.size(), 3); ++i) {
         bool ok = false;
-        // int() in Python accepts surrounding whitespace and a sign; digits are what matter here.
         v[static_cast<std::size_t>(i)] = parts[i].trimmed().toInt(&ok);
         if (!ok)
             return std::nullopt;
@@ -75,7 +74,6 @@ QUrl latestReleaseApi(const QString &repo)
 
 namespace {
 
-// Runs `reply` to completion, aborting on cancel.
 void wait(QNetworkReply *reply, const std::atomic<bool> *cancel)
 {
     QEventLoop loop;
@@ -92,7 +90,7 @@ void wait(QNetworkReply *reply, const std::atomic<bool> *cancel)
         loop.exec();
 }
 
-} // namespace
+}
 
 UpdateCheck checkForUpdate(const QString &repo, const QString &currentVersion, int timeoutMs)
 {
@@ -109,7 +107,6 @@ UpdateCheck checkForUpdate(const QString &repo, const QString &currentVersion, i
     QNetworkAccessManager nam;
     std::unique_ptr<QNetworkReply> reply(nam.get(request));
     wait(reply.get(), nullptr);
-    // 404: the repository has no published release yet, so nothing is newer.
     if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 404) {
         out.status = UpdateCheck::Status::UpToDate;
         return out;
@@ -216,4 +213,4 @@ QString downloadInstaller(const InstallerAsset &asset, const QString &destDir, Q
     return target;
 }
 
-} // namespace core::net
+}

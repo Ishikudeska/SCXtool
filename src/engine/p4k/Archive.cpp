@@ -14,8 +14,8 @@ namespace engine::p4k {
 
 namespace {
 
-constexpr std::uint32_t kLocalHeaderSig = 0x04034b50;    // PK\3\4
-constexpr std::uint32_t kCigLocalHeaderSig = 0x14034b50; // PK\3\x14, accepted by unp4k, unused today
+constexpr std::uint32_t kLocalHeaderSig = 0x04034b50;
+constexpr std::uint32_t kCigLocalHeaderSig = 0x14034b50;
 constexpr std::uint32_t kCentralHeaderSig = 0x02014b50;
 constexpr std::uint32_t kEndOfCentralDirSig = 0x06054b50;
 constexpr std::uint32_t kZip64EndOfCentralDirSig = 0x06064b50;
@@ -31,7 +31,7 @@ constexpr std::uint16_t kTagZip64 = 0x0001;
 constexpr std::uint16_t kTagCigEncryption = 0x5002;
 constexpr std::uint16_t kTagCigSha256 = 0x5003;
 
-constexpr std::size_t kReadChunk = 1 << 20; // multiple of the AES block size
+constexpr std::size_t kReadChunk = 1 << 20;
 constexpr std::size_t kDirectoryChunk = 8 << 20;
 constexpr std::uint8_t kZstdMagic[4] = {0x28, 0xB5, 0x2F, 0xFD};
 
@@ -80,8 +80,6 @@ bool sameName(std::string_view a, std::string_view b)
     return true;
 }
 
-// --- Extra fields ---------------------------------------------------------
-
 struct ExtraField
 {
     std::uint16_t tag = 0;
@@ -92,7 +90,7 @@ struct ExtraFields
 {
     std::array<ExtraField, 8> items{};
     std::size_t count = 0;
-    bool tiles = false; // the fields cover the extra data exactly
+    bool tiles = false;
 
     const ExtraField *find(std::uint16_t tag) const
     {
@@ -103,7 +101,6 @@ struct ExtraFields
     }
 };
 
-// CIG's lengths include the 4-byte tag+length header; standard ZIP's don't.
 ExtraFields splitExtra(std::span<const std::uint8_t> extra, bool lengthIncludesHeader)
 {
     ExtraFields fields;
@@ -137,8 +134,6 @@ ExtraFields parseExtra(std::span<const std::uint8_t> extra)
     return splitExtra(extra, false);
 }
 
-// --- Decoders -------------------------------------------------------------
-
 std::vector<std::uint8_t> &outputBuffer()
 {
     thread_local std::vector<std::uint8_t> buffer(256 * 1024);
@@ -156,8 +151,6 @@ public:
     virtual Result<void> finish() = 0;
 };
 
-// Passes bytes through. For decrypted data it drops trailing zero bytes, as
-// the C# does after decrypting (the AES padding is zeros).
 class StoredDecoder final : public Decoder
 {
 public:
@@ -269,9 +262,6 @@ ZSTD_DCtx *zstdContext()
     return holder.ctx;
 }
 
-// Method 100. unp4k checks for the zstd magic and passes the bytes through
-// unchanged when it is missing. Decodes exactly one frame: encrypted entries
-// carry up to 15 zero bytes of AES padding after it.
 class ZstdDecoder final : public Decoder
 {
 public:
@@ -341,7 +331,7 @@ private:
             if (rc == 0)
                 state_ = State::Done;
             else if (zin.pos == zin.size && zout.pos < zout.size)
-                break; // needs more input
+                break;
         }
         return {};
     }
@@ -360,7 +350,7 @@ std::vector<std::uint8_t> &readBuffer()
     return buffer;
 }
 
-} // namespace
+}
 
 std::string_view methodName(std::uint16_t method)
 {
@@ -403,8 +393,6 @@ Result<void> Archive::parseDirectory(const OpenOptions &options)
     if (size < kEndOfCentralDirSize)
         return fail(Errc::Format, where + " is not a ZIP/P4K archive");
 
-    // Scan back for the end record. Data.p4k has a 16-byte "CIG" comment and
-    // then 828 zero bytes after it, so it is not at the very end.
     const std::size_t tailSize = static_cast<std::size_t>(std::min<std::uint64_t>(size, 1 << 20));
     const std::uint64_t tailPos = size - tailSize;
     std::vector<std::uint8_t> tail(tailSize);
@@ -436,8 +424,6 @@ Result<void> Archive::parseDirectory(const OpenOptions &options)
             return fail(Errc::Format, where + ": bad ZIP64 end of central directory");
         entryCount = u64(z + 32);
         directoryOffset = u64(z + 48);
-        // The directory size field (z + 40) is 1,024 bytes too large in LIVE's
-        // Data.p4k, so bound the directory by where the ZIP64 record starts.
         directoryEnd = zip64Pos;
     } else if (entryCount == 0xFFFF || u32(end + 16) == 0xFFFFFFFF) {
         return fail(Errc::Format, where + ": ZIP64 archive without a ZIP64 locator");
@@ -453,7 +439,6 @@ Result<void> Archive::parseDirectory(const OpenOptions &options)
     entries_.reserve(static_cast<std::size_t>(entryCount));
     names_.reserve(static_cast<std::size_t>(std::min<std::uint64_t>(directoryBytes, entryCount * 128)));
 
-    // Stream the directory through a bounded buffer: one pass, no 443 MB copy.
     std::vector<std::uint8_t> buf(kDirectoryChunk);
     std::size_t begin = 0;
     std::size_t filled = 0;
@@ -572,7 +557,7 @@ void Archive::buildLookup() const
                 break;
             }
             if (sameName(name(occupant), n))
-                break; // keep the first, as SharpZipLib's FindEntry does
+                break;
             slot = (slot + 1) & mask;
         }
     }
@@ -724,4 +709,4 @@ Result<std::optional<crypto::Sha256::Digest>> Archive::storedHash(std::size_t in
     return std::optional(digest);
 }
 
-} // namespace engine::p4k
+}

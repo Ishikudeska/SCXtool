@@ -37,7 +37,7 @@ const std::array<Category, 7> &categoryTable()
     return table;
 }
 
-} // namespace
+}
 
 std::span<const File> files()
 {
@@ -65,4 +65,4 @@ QString fileNameFor(const QString &fileId)
     return {};
 }
 
-} // namespace core::enhancements
+}

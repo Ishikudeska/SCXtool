@@ -51,7 +51,7 @@ QStringList sortedFacet(QSet<QString> values, const QString &attr)
     return out;
 }
 
-} // namespace
+}
 
 BlueprintController::BlueprintController(QObject *parent) : QObject(parent)
 {
@@ -138,7 +138,6 @@ void BlueprintController::rebuild()
     classes_ = sortedFacet(classes, QStringLiteral("cls"));
     sizes_ = sortedFacet(sizes, QStringLiteral("size"));
     grades_ = sortedFacet(grades, QStringLiteral("grade"));
-    // A selection that no longer exists falls back to Any.
     if (!mission_.isEmpty() && !missions.contains(mission_))
         mission_.clear();
 
@@ -252,8 +251,6 @@ void BlueprintController::applyOwnedTags()
     app().setStatus(text("blueprint_tracker.owned_tags_refreshed"));
 }
 
-// ── log scan ──────────────────────────────────────────────────────────────
-
 void BlueprintController::scanLogs()
 {
     const QString channelDir = app().paths().channelInstallDir();
@@ -345,8 +342,6 @@ void BlueprintController::finishScan(const QSet<QString> &found)
                                      {{QStringLiteral("count"), static_cast<int>(names.size())}}),
                           names.join(u'\n'));
 }
-
-// ── import / export ───────────────────────────────────────────────────────
 
 QString BlueprintController::defaultExportPath(bool csv) const
 {

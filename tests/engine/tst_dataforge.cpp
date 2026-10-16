@@ -73,7 +73,7 @@ std::vector<std::uint8_t> buildFixture()
 
     const auto dup = b.addStruct("Dup", base);
     b.addProperty(dup, "x", DataType::Int32);
-    b.addProperty(dup, "baseFlag", DataType::UInt8); // same name as the inherited Bool
+    b.addProperty(dup, "baseFlag", DataType::UInt8);
 
     b.addInstance(thing, Inst()
                              .u8(1)
@@ -174,7 +174,7 @@ std::string holderXml(bool nullErrors)
            "</Holder.H1>";
 }
 
-} // namespace
+}
 
 class TestDataForge : public QObject
 {
@@ -188,7 +188,6 @@ private slots:
         QCOMPARE(df.structs().size(), std::size_t(7));
         QCOMPARE(df.records().size(), std::size_t(7));
         QCOMPARE(df.structName(1), std::string("Thing"));
-        // Inherited properties come first.
         QCOMPARE(df.propertyName(df.structProperties(1).front()), std::string("baseFlag"));
         QCOMPARE(df.structProperties(1).size(), std::size_t(13));
     }
@@ -230,8 +229,6 @@ private slots:
                  holderXml(false));
     }
 
-    // A pointer cycle prunes every element on the loop, so the record renders
-    // empty and unforge writes no file for it.
     void cyclesRenderEmpty()
     {
         const auto df = loadFixture();
@@ -247,8 +244,6 @@ private slots:
                         "name.\" />"));
     }
 
-    // A derived property with an inherited name replaces the earlier
-    // attribute and moves to the end (XmlAttributeCollection.Append).
     void duplicateAttributeNames()
     {
         const auto df = loadFixture();
@@ -266,7 +261,7 @@ private slots:
         auto stats = forge::exportRecords(df, std::filesystem::path(out.path().toStdWString()), options);
         QVERIFY(stats);
         QCOMPARE(stats->written, std::size_t(5));
-        QCOMPARE(stats->skipped, std::size_t(1)); // the cycle
+        QCOMPARE(stats->skipped, std::size_t(1));
         QVERIFY(stats->failures.empty());
 
         QFile f(out.filePath("libs/foundry/records/holder.xml"));
@@ -274,7 +269,6 @@ private slots:
         QCOMPARE(f.readAll().toStdString(), holderXml(true));
         QVERIFY(!QFile::exists(out.filePath("libs/foundry/records/loop.xml")));
 
-        // Filtered export.
         QTemporaryDir only;
         options.include = [](std::string_view path) {
             return path.starts_with("libs/foundry/records/things/");

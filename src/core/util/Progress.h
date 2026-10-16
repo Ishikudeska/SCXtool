@@ -11,13 +11,8 @@
 #include <optional>
 #include <tuple>
 
-// Progress and cancellation for work that fans out over threads.
 namespace core {
 
-// Workers call advance() from any thread; updates are coalesced into one
-// (completed, total, message) and passed to the callback at most every
-// `minInterval`, except that total changes, flush() and reaching the total
-// always report. Identical repeats are dropped.
 class ProgressSink
 {
 public:
@@ -47,7 +42,6 @@ private:
     std::optional<std::tuple<int, int, QString>> lastEmitted_;
 };
 
-// A shareable cancel flag; the engine takes flag().
 class CancelToken
 {
 public:
@@ -61,8 +55,6 @@ private:
     std::shared_ptr<std::atomic<bool>> flag_;
 };
 
-// Logs "<name>: 1.234s" to the scx.perf category (debug) when it goes out of
-// scope. Costs nothing measurable when debug logging is off.
 class PerfTimer
 {
 public:
@@ -76,4 +68,4 @@ private:
     QElapsedTimer timer_;
 };
 
-} // namespace core
+}

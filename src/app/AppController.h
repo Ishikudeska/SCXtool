@@ -18,10 +18,6 @@
 
 #include <memory>
 
-// The app's state and every top-level action, exposed to QML as the `App`
-// singleton: startup checks, loading the strings table, applying to the
-// game, backups, channel and language switches, extraction and enhancement
-// generation. Pages call in here; nothing in QML touches files.
 class AppController : public QObject
 {
     Q_OBJECT
@@ -60,15 +56,12 @@ class AppController : public QObject
     Q_PROPERTY(QString dataForgeStatus READ dataForgeStatus NOTIFY pathsChanged)
 
 public:
-    // Not default-constructible, so QML uses create() and gets main()'s
-    // instance instead of making its own.
     struct MainInstance
     {
     };
     explicit AppController(MainInstance, QObject *parent = nullptr);
     ~AppController() override;
 
-    // The instance main() made; QML gets this one.
     static AppController *instance();
     static AppController *create(QQmlEngine *, QJSEngine *);
     void setEngine(QQmlEngine *engine) { engine_ = engine; }
@@ -110,28 +103,21 @@ public:
     QString userDataRoot() const;
     QString dataForgeDir() const;
     QString p4kPath() const;
-    QString p4kStatus() const;       // "fresh", "stale", "missing" or "noarchive"
-    QString dataForgeStatus() const; // same values
+    QString p4kStatus() const;
+    QString dataForgeStatus() const;
 
-    // Startup: install detection, OneDrive warning, base.ini freshness,
-    // then load; called once the window is up.
     Q_INVOKABLE void startup();
     Q_INVOKABLE void reload();
-    // Reload after user.ini was replaced on disk: in-memory edits are
-    // dropped instead of carried over.
     void reloadFromDisk(const QString &message);
     void notifyPathsChanged() { emit pathsChanged(); }
 
-    // Blueprint Tracker data, rebuilt on every load.
     const QMap<QString, core::blueprints::BlueprintItem> &blueprintMeta() const { return blueprintMeta_; }
     const QSet<QString> &knownItemNames() const { return knownItemNames_; }
     core::blueprints::Enclosings enclosings();
     QString blueprintHeader() const;
-    // Weaves [Owned] into the loaded strings for the current owned set and
-    // refreshes the table's Owned column.
     void recomputeOwned();
     Q_INVOKABLE void applyToGame();
-    Q_INVOKABLE QVariantList backups() const; // [{path, name, time}], newest first
+    Q_INVOKABLE QVariantList backups() const;
     Q_INVOKABLE void restoreBackup(const QString &path);
     Q_INVOKABLE void clearLocalization();
     Q_INVOKABLE void clearCache();
@@ -142,8 +128,6 @@ public:
     Q_INVOKABLE void extractFromP4k(bool thenGenerate = false);
     Q_INVOKABLE void extractDataForge(bool thenGenerate = true);
     Q_INVOKABLE void generateEnhancements();
-    // Simple mode's one button: refresh what is stale (base.ini, DataForge),
-    // generate enhancements, reload, then apply to the game.
     Q_INVOKABLE void simpleApply();
 
     Q_INVOKABLE void detectInstall();
@@ -153,9 +137,6 @@ public:
     Q_INVOKABLE QString tr(const QString &key, const QVariantMap &args = {}) const;
     Q_INVOKABLE void setStatus(const QString &text);
     Q_INVOKABLE bool saveUserIni();
-    // Window close: false when a prompt about unapplied edits is showing;
-    // QML calls quit() after the user decides. While a job runs, it is
-    // cancelled (an apply finishes first) and the close resumes once idle.
     Q_INVOKABLE bool requestClose();
     Q_INVOKABLE void quit();
     Q_INVOKABLE QString urlToPath(const QUrl &url) const;
@@ -174,7 +155,7 @@ signals:
     void busyChanged();
     void pathsChanged();
     void entriesReloaded();
-    void navigateTo(const QString &page); // ask the shell to show a page ("config", ...)
+    void navigateTo(const QString &page);
     void blueprintsChanged();
 
 private:
@@ -205,8 +186,8 @@ private:
     bool loaded_ = false;
     bool initialLoadDone_ = false;
     bool unappliedEdit_ = false;
-    bool closeWhenIdle_ = false;   // the window was closed while a job ran
-    bool simpleRunActive_ = false; // simpleApply() continues into applyToGame()
+    bool closeWhenIdle_ = false;
+    bool simpleRunActive_ = false;
     bool startupDone_ = false;
     bool enhancementsPrompted_ = false;
     QMap<QString, core::blueprints::BlueprintItem> blueprintMeta_;

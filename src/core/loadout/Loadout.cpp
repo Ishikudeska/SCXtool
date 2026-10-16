@@ -24,7 +24,7 @@ QString join(const QString &parent, const QString &name)
     return parent.isEmpty() ? name : parent + u'/' + name;
 }
 
-} // namespace
+}
 
 const Item *stockItem(const Catalog &catalog, const QStringList &shipTags, const Port *port,
                       const LoadoutEntry &entry)
@@ -55,8 +55,6 @@ Loadout::Loadout(const Catalog &catalog, const Ship &ship) : catalog_(&catalog),
              entry ? &entry->children : nullptr);
         slots_.push_back(std::move(slot));
     }
-    // Stock items on ports the vehicle XML doesn't list (controllers, armor
-    // on some ships) still count; they can't be swapped.
     for (const LoadoutEntry &entry : ship.loadout) {
         const bool listed = std::any_of(ship.ports.begin(), ship.ports.end(), [&](const Port &p) {
             return p.name.compare(entry.port, Qt::CaseInsensitive) == 0;
@@ -84,8 +82,6 @@ void Loadout::fill(Slot &slot, const Item *item, const std::vector<LoadoutEntry>
         Slot child;
         child.port = port;
         child.path = join(slot.path, port.name);
-        // The ship's loadout names what goes in the item's ports; failing
-        // that, the item comes with its own.
         const LoadoutEntry *entry = entryFor(overrides, port.name);
         const std::vector<LoadoutEntry> *grand = nullptr;
         if (entry) {
@@ -144,9 +140,6 @@ std::vector<const Item *> Loadout::compatible(const QString &path) const
     const Slot *slot = find(path);
     if (!slot)
         return out;
-    // Placeholder and test records, and copies of an item under its name
-    // (turret or mission versions): the base record stands for them, unless
-    // a copy is what's fitted.
     static const QRegularExpression notForSale(
         QStringLiteral("(^|_)(temp|test|template|dummy|placeholder)(_|$)"),
         QRegularExpression::CaseInsensitiveOption);
@@ -155,9 +148,6 @@ std::vector<const Item *> Loadout::compatible(const QString &path) const
         const bool fitted = &item == slot->item;
         if (!fitted && (!item.named || notForSale.match(item.id).hasMatch()))
             continue;
-        // Turrets: generic mounts ("gimbalMount", "turretMount", "fixedMount")
-        // and ones a tag ties to this ship or port. The rest are other ships'
-        // own turrets, which nothing stops on paper.
         if (!fitted && (item.type == u"Turret" || item.type == u"TurretBase")) {
             const bool mount = std::any_of(item.tags.begin(), item.tags.end(), [](const QString &t) {
                 return t.compare(u"gimbalMount", Qt::CaseInsensitive) == 0 ||
@@ -180,7 +170,7 @@ std::vector<const Item *> Loadout::compatible(const QString &path) const
         if (a->size != b->size)
             return a->size > b->size;
         if (a->grade != b->grade)
-            return a->grade < b->grade; // A before D
+            return a->grade < b->grade;
         if (const int c = a->name.localeAwareCompare(b->name); c != 0)
             return c < 0;
         return a->id < b->id;
@@ -201,7 +191,6 @@ QList<QPair<QString, QString>> Loadout::entries() const
 int Loadout::apply(const QList<QPair<QString, QString>> &entries)
 {
     int skipped = 0;
-    // Parents first, so a child's entry lands in the item its parent got.
     QList<QPair<QString, QString>> sorted = entries;
     std::stable_sort(sorted.begin(), sorted.end(),
                      [](const auto &a, const auto &b) { return a.first.count(u'/') < b.first.count(u'/'); });
@@ -236,4 +225,4 @@ QList<QPair<QString, QString>> Loadout::changes() const
     return out;
 }
 
-} // namespace core::loadout
+}

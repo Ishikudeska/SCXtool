@@ -9,37 +9,30 @@
 
 #include <optional>
 
-// The lookups the generator builds before its category passes: ammo,
-// SCItem, controller and armor lookups, and the reputation / standings
-// tables.
 namespace core::enh {
 
-// ammoparams/<kind>: __ref (else file stem) -> record.
 RecordLookup buildAmmoLookup(const RecordStore &store, const QString &relDir);
 
 struct ScitemLookups
 {
-    MagazineLookup magazines;                      // entity class -> (ammo record, capacity)
-    QHash<QString, QString> entityNames;           // __ref -> display name
-    QHash<QString, QString> entityNamesByFilename; // lower-cased stem -> display name
-    QHash<QString, QString> entityNameTags;        // __ref -> component tag for blueprint lists
+    MagazineLookup magazines;
+    QHash<QString, QString> entityNames;
+    QHash<QString, QString> entityNamesByFilename;
+    QHash<QString, QString> entityNameTags;
 };
 ScitemLookups buildScitemLookups(const RecordStore &store, const Loc &loc,
                                  const tags::TagConfig *componentsConfig);
 
-// ships/controller/controller_flight_<class>.xml, by lower-cased class.
 RecordLookup buildControllerLookup(const RecordStore &store);
-// ships/armor/*.xml, by lower-cased class name.
 RecordLookup buildArmorLookup(const RecordStore &store);
 
-// reward __ref -> int(float(reputationAmount)).
 QHash<QString, qint64> buildReputationLookup(const RecordStore &store);
 
 struct Standings
 {
-    QHash<QString, QString> ranks;  // standing __ref -> rank display name
-    QHash<QString, QString> tracks; // standing __ref -> reputation track name
+    QHash<QString, QString> ranks;
+    QHash<QString, QString> tracks;
 };
 Standings buildStandings(const RecordStore &store, const Loc &englishLoc);
 
-} // namespace core::enh
+}

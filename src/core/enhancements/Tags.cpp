@@ -10,8 +10,6 @@ namespace core::enh {
 
 namespace {
 
-// Item Type -> abbreviation, the Class: stand-in for lean items. Ship-weapon
-// types map to the strings-tab damage letters (E/B/D/EMP).
 const QHash<QString, QString> &itemTypeAbbrev()
 {
     static const QHash<QString, QString> table = {
@@ -33,7 +31,7 @@ const QHash<QString, QString> &itemTypeAbbrev()
         {QStringLiteral("Neutron Cannon"), QStringLiteral("E")},
         {QStringLiteral("Neutron Repeater"), QStringLiteral("E")},
         {QStringLiteral("Plasma Cannon"), QStringLiteral("E")},
-        {QStringLiteral("Plasma Canon"), QStringLiteral("E")}, // CIG typo
+        {QStringLiteral("Plasma Canon"), QStringLiteral("E")},
         {QStringLiteral("Plasma Scattergun"), QStringLiteral("E")},
         {QStringLiteral("Tachyon Cannon"), QStringLiteral("E")},
         {QStringLiteral("Ballistic Cannon"), QStringLiteral("B")},
@@ -54,7 +52,6 @@ const QHash<QString, QString> &itemTypeAbbrev()
     return table;
 }
 
-// "Size: 1" or "Size: S0" in description text; the digits only.
 const QRegularExpression &sizeLineRe()
 {
     static const QRegularExpression re = py::re(QStringLiteral(R"(Size:\s*S?(\d+))"));
@@ -83,7 +80,6 @@ const tags::TagConfig &orDefault(const tags::TagConfig *config, const char *cate
     return config ? *config : defaultTagConfig(QString::fromLatin1(category));
 }
 
-// "_S0*(\d+)_" on the record's Name attribute, as a plain number.
 QString sizeFromNameAttr(Node root)
 {
     std::string_view name = getOr(root, "Name");
@@ -100,7 +96,7 @@ QString sizeFromDesc(const QString &desc)
     return m.hasMatch() ? m.captured(1) : QString();
 }
 
-} // namespace
+}
 
 const tags::TagConfig &defaultTagConfig(const QString &category)
 {
@@ -122,7 +118,6 @@ QString componentNameTag(const QString &desc, Node root, const tags::TagConfig *
             attachDef = find(attach, "AttachDef");
     }
 
-    // Size: the description, then the class name, the Name loc key, AttachDef.
     QString size = sizeFromDesc(desc);
     bool haveSize = sizeLineRe().match(desc).hasMatch();
     if (!haveSize && root) {
@@ -177,8 +172,6 @@ QString componentNameTag(const QString &desc, Node root, const tags::TagConfig *
             xmlItemType = camelSplit(qs(getOr(icp, "itemType")));
     }
 
-    // Strict path: the full trio with a known class goes through the Tag
-    // Builder, so the user's component config applies.
     const tags::Mapping &classes = tags::defaultKindMappings().value(QStringLiteral("class"));
     if (!grade.isEmpty() && !className.isEmpty() && classes.contains(className)) {
         QHash<QString, QString> values = {
@@ -191,11 +184,9 @@ QString componentNameTag(const QString &desc, Node root, const tags::TagConfig *
         const QString out = tags::renderTag(orDefault(config, "components"), values);
         if (!out.isEmpty())
             return out;
-        // Every element disabled: the legacy hardcoded shape.
         return QStringLiteral("[%1-S%2-%3]").arg(classes.value(className)[1], size, grade);
     }
 
-    // Fallback: classify by Item Type when Class: is missing or unknown.
     QString typeAbbrev;
     if (const QRegularExpressionMatch m = itemTypeLineRe().match(desc); m.hasMatch())
         typeAbbrev = itemTypeAbbrev().value(py::strip(m.captured(1)));
@@ -317,7 +308,6 @@ NameTagger shipWeaponNameTagger(const RecordLookup &ammo, const tags::TagConfig 
         if (size.isEmpty())
             size = sizeFromDesc(desc);
 
-        // The ammo's largest damage type, by its full mapping name.
         QString damage;
         const Node container = find(root, ".//SAmmoContainerComponentParams");
         const auto ammoId = container ? get(container, "ammoParamsRecord") : std::nullopt;
@@ -333,8 +323,6 @@ NameTagger shipWeaponNameTagger(const RecordLookup &ammo, const tags::TagConfig 
                 }
             }
         }
-        // EMP devices and tractor beams have no damage: no tag, except that
-        // mining lasers get the component Type+Size shape (#266).
         if (damage.isEmpty())
             return miningLaserComponentTag(desc, root, miningCfg);
         return tags::renderTag(cfg, {{QStringLiteral("damage"), damage}, {QStringLiteral("size"), size}});
@@ -364,13 +352,12 @@ QString bareTypeTagFromDesc(const QString &desc, const tags::TagConfig *componen
 
 namespace {
 
-// key[:-len("_Name")] + "_Desc" for a key ending in "_name" (any case).
 QString descKeyFor(const QString &nameKey)
 {
     return nameKey.chopped(5) + QStringLiteral("_Desc");
 }
 
-} // namespace
+}
 
 Loc bareTypeTags(const Loc &loc, const tags::TagConfig *componentsConfig)
 {
@@ -410,4 +397,4 @@ QHash<QString, QString> bareTypeNameTagLookup(const Loc &loc, const tags::TagCon
     return out;
 }
 
-} // namespace core::enh
+}

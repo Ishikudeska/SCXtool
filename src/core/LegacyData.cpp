@@ -21,9 +21,6 @@ QString currentName()
     return QString::fromUtf8(identity::kAppName);
 }
 
-// Moves what `to` lacks from `from` into it, recursing into folders both
-// have, and removes `from` once it is empty. Returns how many entries were
-// left behind because `to` already had them.
 int mergeInto(const QString &from, const QString &to, QStringList &log)
 {
     int kept = 0;
@@ -47,9 +44,6 @@ int mergeInto(const QString &from, const QString &to, QStringList &log)
     return kept;
 }
 
-// Moves `from` to `to`. When `to` already exists (a run of the new build
-// before this one, such as the test suite's smoke test, creates logs\), the
-// two are merged; nothing in `to` is ever overwritten.
 void moveDir(const QString &from, const QString &to, QStringList &log)
 {
     if (from.isEmpty() || to.isEmpty() || !QFileInfo(from).isDir())
@@ -72,7 +66,6 @@ void moveDir(const QString &from, const QString &to, QStringList &log)
                    .arg(kept);
 }
 
-// "<parent>/<old name>" becomes "<parent>/<new name>"; anything else, empty.
 QString renamedPath(const QString &path)
 {
     const QFileInfo info(QDir::cleanPath(QDir::fromNativeSeparators(path)));
@@ -81,7 +74,7 @@ QString renamedPath(const QString &path)
     return QDir(info.path()).filePath(currentName());
 }
 
-} // namespace
+}
 
 LegacyDataLocations legacyDataLocations()
 {
@@ -93,7 +86,6 @@ LegacyDataLocations legacyDataLocations()
     if (const QString roaming = qEnvironmentVariable("APPDATA"); !roaming.isEmpty())
         where.settingsDirFrom = QDir(QDir::fromNativeSeparators(roaming)).filePath(legacyName());
 #else
-    // QSettings' AppConfigLocation: <config>/<org>/<app>, both the app name.
     where.settingsDirFrom = QDir(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation))
                                 .filePath(legacyName() + u'/' + legacyName());
 #endif
@@ -107,7 +99,6 @@ QStringList migrateLegacyData(const LegacyDataLocations &where)
         return log;
 
     moveDir(where.settingsDirFrom, where.settingsDirTo, log);
-    // On Linux the old folder sat inside an <old> organization folder.
     if (const QString parent = QFileInfo(where.settingsDirFrom).path();
         QFileInfo(parent).fileName() == legacyName())
         QDir().rmdir(parent);
@@ -134,4 +125,4 @@ QStringList migrateLegacyData(const LegacyDataLocations &where)
     return log;
 }
 
-} // namespace core
+}
