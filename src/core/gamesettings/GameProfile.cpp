@@ -24,8 +24,9 @@ QString resolveCaseInsensitive(const QString &base, const QStringList &parts)
     bool exists = QFileInfo(current).isDir();
     for (const QString &part : parts) {
         QString next = QDir(current).filePath(part);
-        if (exists && !QFileInfo::exists(next)) {
-            const QStringList entries = QDir(current).entryList(QDir::AllEntries | QDir::NoDotAndDotDot);
+        const QStringList entries =
+            exists ? QDir(current).entryList(QDir::AllEntries | QDir::NoDotAndDotDot) : QStringList();
+        if (!entries.contains(part)) {
             for (const QString &entry : entries) {
                 if (entry.compare(part, Qt::CaseInsensitive) == 0) {
                     next = QDir(current).filePath(entry);
