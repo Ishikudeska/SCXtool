@@ -8,11 +8,9 @@ namespace core {
 
 namespace {
 
-constexpr QLatin1StringView kPrefix("global.ini.bak_");
-
-QFileInfoList byAge(const QString &dir)
+QFileInfoList byAge(const QString &dir, const QString &prefix)
 {
-    return QDir(dir).entryInfoList({kPrefix + u'*'}, QDir::Files, QDir::Time | QDir::Reversed);
+    return QDir(dir).entryInfoList({prefix + u'*'}, QDir::Files, QDir::Time | QDir::Reversed);
 }
 
 }
@@ -27,12 +25,12 @@ QString GameFileBackups::backup(const QString &gameFile, QString *error, const Q
         return {};
     }
 
-    QFileInfoList existing = byAge(dir_);
+    QFileInfoList existing = byAge(dir_, prefix_);
     while (existing.size() >= kKeep) {
         QFile::remove(existing.takeFirst().absoluteFilePath());
     }
 
-    const QString target = QDir(dir_).filePath(kPrefix + now.toString(QStringLiteral("yyyyMMdd_HHmmss")));
+    const QString target = QDir(dir_).filePath(prefix_ + now.toString(QStringLiteral("yyyyMMdd_HHmmss")));
     QFile::remove(target);
     if (!QFile::copy(gameFile, target)) {
         if (error)
@@ -49,7 +47,7 @@ QString GameFileBackups::backup(const QString &gameFile, QString *error, const Q
 
 QFileInfoList GameFileBackups::list() const
 {
-    return QDir(dir_).entryInfoList({kPrefix + u'*'}, QDir::Files, QDir::Time);
+    return QDir(dir_).entryInfoList({prefix_ + u'*'}, QDir::Files, QDir::Time);
 }
 
 QString GameFileBackups::restore(const QString &backupFile, const QString &gameFile)

@@ -37,6 +37,8 @@ struct DataForgeExtraction
 {
     std::size_t records = 0;
     PatchReport patches;
+    std::size_t configFiles = 0;
+    QString configError;
 };
 
 engine::Result<DataForgeExtraction> extractDataForge(const engine::p4k::Archive &archive,
@@ -49,6 +51,11 @@ QString dataForgeTagTablePath(const QString &cacheDir);
 engine::Result<std::size_t> writeTagTable(const engine::forge::DataForge &forge, const QString &path);
 QString dataForgeVehiclesDir(const QString &cacheDir);
 engine::Result<std::size_t> writeVehicleDefinitions(const engine::p4k::Archive &archive, const QString &dir);
+
+const QStringList &gameConfigEntries();
+QString gameConfigDir(const QString &cacheDir);
+engine::Result<std::size_t> extractGameConfig(const engine::p4k::Archive &archive, const QString &cacheDir);
+bool gameConfigIsFresh(const QString &p4kPath, const QString &cacheDir);
 
 bool baseIniIsFresh(const QString &p4kPath, const QString &baseIniPath);
 bool dataForgeCacheIsFresh(const QString &p4kPath, const QString &cacheDir);
