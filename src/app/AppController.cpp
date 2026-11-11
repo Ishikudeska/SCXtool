@@ -1023,6 +1023,8 @@ void AppController::extractDataForge(bool thenGenerate)
                 return QString::fromStdString(result.error().message);
             qCInfo(lcApp).noquote() << "DataForge cache:" << result->records << "records;"
                                     << result->patches.summary();
+            if (!result->configError.isEmpty())
+                qCWarning(lcApp).noquote() << "Game settings definitions not cached:" << result->configError;
             return {};
         },
         [this, thenGenerate](const QString &error) {

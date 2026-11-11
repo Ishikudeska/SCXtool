@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -62,18 +63,53 @@ jobs:
           ./packaging/package.ps1
 
       - name: Upload the installer
+        id: installer
         uses: actions/upload-artifact@v7
         with:
-          name: installer
           path: dist/*-Setup.exe
+          archive: false
           if-no-files-found: error
 
       - name: Upload the portable zip
+        id: portable
         uses: actions/upload-artifact@v7
         with:
-          name: portable
           path: dist/*-Portable-*.zip
+          archive: false
           if-no-files-found: error
+
+      - name: Link the packages on the pull request
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/github-script@v9
+        env:
+          INSTALLER_URL: ${{ steps.installer.outputs.artifact-url }}
+          PORTABLE_URL: ${{ steps.portable.outputs.artifact-url }}
+        with:
+          script: |
+            const fs = require('fs');
+            const file = (pattern) => fs.readdirSync('dist').find((name) => pattern.test(name));
+            const heading = '### Packages built from this pull request';
+            const body = [
+              heading,
+              '',
+              `From ${context.payload.pull_request.head.sha}:`,
+              '',
+              `- [${file(/-Setup\.exe$/)}](${process.env.INSTALLER_URL})`,
+              `- [${file(/-Portable-.*\.zip$/)}](${process.env.PORTABLE_URL})`,
+              '',
+              'Downloading needs a GitHub sign-in, and the files expire with the workflow run\'s artifacts.',
+            ].join('\n');
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const earlier = (await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number }))
+              .filter((c) => c.user.login === 'github-actions[bot]' && c.body.startsWith(heading));
+            await github.rest.issues.createComment({ owner, repo, issue_number, body });
+            for (const comment of earlier) {
+              await github.graphql(
+                'mutation($id: ID!) { minimizeComment(input: { subjectId: $id, classifier: OUTDATED }) { minimizedComment { isMinimized } } }',
+                { id: comment.node_id },
+              );
+            }
 
       - name: Publish the release
         if: startsWith(github.ref, 'refs/tags/v')

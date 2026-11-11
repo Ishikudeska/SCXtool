@@ -193,6 +193,48 @@ private slots:
         QVERIFY(dataForgeKeepSubpaths().contains(QStringLiteral("scitemmanufacturer")));
     }
 
+    void extractsGameConfig()
+    {
+        testing::P4kBuilder builder;
+        builder.add({"Data/Libs/Config/Profiles/default/attributes.xml",
+                     testing::bytesOf("<Attributes Version=\"35\" />"), 100, false});
+        builder.add({"Data/Libs/Config/defaultProfile.xml", testing::bytesOf("<profile />"), 100, false});
+        builder.add({"Data/Libs/Config/keybinding_localization.xml", testing::bytesOf("<LocalizedKeys />"),
+                     100, false});
+        const auto bytes = builder.build();
+        QTemporaryDir dir;
+        const QString path = dir.filePath(QStringLiteral("Data.p4k"));
+        writeFile(path, QByteArray(reinterpret_cast<const char *>(bytes.data()),
+                                   static_cast<qsizetype>(bytes.size())));
+        const auto archive = open(path);
+        QVERIFY(archive);
+        const QString cache = dir.filePath(QStringLiteral("cache"));
+        QVERIFY(!gameConfigIsFresh(path, cache));
+        const auto written = extractGameConfig(*archive, cache);
+        QVERIFY(written);
+        QCOMPARE(*written, std::size_t(3));
+        QCOMPARE(readAll(gameConfigDir(cache) + QStringLiteral("/attributes.xml")),
+                 QByteArray("<Attributes Version=\"35\" />"));
+        QCOMPARE(readAll(gameConfigDir(cache) + QStringLiteral("/defaultProfile.xml")),
+                 QByteArray("<profile />"));
+        QVERIFY(gameConfigIsFresh(path, cache));
+        QFile::remove(gameConfigDir(cache) + QStringLiteral("/keybinding_localization.xml"));
+        QVERIFY(!gameConfigIsFresh(path, cache));
+    }
+
+    void gameConfigMissingIsReportedNotFatal()
+    {
+        QTemporaryDir dir;
+        const auto archive = open(buildP4k(dir));
+        QVERIFY(archive);
+        QVERIFY(!extractGameConfig(*archive, dir.filePath(QStringLiteral("cache"))));
+        const auto result = extractDataForge(*archive, dir.filePath(QStringLiteral("forge")),
+                                             dir.filePath(QStringLiteral("no-patches")));
+        QVERIFY(result);
+        QCOMPARE(result->configFiles, std::size_t(0));
+        QVERIFY(!result->configError.isEmpty());
+    }
+
     void writesVehicleDefinitions()
     {
         testing::P4kBuilder builder;

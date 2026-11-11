@@ -32,6 +32,7 @@ qt_add_qml_module(scapp
         MissionsController.h MissionsController.cpp
         EnhancementsController.h EnhancementsController.cpp
         ExplorerController.h ExplorerController.cpp
+        GameSettingsController.h GameSettingsController.cpp
         P4kTreeModel.h P4kTreeModel.cpp
         PromptService.h PromptService.cpp
         StringTableModel.h StringTableModel.cpp
@@ -57,6 +58,7 @@ qt_add_qml_module(scapp
         qml/pages/BlueprintsPage.qml
         qml/pages/MissionsPage.qml
         qml/pages/LoadoutPage.qml
+        qml/pages/GameSettingsPage.qml
         qml/pages/ExplorerPage.qml
         qml/pages/SimplePage.qml
         qml/pages/DocsPage.qml
@@ -65,6 +67,7 @@ qt_add_qml_module(scapp
 file(GLOB_RECURSE SC_LANGUAGE_FILES CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/resources/languages/*)
 file(GLOB_RECURSE SC_PATCH_FILES CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/resources/patches/*)
 file(GLOB_RECURSE SC_DOC_FILES CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/resources/docs/*)
+file(GLOB_RECURSE SC_GAMESETTINGS_FILES CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/resources/gamesettings/*)
 qt_add_resources(scapp "bundled_data"
     PREFIX "/"
     BASE ${PROJECT_SOURCE_DIR}/resources
@@ -72,6 +75,7 @@ qt_add_resources(scapp "bundled_data"
         ${SC_LANGUAGE_FILES}
         ${SC_PATCH_FILES}
         ${SC_DOC_FILES}
+        ${SC_GAMESETTINGS_FILES}
         ${PROJECT_SOURCE_DIR}/resources/tutorial.json
 )
 

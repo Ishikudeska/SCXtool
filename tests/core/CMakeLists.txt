@@ -106,3 +106,10 @@ sc_add_test(tst_core_appupdater
     LIBS sccore
     LABELS unit core
 )
+
+sc_add_test(tst_core_gamesettings
+    SOURCES tst_gamesettings.cpp
+    LIBS sccore
+    LABELS unit core
+)
+target_compile_definitions(tst_core_gamesettings PRIVATE SC_SOURCE_DIR="${PROJECT_SOURCE_DIR}")

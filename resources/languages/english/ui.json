@@ -105,6 +105,10 @@
     "loadout": {
       "ht": "Loadout",
       "at": ""
+    },
+    "game_settings": {
+      "ht": "Game Settings",
+      "at": ""
     }
   },
   "toolbar": {
@@ -4015,6 +4019,496 @@
     "stat_ir": {
       "ht": "IR",
       "at": ""
+    }
+  },
+  "game_settings": {
+    "title": {
+      "ht": "Game Settings",
+      "at": ""
+    },
+    "desc": {
+      "ht": "Every Star Citizen option for the selected channel: gameplay, graphics, audio, controls, keybinds, and comms, VR and head tracking. Changes are kept here until you save them; saving backs up the game's files first. Close the game before saving, because it rewrites these files when it exits.",
+      "at": ""
+    },
+    "loading": {
+      "ht": "Loading game settings",
+      "at": ""
+    },
+    "extracting": {
+      "ht": "Reading the game's settings definitions from Data.p4k",
+      "at": ""
+    },
+    "no_install": {
+      "ht": "No Star Citizen install is set for this channel. Choose the install folder on the Config tab.",
+      "at": ""
+    },
+    "no_data": {
+      "ht": "The game's settings definitions have not been read from Data.p4k yet.",
+      "at": ""
+    },
+    "load_error": {
+      "ht": "Could not load the game settings: {message}",
+      "at": ""
+    },
+    "extract_btn": {
+      "ht": "Read from Data.p4k",
+      "at": ""
+    },
+    "reload_btn": {
+      "ht": "Reload",
+      "at": ""
+    },
+    "running_banner": {
+      "ht": "Star Citizen is running. You can make changes, but they can only be saved after the game is closed, because it overwrites its settings files when it exits.",
+      "at": ""
+    },
+    "running_title": {
+      "ht": "Close Star Citizen first",
+      "at": ""
+    },
+    "running_body": {
+      "ht": "Star Citizen is running. It rewrites its settings files when it exits, which would undo these changes. Close the game, then save again.",
+      "at": ""
+    },
+    "save_btn": {
+      "ht": "Save to Game",
+      "at": ""
+    },
+    "save_count_btn": {
+      "ht": "Save to Game ({count})",
+      "at": ""
+    },
+    "save_tip": {
+      "ht": "Writes attributes.xml and actionmaps.xml for this channel, after backing up the current files.",
+      "at": ""
+    },
+    "discard_btn": {
+      "ht": "Discard Changes",
+      "at": ""
+    },
+    "reset_tab_btn": {
+      "ht": "Reset Tab to Defaults",
+      "at": ""
+    },
+    "reset_tab_tip": {
+      "ht": "Returns every setting on this tab to the game's default. Nothing is written until you save.",
+      "at": ""
+    },
+    "reset_device_btn": {
+      "ht": "Reset Device Keybinds",
+      "at": ""
+    },
+    "reset_device_tip": {
+      "ht": "Removes every custom keybind for the selected device, so the game's defaults apply. Nothing is written until you save.",
+      "at": ""
+    },
+    "reset_tab_confirm": {
+      "ht": "Return every setting on this tab to the game's default? You can still discard the change before saving.",
+      "at": ""
+    },
+    "reset_device_confirm": {
+      "ht": "Remove every custom keybind for this device? You can still discard the change before saving.",
+      "at": ""
+    },
+    "reset_confirm_btn": {
+      "ht": "Reset",
+      "at": ""
+    },
+    "cancel_btn": {
+      "ht": "Cancel",
+      "at": ""
+    },
+    "close_btn": {
+      "ht": "Close",
+      "at": ""
+    },
+    "backups_btn": {
+      "ht": "Backups",
+      "at": ""
+    },
+    "backups_title": {
+      "ht": "Game settings backups",
+      "at": ""
+    },
+    "backups_desc": {
+      "ht": "A copy of attributes.xml or actionmaps.xml is taken before every save and restore. The last 5 of each are kept.",
+      "at": ""
+    },
+    "no_backups": {
+      "ht": "No backups yet.",
+      "at": ""
+    },
+    "restore_btn": {
+      "ht": "Restore",
+      "at": ""
+    },
+    "restored": {
+      "ht": "Game settings restored from the backup.",
+      "at": ""
+    },
+    "open_folder_btn": {
+      "ht": "Open Profile Folder",
+      "at": ""
+    },
+    "search_placeholder": {
+      "ht": "Search settings, keybinds and console variables",
+      "at": ""
+    },
+    "modified_only": {
+      "ht": "Changed only",
+      "at": ""
+    },
+    "device_label": {
+      "ht": "Device",
+      "at": ""
+    },
+    "category_label": {
+      "ht": "Category",
+      "at": ""
+    },
+    "all_categories": {
+      "ht": "All categories",
+      "at": ""
+    },
+    "no_matches": {
+      "ht": "Nothing matches.",
+      "at": ""
+    },
+    "on": {
+      "ht": "On",
+      "at": ""
+    },
+    "off": {
+      "ht": "Off",
+      "at": ""
+    },
+    "default_value": {
+      "ht": "Default: {value}",
+      "at": ""
+    },
+    "unknown_value": {
+      "ht": "Value {value}",
+      "at": ""
+    },
+    "reset_tip": {
+      "ht": "Return to the game's default",
+      "at": ""
+    },
+    "pending_tip": {
+      "ht": "Changed here, not saved to the game yet",
+      "at": ""
+    },
+    "modified_tip": {
+      "ht": "Differs from the game's default",
+      "at": ""
+    },
+    "setting_tip": {
+      "ht": "Setting: {name}\nConsole variable: {cvar}",
+      "at": ""
+    },
+    "restart_tip": {
+      "ht": "Takes effect after restarting the game.",
+      "at": ""
+    },
+    "saved": {
+      "ht": "Game settings saved.",
+      "at": ""
+    },
+    "save_failed_title": {
+      "ht": "Could not save the game settings",
+      "at": ""
+    },
+    "verify_failed": {
+      "ht": "{path} did not read back as written.",
+      "at": ""
+    },
+    "discarded_title": {
+      "ht": "Unsaved game settings discarded",
+      "at": ""
+    },
+    "discarded_body": {
+      "ht": "The channel, install or data folder changed, so the unsaved Game Settings changes for the previous one were discarded.",
+      "at": ""
+    },
+    "unbound": {
+      "ht": "Unbound",
+      "at": ""
+    },
+    "conflict": {
+      "ht": "Also bound to: {actions}",
+      "at": ""
+    },
+    "bind_btn": {
+      "ht": "Bind…",
+      "at": ""
+    },
+    "clear_btn": {
+      "ht": "Clear",
+      "at": ""
+    },
+    "unbind_btn": {
+      "ht": "Unbind",
+      "at": ""
+    },
+    "apply_bind_btn": {
+      "ht": "Apply",
+      "at": ""
+    },
+    "capture_keyboard": {
+      "ht": "Press a key or key combination. Hold Shift, Ctrl or Alt first to add a modifier.",
+      "at": ""
+    },
+    "capture_mouse": {
+      "ht": "Click a mouse button or scroll the wheel inside the box. Hold Shift, Ctrl or Alt to add a modifier.",
+      "at": ""
+    },
+    "capture_list": {
+      "ht": "Pick or type the input, for example button3, x, rotz or hat1_up.",
+      "at": ""
+    },
+    "capture_waiting": {
+      "ht": "Waiting for input…",
+      "at": ""
+    },
+    "activation_mode": {
+      "ht": "Activation",
+      "at": ""
+    },
+    "activation_default": {
+      "ht": "Action default",
+      "at": ""
+    },
+    "taps": {
+      "ht": "Taps",
+      "at": ""
+    },
+    "invert": {
+      "ht": "Invert",
+      "at": ""
+    },
+    "exponent": {
+      "ht": "Curve exponent",
+      "at": ""
+    },
+    "has_curve": {
+      "ht": "custom curve",
+      "at": ""
+    },
+    "invert_cvar_tip": {
+      "ht": "Also controlled by {cvar}",
+      "at": ""
+    },
+    "axes_heading": {
+      "ht": "Axis dead zones",
+      "at": ""
+    },
+    "deadzone": {
+      "ht": "Dead zone",
+      "at": ""
+    },
+    "saturation": {
+      "ht": "Saturation",
+      "at": ""
+    },
+    "input_devices_desc": {
+      "ht": "Inversion and response curves from the game's Controls menu, stored per device in actionmaps.xml. Dead zones apply to the selected joystick.",
+      "at": ""
+    },
+    "devices": {
+      "keyboard": {
+        "ht": "Keyboard",
+        "at": ""
+      },
+      "mouse": {
+        "ht": "Mouse",
+        "at": ""
+      },
+      "gamepad": {
+        "ht": "Gamepad",
+        "at": ""
+      },
+      "mouse_keyboard": {
+        "ht": "Mouse and keyboard",
+        "at": ""
+      },
+      "joystick": {
+        "ht": "Joystick {n}",
+        "at": ""
+      }
+    },
+    "choices": {
+      "from_preset": {
+        "ht": "From quality preset",
+        "at": ""
+      }
+    },
+    "sections": {
+      "other": {
+        "ht": "Other settings",
+        "at": ""
+      },
+      "general": {
+        "ht": "General",
+        "at": ""
+      },
+      "subtitles": {
+        "ht": "Subtitles",
+        "at": ""
+      },
+      "on_foot": {
+        "ht": "On foot",
+        "at": ""
+      },
+      "flight_defaults": {
+        "ht": "Vehicle defaults",
+        "at": ""
+      },
+      "flight_input": {
+        "ht": "Flight input",
+        "at": ""
+      },
+      "hud": {
+        "ht": "Vehicle HUD",
+        "at": ""
+      },
+      "weapons": {
+        "ht": "Vehicle weapons",
+        "at": ""
+      },
+      "vjoy": {
+        "ht": "VJoy",
+        "at": ""
+      },
+      "esp": {
+        "ht": "E.S.P. and turrets",
+        "at": ""
+      },
+      "tools": {
+        "ht": "Salvage and tractor beam",
+        "at": ""
+      },
+      "targeting": {
+        "ht": "Targeting",
+        "at": ""
+      },
+      "look_ahead": {
+        "ht": "Look ahead",
+        "at": ""
+      },
+      "camera": {
+        "ht": "Camera",
+        "at": ""
+      },
+      "social": {
+        "ht": "Social",
+        "at": ""
+      },
+      "scanning": {
+        "ht": "Scanning and emissions",
+        "at": ""
+      },
+      "display": {
+        "ht": "Display",
+        "at": ""
+      },
+      "upscaling": {
+        "ht": "Upscaling",
+        "at": ""
+      },
+      "hdr": {
+        "ht": "HDR",
+        "at": ""
+      },
+      "quality": {
+        "ht": "Quality",
+        "at": ""
+      },
+      "image": {
+        "ht": "Image and field of view",
+        "at": ""
+      },
+      "volume": {
+        "ht": "Volume",
+        "at": ""
+      },
+      "output": {
+        "ht": "Output",
+        "at": ""
+      },
+      "mouse": {
+        "ht": "Mouse",
+        "at": ""
+      },
+      "controller": {
+        "ht": "Controller",
+        "at": ""
+      },
+      "input_devices": {
+        "ht": "Input devices",
+        "at": ""
+      },
+      "vr": {
+        "ht": "VR (experimental)",
+        "at": ""
+      },
+      "head_tracking": {
+        "ht": "Head tracking",
+        "at": ""
+      },
+      "voice": {
+        "ht": "Voice and microphone",
+        "at": ""
+      },
+      "foip": {
+        "ht": "FOIP and Faceware",
+        "at": ""
+      },
+      "tobii": {
+        "ht": "Tobii",
+        "at": ""
+      }
+    },
+    "labels": {
+      "width": {
+        "ht": "Resolution width",
+        "at": ""
+      },
+      "height": {
+        "ht": "Resolution height",
+        "at": ""
+      },
+      "controller_sensitivity": {
+        "ht": "Controller sensitivity",
+        "at": ""
+      },
+      "aim_assistance": {
+        "ht": "Aim assistance",
+        "at": ""
+      },
+      "proximity_assist_landing": {
+        "ht": "Defaults - Flight - Proximity Assist for Landing On",
+        "at": ""
+      },
+      "stability": {
+        "ht": "Defaults - Flight - Stability Assist On",
+        "at": ""
+      },
+      "ifcs_core": {
+        "ht": "Defaults - Flight - IFCS Core Functionality On",
+        "at": ""
+      },
+      "fov_social": {
+        "ht": "Field Of View - Social",
+        "at": ""
+      },
+      "fov_combat": {
+        "ht": "Field Of View - Combat",
+        "at": ""
+      },
+      "ads_padlock": {
+        "ht": "Look Ahead - Aiming Down Sights Enables Padlock",
+        "at": ""
+      }
     }
   }
 }
