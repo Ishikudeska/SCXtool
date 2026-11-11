@@ -54,7 +54,9 @@ private slots:
             QCOMPARE(s.favoritePrefix(), QStringLiteral("*"));
             QVERIFY(s.enhancementCategoryEnabled(QStringLiteral("missions")));
             QCOMPARE(s.enabledEnhancementFileIds().size(), 9);
+            QCOMPARE(s.gameSettingsInfo(), QStringLiteral("popup"));
 
+            s.setGameSettingsInfo(QStringLiteral("sidebar"));
             s.setActiveChannel(QStringLiteral("PTU"));
             s.setActiveChannel(QStringLiteral("NOT-A-CHANNEL"));
             s.setFavoritePrefix(QStringLiteral(" "));
@@ -69,6 +71,9 @@ private slots:
         QVERIFY(!s.enabledEnhancementFileIds().contains(QStringLiteral("missile_enhancements")));
         QCOMPARE(s.enabledEnhancementFileIds().size(), 6);
         QCOMPARE(s.scInstallRoot(), QStringLiteral("D:/Games/StarCitizen"));
+        QCOMPARE(s.gameSettingsInfo(), QStringLiteral("sidebar"));
+        s.setGameSettingsInfo(QStringLiteral("nonsense"));
+        QCOMPARE(s.gameSettingsInfo(), QStringLiteral("popup"));
 
         s.setValue(QStringLiteral("tag_builder/components/config"), QStringLiteral("{\"a\":1}"));
         s.sync();

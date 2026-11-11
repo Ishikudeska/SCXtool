@@ -398,6 +398,18 @@ void Settings::setUiMode(const QString &mode)
     settings_->setValue(QStringLiteral("ui_mode"), mode);
 }
 
+QString Settings::gameSettingsInfo() const
+{
+    return settings_->value(QStringLiteral("game_settings_info")).toString() == u"sidebar"
+               ? QStringLiteral("sidebar")
+               : QStringLiteral("popup");
+}
+
+void Settings::setGameSettingsInfo(const QString &mode)
+{
+    settings_->setValue(QStringLiteral("game_settings_info"), mode);
+}
+
 bool Settings::includeNewLines() const
 {
     return settings_->value(QStringLiteral("include_new_lines"), false).toBool();

@@ -4202,10 +4202,6 @@
       "ht": "Differs from the game's default",
       "at": ""
     },
-    "setting_tip": {
-      "ht": "Setting: {name}\nConsole variable: {cvar}",
-      "at": ""
-    },
     "restart_tip": {
       "ht": "Takes effect after restarting the game.",
       "at": ""
@@ -4292,10 +4288,6 @@
     },
     "has_curve": {
       "ht": "custom curve",
-      "at": ""
-    },
-    "invert_cvar_tip": {
-      "ht": "Also controlled by {cvar}",
       "at": ""
     },
     "axes_heading": {
@@ -4509,6 +4501,1330 @@
         "ht": "Look Ahead - Aiming Down Sights Enables Padlock",
         "at": ""
       }
+    },
+    "info": {
+      "mode_label": {
+        "ht": "Details",
+        "at": ""
+      },
+      "mode_popup": {
+        "ht": "Info icons",
+        "at": ""
+      },
+      "mode_sidebar": {
+        "ht": "Side panel",
+        "at": ""
+      },
+      "mode_tip": {
+        "ht": "Where details appear: in a pop-up when you hover over the (i) icon beside each item, or in a panel beside the list.",
+        "at": ""
+      },
+      "empty": {
+        "ht": "Hover over a setting to see its details here.",
+        "at": ""
+      },
+      "no_description": {
+        "ht": "The game gives no description for this.",
+        "at": ""
+      },
+      "current": {
+        "ht": "Current",
+        "at": ""
+      },
+      "default": {
+        "ht": "Default",
+        "at": ""
+      },
+      "range": {
+        "ht": "Range",
+        "at": ""
+      },
+      "range_value": {
+        "ht": "{min} to {max}",
+        "at": ""
+      },
+      "options": {
+        "ht": "Options",
+        "at": ""
+      },
+      "attribute": {
+        "ht": "Saved as",
+        "at": ""
+      },
+      "cvar": {
+        "ht": "Console variable",
+        "at": ""
+      },
+      "group": {
+        "ht": "Option group",
+        "at": ""
+      },
+      "invert_cvar": {
+        "ht": "Invert variable",
+        "at": ""
+      },
+      "input": {
+        "ht": "Input",
+        "at": ""
+      },
+      "option_desc": {
+        "ht": "Invert reverses this input's direction. The exponent shapes how it responds: above 1, small movements do less and the response builds toward the end of the travel; below 1, small movements do more.",
+        "at": ""
+      },
+      "axis_desc": {
+        "ht": "The dead zone is how far the axis has to move before the game responds. Saturation is how far along its travel the axis reaches full output.",
+        "at": ""
+      },
+      "has_curve": {
+        "ht": "Has a custom response curve, set in the game.",
+        "at": ""
+      }
+    },
+    "descriptions": {
+      "enable_cinematic_camera": {
+        "ht": "Lets the game briefly switch to cinematic camera angles at certain moments.",
+        "at": ""
+      },
+      "control_hints_enabled": {
+        "ht": "Shows the list of controls you can use right now in the corner of the screen. It changes with what you're doing.",
+        "at": ""
+      },
+      "vibration": {
+        "ht": "Lets a gamepad or other controller rumble.",
+        "at": ""
+      },
+      "camera_spring_movement": {
+        "ht": "Lets the camera lag slightly behind your movements and spring back, instead of staying rigidly fixed.",
+        "at": ""
+      },
+      "show_hints": {
+        "ht": "Shows pop-up hints that explain game features as you come across them.",
+        "at": ""
+      },
+      "ship_entry_labels_enabled": {
+        "ht": "Labels a ship's entrances, such as doors, ramps, ladders and elevators, when you're near it.",
+        "at": ""
+      },
+      "report_crime_if_ignoring": {
+        "ht": "When someone commits a crime against you, the game asks whether to report it. With this on, ignoring that notification reports the crime automatically.",
+        "at": ""
+      },
+      "text_input_repeat_delay": {
+        "ht": "How long you hold a key in a text box before it starts repeating, in seconds.",
+        "at": ""
+      },
+      "text_input_repeat_rate": {
+        "ht": "How many times per second a held key repeats in a text box.",
+        "at": ""
+      },
+      "star_map_zoom_speed": {
+        "ht": "How fast the star map zooms in and out.",
+        "at": ""
+      },
+      "subtitles_enabled": {
+        "ht": "Shows subtitles for spoken dialogue.",
+        "at": ""
+      },
+      "contextual_dialog_subtitles": {
+        "ht": "Also shows subtitles for incidental dialogue around you, such as NPC chatter, not just conversations you're part of.",
+        "at": ""
+      },
+      "cockpit_audio_subtitles": {
+        "ht": "Shows subtitles for your ship computer's voice and other cockpit announcements.",
+        "at": ""
+      },
+      "sprint_toggle": {
+        "ht": "Press sprint once to start or stop sprinting, instead of holding the key.",
+        "at": ""
+      },
+      "crouch_toggle": {
+        "ht": "Press crouch once to crouch or stand up, instead of holding the key.",
+        "at": ""
+      },
+      "prone_toggle": {
+        "ht": "Press prone once to go prone or get up, instead of holding the key.",
+        "at": ""
+      },
+      "hold_toggle_zoom": {
+        "ht": "Press aim once to aim down sights and again to stop, instead of holding the button.",
+        "at": ""
+      },
+      "interaction_toggle": {
+        "ht": "Press the interaction key once to enter or leave interaction mode, instead of holding it.",
+        "at": ""
+      },
+      "input_prompt_display_input_icon": {
+        "ht": "Shows which key or button to press beside interaction prompts.",
+        "at": ""
+      },
+      "interaction_highlight_mode": {
+        "ht": "How objects you can interact with are highlighted when you look at them.",
+        "at": ""
+      },
+      "lean_toggle": {
+        "ht": "Press lean once to lean and again to straighten up, instead of holding the key.",
+        "at": ""
+      },
+      "crosshair_mode": {
+        "ht": "When the crosshair is shown while you're on foot.",
+        "at": ""
+      },
+      "crosshair_opacity": {
+        "ht": "How visible the on-foot crosshair is, from fully transparent to fully opaque.",
+        "at": ""
+      },
+      "hitmarker_mode": {
+        "ht": "Shows a marker on your crosshair when your shots hit.",
+        "at": ""
+      },
+      "weapon_mount_use_fpsrotation": {
+        "ht": "On mounted guns, the mouse aims directly, like an on-foot weapon. With this off, the mouse steers the gun like a turret.",
+        "at": ""
+      },
+      "ifcs_setting_auto_precision_mode_enabled": {
+        "ht": "Starts flights with automatic slowdown on, so the ship lowers its speed for you when you need finer control.",
+        "at": ""
+      },
+      "ifcs_setting_coupled_enabled": {
+        "ht": "Starts flights in decoupled mode, where the ship keeps drifting on its current course until you thrust against it. With this off, flights start in coupled mode, where the ship flies where you point it.",
+        "at": ""
+      },
+      "ifcs_setting_esp_enabled": {
+        "ht": "Starts flights with Enhanced Stick Precision (ESP) on, which slows your aim near a target to make small corrections easier.",
+        "at": ""
+      },
+      "ifcs_setting_gravity_compensation_enabled": {
+        "ht": "Starts flights with gravity compensation on, so the thrusters hold the ship up against gravity without your input.",
+        "at": ""
+      },
+      "ifcs_setting_wind_compensation_enabled": {
+        "ht": "Starts flights with wind compensation on, so the ship corrects for wind pushing it off course in an atmosphere.",
+        "at": ""
+      },
+      "ifcs_setting_gsafe_enabled": {
+        "ht": "Starts flights with G-Safe on, which limits maneuvers so the pilot doesn't black out or red out from G-forces.",
+        "at": ""
+      },
+      "ifcs_setting_gsafe_disabled_by_boost": {
+        "ht": "Boosting turns G-Safe off while the boost lasts, so you can pull harder maneuvers at the risk of blacking out.",
+        "at": ""
+      },
+      "ifcs_setting_sticky_throttle_enabled": {
+        "ht": "Starts flights in cruise mode, where the throttle holds its position when you let go instead of returning to zero.",
+        "at": ""
+      },
+      "ifcs_setting_spacebrake_enables_boost": {
+        "ht": "Using the space brake also boosts, so the ship stops faster.",
+        "at": ""
+      },
+      "ifcs_setting_speed_limiter_on": {
+        "ht": "Starts flights with the speed limiter on, which caps your top speed at the limiter's setting.",
+        "at": ""
+      },
+      "ifcs_setting_proximity_assist_default_enabled": {
+        "ht": "Starts flights with proximity assist on, which slows the ship automatically to avoid flying into nearby objects.",
+        "at": ""
+      },
+      "ifcs_setting_proximity_assist_landing_enabled": {
+        "ht": "Turns proximity assist on while landing, to help you avoid hitting things on the way down.",
+        "at": ""
+      },
+      "ifcs_setting_stability_enabled": {
+        "ht": "Starts flights with stability assist on, which helps keep the ship steady.",
+        "at": ""
+      },
+      "ifcs_setting_command_behaviour_enabled": {
+        "ht": "Starts flights with the flight control system's (IFCS) command behaviour on.",
+        "at": ""
+      },
+      "ifcs_setting_core_functionality_enabled": {
+        "ht": "Starts flights with the flight control system's (IFCS) core functions on. With them off, your inputs drive the thrusters more directly, with much less assistance.",
+        "at": ""
+      },
+      "engineering_automatic_power_distribution_enabled": {
+        "ht": "When you give a component more power than its pool has free, the shortfall is taken from other power pools automatically.",
+        "at": ""
+      },
+      "light_group_controller_setting_lights_enabled": {
+        "ht": "Turns a ship's lights on automatically when you start flying it.",
+        "at": ""
+      },
+      "flight_thrust_invert_toggle": {
+        "ht": "On a HOTAS, the thrust-invert button switches between forward and reverse with each press, instead of reversing only while held.",
+        "at": ""
+      },
+      "flight_relative_throttle_trap_time": {
+        "ht": "With a relative throttle, how long the throttle holds at zero when you move the axis across its center, in seconds, so you don't slip straight into reverse.",
+        "at": ""
+      },
+      "flight_relative_throttle_trap_threshold": {
+        "ht": "With a relative throttle, how far past its center you have to move the axis before the throttle leaves zero.",
+        "at": ""
+      },
+      "flight_core_disabled_sensitivity_rotation": {
+        "ht": "Scales rotation input while the flight control system's core functions are off. Higher turns the ship more for the same input.",
+        "at": ""
+      },
+      "flight_core_disabled_sensitivity_translation": {
+        "ht": "Scales strafing input while the flight control system's core functions are off. Higher thrusts harder for the same input.",
+        "at": ""
+      },
+      "flight_controller_setting_advanced_hud_scm_enabled": {
+        "ht": "Shows the advanced HUD, with extra flight data, by default in SCM mode.",
+        "at": ""
+      },
+      "flight_controller_setting_advanced_hud_nav_enabled": {
+        "ht": "Shows the advanced HUD, with extra flight data, by default in NAV mode.",
+        "at": ""
+      },
+      "flight_controller_setting_advanced_hud_labels_enabled": {
+        "ht": "The advanced HUD shows text labels where it would otherwise use icons.",
+        "at": ""
+      },
+      "flight_controller_setting_course_prediction_enabled": {
+        "ht": "Shows your ship's predicted course on the HUD.",
+        "at": ""
+      },
+      "flight_controller_setting_light_amplification_enabled": {
+        "ht": "Brightens dark scenes from the pilot's seat, like night vision.",
+        "at": ""
+      },
+      "turret_setting_light_amplification_enabled": {
+        "ht": "Brightens dark scenes from turret seats, like night vision.",
+        "at": ""
+      },
+      "velocity_indicator_display_type": {
+        "ht": "How the velocity indicator, which marks the direction your ship is actually moving, appears on the HUD.",
+        "at": ""
+      },
+      "weapon_setting_fallback_convergence_distance": {
+        "ht": "The distance, in metres, at which your guns' shots meet when no target is selected.",
+        "at": ""
+      },
+      "weapon_setting_gimbals_locked_pilot": {
+        "ht": "Starts with gimbals locked when piloting, so your guns fire straight ahead instead of following your aim.",
+        "at": ""
+      },
+      "weapon_setting_gimbals_locked_gunner": {
+        "ht": "Starts with gimbals locked when you're a gunner, so the guns fire straight ahead instead of following your aim.",
+        "at": ""
+      },
+      "weapon_setting_gimbals_locked_driver": {
+        "ht": "Starts with gimbals locked when driving a ground vehicle, so its guns fire straight ahead instead of following your aim.",
+        "at": ""
+      },
+      "weapon_setting_magnified_ui": {
+        "ht": "Starts with the magnified weapon display on.",
+        "at": ""
+      },
+      "weapon_setting_precision_lines": {
+        "ht": "Starts with precision lines on, which draw guide lines between your aim and the target's lead marker.",
+        "at": ""
+      },
+      "weapon_setting_staggered_firing": {
+        "ht": "Starts with staggered fire on, so guns in a group fire one after another instead of all at once.",
+        "at": ""
+      },
+      "weapon_setting_lag_pips": {
+        "ht": "Starts with lag PIPs on, which mark where your shots will pass relative to the target, instead of where to aim.",
+        "at": ""
+      },
+      "weapon_setting_single_pips": {
+        "ht": "Shows a separate PIP (aim marker) for each weapon instead of one combined marker.",
+        "at": ""
+      },
+      "weapon_setting_fading_pips": {
+        "ht": "Starts with fading PIPs on, which fade aim markers in and out depending on whether the target is in range.",
+        "at": ""
+      },
+      "manual_gimbal_mode_ships_default": {
+        "ht": "What manually aimed gimbal guns follow when you pilot a ship.",
+        "at": ""
+      },
+      "manual_gimbal_mode_ships_free_look": {
+        "ht": "What manually aimed gimbal guns follow while you use free look in a ship.",
+        "at": ""
+      },
+      "manual_gimbal_mode_mgv_default": {
+        "ht": "What manually aimed gimbal guns follow when you drive a ground vehicle.",
+        "at": ""
+      },
+      "manual_gimbal_mode_mgv_free_look": {
+        "ht": "What manually aimed gimbal guns follow while you use free look in a ground vehicle.",
+        "at": ""
+      },
+      "manual_gimbal_mode_turrets_default": {
+        "ht": "What manually aimed turret guns follow.",
+        "at": ""
+      },
+      "manual_gimbal_mode_turrets_free_look": {
+        "ht": "What manually aimed turret guns follow while you use free look.",
+        "at": ""
+      },
+      "missiles_increase_count_loop": {
+        "ht": "Raising the number of armed missiles past the maximum wraps back around to one.",
+        "at": ""
+      },
+      "bombs_desired_impact_point_direction": {
+        "ht": "How the desired impact point for bombs is placed.",
+        "at": ""
+      },
+      "vjoy_angle_pilots": {
+        "ht": "When flying with the mouse, how far the virtual joystick reaches, in degrees. The cursor at the edge gives full turn rate, so a smaller range turns the ship harder for less mouse movement.",
+        "at": ""
+      },
+      "vjoy_use_raw_input": {
+        "ht": "Feeds the pilot's virtual joystick unfiltered mouse movement.",
+        "at": ""
+      },
+      "vjoy_combined_dead_zone": {
+        "ht": "When flying with the mouse, how far from the center the cursor has to move before the ship starts turning, as a percentage of the virtual joystick's range.",
+        "at": ""
+      },
+      "vjoy_visibility": {
+        "ht": "When the virtual joystick is drawn on screen.",
+        "at": ""
+      },
+      "vjoy_show_deadzone": {
+        "ht": "Draws the dead zone in the middle of the virtual joystick.",
+        "at": ""
+      },
+      "vjoy_mgv_angle": {
+        "ht": "When driving with the mouse, how far the virtual joystick reaches, in degrees. A smaller range steers harder for less mouse movement.",
+        "at": ""
+      },
+      "vjoy_mgv_combined_dead_zone": {
+        "ht": "When driving with the mouse, how far from the center the cursor has to move before the vehicle responds, as a percentage of the virtual joystick's range.",
+        "at": ""
+      },
+      "vjoy_turret_angle": {
+        "ht": "When aiming a turret with the mouse, how far the virtual joystick reaches, in degrees. A smaller range turns the turret faster for less mouse movement.",
+        "at": ""
+      },
+      "vjoy_turret_combined_dead_zone": {
+        "ht": "When aiming a turret with the mouse, how far from the center the cursor has to move before the turret responds, as a percentage of the virtual joystick's range.",
+        "at": ""
+      },
+      "pilot_esp_strength": {
+        "ht": "How strongly Enhanced Stick Precision (ESP) slows your aim near a target. 1 is the game's default.",
+        "at": ""
+      },
+      "pilot_esp_dampening_amount": {
+        "ht": "How much ESP dampens your rotation input near a target.",
+        "at": ""
+      },
+      "pilot_esp_dampening_include_roll": {
+        "ht": "ESP also dampens roll, not just pitch and yaw.",
+        "at": ""
+      },
+      "turrets_esp_default_on": {
+        "ht": "Turns Enhanced Stick Precision (ESP) on by default in turrets.",
+        "at": ""
+      },
+      "turrets_esp_strength": {
+        "ht": "How strongly ESP slows turret aim near a target. 1 is the game's default.",
+        "at": ""
+      },
+      "turrets_esp_dampening": {
+        "ht": "The shape of ESP's dampening curve in turrets.",
+        "at": ""
+      },
+      "turret_default_mouse_mode": {
+        "ht": "How the mouse moves turrets by default.",
+        "at": ""
+      },
+      "turret_relative_mouse_mode_adaptive_zoom_sensitivity": {
+        "ht": "Lowers turret mouse sensitivity as you zoom in, so aiming stays steady. Doesn't apply when you aim with the virtual joystick.",
+        "at": ""
+      },
+      "salvage_free_gimbal_locks_rotation": {
+        "ht": "In salvage mode with a free gimbal, the mouse moves only the salvage head and the ship stops rotating.",
+        "at": ""
+      },
+      "salvage_aim_nudge_sensitivity": {
+        "ht": "How far the salvage aim moves when you nudge it.",
+        "at": ""
+      },
+      "tractor_beam_rotation_mode": {
+        "ht": "When you rotate an object with a tractor beam, it turns around its own axes instead of around your point of view.",
+        "at": ""
+      },
+      "targeting_show_heading": {
+        "ht": "Shows an arrow for the direction your locked target is heading.",
+        "at": ""
+      },
+      "targeting_show_distance": {
+        "ht": "Shows the distance to your locked target.",
+        "at": ""
+      },
+      "targeting_show_name": {
+        "ht": "Shows your locked target's name.",
+        "at": ""
+      },
+      "targeting_show_trail": {
+        "ht": "Shows a trail behind your locked target.",
+        "at": ""
+      },
+      "show_selected_target_reticle": {
+        "ht": "Draws a reticle around your selected target.",
+        "at": ""
+      },
+      "target_selection_direction_source": {
+        "ht": "Which direction the game uses to pick the target you're looking at, such as your ship's nose or your view.",
+        "at": ""
+      },
+      "targeting_pinned_overflow_behaviour": {
+        "ht": "What happens when you pin a target while every pin slot is full. With overflow enabled, the new target replaces the oldest pin; with it disabled, nothing is pinned.",
+        "at": ""
+      },
+      "auto_zoom_on_selected_target": {
+        "ht": "Zooms your view in automatically on your locked target.",
+        "at": ""
+      },
+      "auto_zoom_on_selected_target_strength": {
+        "ht": "How far the automatic zoom on a locked target goes.",
+        "at": ""
+      },
+      "targeting_arrow_display_mode": {
+        "ht": "How the arrow pointing to an off-screen target is shown.",
+        "at": ""
+      },
+      "look_ahead_enabled_spaceship": {
+        "ht": "Look ahead turns the pilot's view automatically toward where the ship is going, such as into turns or toward a target.",
+        "at": ""
+      },
+      "look_ahead_strength_forward": {
+        "ht": "How strongly look ahead keeps your view toward the ship's nose.",
+        "at": ""
+      },
+      "look_ahead_strength_velocity_vector": {
+        "ht": "How strongly look ahead turns your view toward the direction the ship is actually moving.",
+        "at": ""
+      },
+      "look_ahead_strength_yaw_pitch": {
+        "ht": "How far your view looks into turns.",
+        "at": ""
+      },
+      "look_ahead_strength_roll": {
+        "ht": "How far your view tilts into rolls.",
+        "at": ""
+      },
+      "look_ahead_strength_jump_point_spline": {
+        "ht": "How strongly your view follows the tunnel while you travel through a jump point.",
+        "at": ""
+      },
+      "look_ahead_strength_vjoy": {
+        "ht": "How strongly your view follows the virtual joystick cursor when you fly with the mouse.",
+        "at": ""
+      },
+      "look_ahead_strength_horizon_look_at": {
+        "ht": "How strongly your view is drawn toward the horizon when you fly near a planet.",
+        "at": ""
+      },
+      "look_ahead_strength_horizon_alignment": {
+        "ht": "How strongly your head tilts to stay level with the horizon.",
+        "at": ""
+      },
+      "look_ahead_strength_target_soft": {
+        "ht": "How strongly your view is drawn toward your target.",
+        "at": ""
+      },
+      "look_ahead_auto_target_padlock_enabled": {
+        "ht": "Turns target padlock on automatically when you lock a target, so your view follows it. Applies when piloting, driving and in turrets.",
+        "at": ""
+      },
+      "look_ahead_strength_quantum_boost_target": {
+        "ht": "How strongly your view turns toward your quantum boost destination.",
+        "at": ""
+      },
+      "look_ahead_dampening_zone": {
+        "ht": "The area around the center of your view, in degrees, where look ahead moves your view more gently.",
+        "at": ""
+      },
+      "look_ahead_ads_enables_padlock": {
+        "ht": "Aiming down sights turns target padlock on, so your view follows your target.",
+        "at": ""
+      },
+      "look_ahead_enabled_turret": {
+        "ht": "Look ahead in turret seats: your view turns automatically toward where the turret is aiming and toward your target.",
+        "at": ""
+      },
+      "look_ahead_strength_turret_forward": {
+        "ht": "How strongly look ahead keeps your view toward where the turret is pointing.",
+        "at": ""
+      },
+      "look_ahead_strength_turret_target_soft": {
+        "ht": "How strongly your view follows your target in a turret.",
+        "at": ""
+      },
+      "look_ahead_strength_turret_vjoy": {
+        "ht": "How strongly your view follows the virtual joystick cursor in a turret.",
+        "at": ""
+      },
+      "look_ahead_strength_turret_pitch_yaw": {
+        "ht": "How far your view looks into the turret's turns.",
+        "at": ""
+      },
+      "look_ahead_enabled_mgv": {
+        "ht": "Look ahead for drivers: your view turns automatically toward where the ground vehicle is going and toward your target.",
+        "at": ""
+      },
+      "look_ahead_strength_mgv_forward": {
+        "ht": "How strongly look ahead keeps your view toward the vehicle's front.",
+        "at": ""
+      },
+      "look_ahead_strength_mgv_target_soft": {
+        "ht": "How strongly your view follows your target while driving.",
+        "at": ""
+      },
+      "look_ahead_strength_mgv_vjoy": {
+        "ht": "How strongly your view follows the virtual joystick cursor while driving.",
+        "at": ""
+      },
+      "look_ahead_strength_mgv_pitch_yaw": {
+        "ht": "How far your view looks into turns while driving.",
+        "at": ""
+      },
+      "look_ahead_strength_mgv_horizon_alignment": {
+        "ht": "How strongly your head tilts to stay level with the horizon while driving.",
+        "at": ""
+      },
+      "gforce_head_bob_scale": {
+        "ht": "How much G-forces move your character's head and view. 1 is the game's default; 0 turns it off.",
+        "at": ""
+      },
+      "gforce_boost_zoom_scale": {
+        "ht": "How strong the zoom effect is when you boost. 1 is the game's default; 0 turns it off.",
+        "at": ""
+      },
+      "shake_scale": {
+        "ht": "How much the camera shakes overall. 1 is the game's default; 0 turns camera shake off.",
+        "at": ""
+      },
+      "vehicle_weapon_recoil_scale": {
+        "ht": "How much firing vehicle weapons shakes your view. 1 is the game's default; 0 turns it off.",
+        "at": ""
+      },
+      "vehicle_seat_exit_needs_hold": {
+        "ht": "Leaving a combat seat, such as a pilot or turret seat, needs the exit button held for a quarter of a second, so you don't leave by accident.",
+        "at": ""
+      },
+      "show_party_nameplate": {
+        "ht": "Shows your party members' names above them.",
+        "at": ""
+      },
+      "party_nameplate_distance": {
+        "ht": "How far away, in metres, party members' names are still shown.",
+        "at": ""
+      },
+      "show_contact_friendly_nameplate": {
+        "ht": "Always shows names above friendly contacts.",
+        "at": ""
+      },
+      "show_contact_neutral_hostile_nameplate": {
+        "ht": "Always shows names above neutral and hostile contacts.",
+        "at": ""
+      },
+      "show_contact_distance": {
+        "ht": "Shows the distance to contacts beside their names.",
+        "at": ""
+      },
+      "friend_requests": {
+        "ht": "Lets other players send you friend requests.",
+        "at": ""
+      },
+      "friend_requests_notifications": {
+        "ht": "Notifies you when you get a friend request.",
+        "at": ""
+      },
+      "restrict_party_invites_notifications": {
+        "ht": "Whose party invites notify you: anyone's, or only your friends'.",
+        "at": ""
+      },
+      "restrict_currency_transfer_notifications": {
+        "ht": "Whose money transfers notify you: anyone's, or only your friends'.",
+        "at": ""
+      },
+      "restrict_comms_calls_notifications": {
+        "ht": "Whose comms calls notify you: anyone's, or only your friends'.",
+        "at": ""
+      },
+      "show_emissions_text": {
+        "ht": "Shows your ship's signature values as numbers on the emissions display, not just as bars.",
+        "at": ""
+      },
+      "lock_vehicle_ping_to_scan_mode": {
+        "ht": "The ping control only works in scanning mode, so you can't ping by accident.",
+        "at": ""
+      },
+      "show_scan_wave_highlights_vehicle": {
+        "ht": "Highlights vehicles your ping's scan wave passes over.",
+        "at": ""
+      },
+      "show_scan_wave_highlights_fps": {
+        "ht": "Highlights people on foot that your ping's scan wave passes over.",
+        "at": ""
+      },
+      "width": {
+        "ht": "The width of the game's resolution, in pixels.",
+        "at": ""
+      },
+      "height": {
+        "ht": "The height of the game's resolution, in pixels.",
+        "at": ""
+      },
+      "window_mode": {
+        "ht": "Whether the game runs in a window, full screen, or a borderless window.",
+        "at": ""
+      },
+      "vsync": {
+        "ht": "Matches the frame rate to your monitor's refresh rate to stop screen tearing, at the cost of some input delay.",
+        "at": ""
+      },
+      "aspect_modifier": {
+        "ht": "Adjusts the shape of helmet visor and lens displays to suit your screen, such as on ultrawide monitors.",
+        "at": ""
+      },
+      "qrcode": {
+        "ht": "Shows a QR code with your session's details on screen, which helps CIG match bug reports to game sessions.",
+        "at": ""
+      },
+      "upscaling": {
+        "ht": "Renders the game at a lower resolution and upscales it to your screen, for a higher frame rate. The percentage is the render resolution. Native AA renders at full resolution and only applies anti-aliasing.",
+        "at": ""
+      },
+      "upscaling_technique": {
+        "ht": "Which upscaler to use: CIG's own temporal upscaler (TSR), or NVIDIA DLSS/DLAA on NVIDIA RTX graphics cards.",
+        "at": ""
+      },
+      "upscaling_model": {
+        "ht": "Which AI model DLSS uses. The Transformer model generally gives a sharper, steadier image but costs more performance.",
+        "at": ""
+      },
+      "hdr": {
+        "ht": "Outputs a high dynamic range image to an HDR-capable display.",
+        "at": ""
+      },
+      "hdrref_white": {
+        "ht": "How bright normal white, such as the UI, appears in HDR, in nits. Raise it if the game looks dim.",
+        "at": ""
+      },
+      "hdrmax_brightness": {
+        "ht": "The brightest your HDR display can show, in nits. Set it to your display's peak brightness.",
+        "at": ""
+      },
+      "sys_spec": {
+        "ht": "Sets all the quality settings below at once. Settings left on \"From quality preset\" follow it.",
+        "at": ""
+      },
+      "global_illumination": {
+        "ht": "Quality of global illumination, which models light bouncing between surfaces.",
+        "at": ""
+      },
+      "sys_spec_object_detail": {
+        "ht": "How detailed objects and models are, especially at a distance.",
+        "at": ""
+      },
+      "sys_spec_object_view_distance": {
+        "ht": "How far away objects are still drawn.",
+        "at": ""
+      },
+      "sys_spec_texture_quality": {
+        "ht": "The resolution of textures. Higher settings use more video memory.",
+        "at": ""
+      },
+      "sys_spec_texture_detail": {
+        "ht": "Quality of detail textures, the fine surface detail you see up close.",
+        "at": ""
+      },
+      "sys_spec_texture_ground": {
+        "ht": "Quality of ground textures on planets and moons.",
+        "at": ""
+      },
+      "sys_spec_texture_filtering": {
+        "ht": "How sharp textures stay when seen at an angle, such as the ground ahead of you.",
+        "at": ""
+      },
+      "sys_spec_shadow_maps": {
+        "ht": "Quality and range of shadows.",
+        "at": ""
+      },
+      "sys_spec_shadow_screen_space": {
+        "ht": "Quality of screen-space shadows, small contact shadows that add depth to fine detail.",
+        "at": ""
+      },
+      "sys_spec_planet_terrain_virtual_textures": {
+        "ht": "Quality of the textures on planet and moon terrain.",
+        "at": ""
+      },
+      "sys_spec_planet_volumetric_clouds": {
+        "ht": "Quality of clouds in planet atmospheres.",
+        "at": ""
+      },
+      "sys_spec_gas_cloud": {
+        "ht": "Quality of gas clouds in space.",
+        "at": ""
+      },
+      "sys_spec_fog": {
+        "ht": "Quality of fog and atmospheric haze.",
+        "at": ""
+      },
+      "sys_spec_water_caustics": {
+        "ht": "Quality of caustics, the rippling patterns of light that water casts on surfaces.",
+        "at": ""
+      },
+      "sys_spec_water_sim": {
+        "ht": "Quality of the water surface simulation, such as waves and ripples.",
+        "at": ""
+      },
+      "sys_spec_particles": {
+        "ht": "Quality of particle effects such as smoke, sparks and explosions.",
+        "at": ""
+      },
+      "sys_spec_shading": {
+        "ht": "Quality of shaders, which control how surfaces react to light.",
+        "at": ""
+      },
+      "sys_spec_post_processing": {
+        "ht": "Quality of post effects such as bloom, depth of field and lens effects.",
+        "at": ""
+      },
+      "sys_spec_video_comms": {
+        "ht": "Quality of video comms, the video feeds of players and NPCs during calls.",
+        "at": ""
+      },
+      "gamma": {
+        "ht": "Adjusts the brightness of midtones. Higher lightens dark areas without brightening bright areas as much.",
+        "at": ""
+      },
+      "brightness": {
+        "ht": "Overall brightness of the image.",
+        "at": ""
+      },
+      "contrast": {
+        "ht": "The difference between light and dark areas.",
+        "at": ""
+      },
+      "fov": {
+        "ht": "Field of view, in degrees: how much of the scene you see. Higher shows more around you; lower looks more zoomed in.",
+        "at": ""
+      },
+      "fov_social": {
+        "ht": "Field of view, in degrees, in social situations such as conversations.",
+        "at": ""
+      },
+      "fov_combat": {
+        "ht": "Field of view, in degrees, in combat.",
+        "at": ""
+      },
+      "motion_blur": {
+        "ht": "Blurs fast movement on screen.",
+        "at": ""
+      },
+      "sharpening": {
+        "ht": "How much the image is sharpened. 0 turns sharpening off.",
+        "at": ""
+      },
+      "chromatic_aberration": {
+        "ht": "Adds colour fringing toward the edges of the image, like a camera lens.",
+        "at": ""
+      },
+      "film_grain": {
+        "ht": "Adds fine film-grain noise to the image.",
+        "at": ""
+      },
+      "ignore_window_focus": {
+        "ht": "Keeps the game's sound playing when its window isn't in focus.",
+        "at": ""
+      },
+      "enable_combat_music": {
+        "ht": "Plays music during combat.",
+        "at": ""
+      },
+      "audio_master_volume": {
+        "ht": "Overall game volume.",
+        "at": ""
+      },
+      "audio_sfx_volume": {
+        "ht": "Volume of sound effects.",
+        "at": ""
+      },
+      "audio_music_volume": {
+        "ht": "Volume of music.",
+        "at": ""
+      },
+      "audio_speech_volume": {
+        "ht": "Volume of characters' speech.",
+        "at": ""
+      },
+      "audio_ship_computer_speech_volume": {
+        "ht": "Volume of your ship computer's voice.",
+        "at": ""
+      },
+      "audio_simulation_announcer_volume": {
+        "ht": "Volume of the announcer in Arena Commander and other simulations.",
+        "at": ""
+      },
+      "video_volume": {
+        "ht": "Volume of videos played in the game's menus and screens.",
+        "at": ""
+      },
+      "enable_race_commentary": {
+        "ht": "Plays announcer commentary during races.",
+        "at": ""
+      },
+      "audio_dynamic_range_preset": {
+        "ht": "How much the volume differs between quiet and loud sounds. A narrower range keeps quiet sounds audible and loud ones in check, which suits headphones or playing late at night.",
+        "at": ""
+      },
+      "audio_panning_rule": {
+        "ht": "Optimizes the sound for speakers or for headphones.",
+        "at": ""
+      },
+      "audio_ship_computer_verbosity_preset": {
+        "ht": "How often your ship's computer speaks up, from off to every announcement.",
+        "at": ""
+      },
+      "audio_shake_strength": {
+        "ht": "How much loud sounds, such as explosions and engines, shake the camera.",
+        "at": ""
+      },
+      "mouse_sensitivity": {
+        "ht": "How far your view moves for a given mouse movement.",
+        "at": ""
+      },
+      "adsmouse_sensitivity": {
+        "ht": "Mouse sensitivity while aiming down sights, relative to normal sensitivity. 1 is the same as normal.",
+        "at": ""
+      },
+      "zoom_sensitivity_multiplier_toggle": {
+        "ht": "Lowers mouse sensitivity further on sights that zoom in more, so aiming feels the same at every zoom level.",
+        "at": ""
+      },
+      "zoom_sensitivity_multiplier": {
+        "ht": "How much zoom scaling lowers mouse sensitivity while aiming down sights.",
+        "at": ""
+      },
+      "invert_ymouse": {
+        "ht": "Moving the mouse forward looks down instead of up.",
+        "at": ""
+      },
+      "mouse_acceleration": {
+        "ht": "Makes fast mouse movements move your view further than slow ones. 0 turns acceleration off.",
+        "at": ""
+      },
+      "mouse_smoothing": {
+        "ht": "Smooths mouse movement, at the cost of some delay. 0 turns smoothing off.",
+        "at": ""
+      },
+      "sensitivity": {
+        "ht": "How fast your view moves with a gamepad's stick.",
+        "at": ""
+      },
+      "invert_ycontroller": {
+        "ht": "Pushing a gamepad's stick up looks down instead of up.",
+        "at": ""
+      },
+      "aim_assistance": {
+        "ht": "Helps your aim stay on targets when you play with a gamepad.",
+        "at": ""
+      },
+      "hmd_vr": {
+        "ht": "Turns virtual reality on for a connected headset. VR support is experimental.",
+        "at": ""
+      },
+      "hmd_theater_mode": {
+        "ht": "Shows the game on a large virtual screen in your headset, instead of putting you inside the game world.",
+        "at": ""
+      },
+      "hmd_theater_mode_scale": {
+        "ht": "How large the theater-mode screen is.",
+        "at": ""
+      },
+      "hmd_theater_mode_distance": {
+        "ht": "How far away the theater-mode screen is.",
+        "at": ""
+      },
+      "hmd_theater_mode_curvature": {
+        "ht": "How much the theater-mode screen curves around you.",
+        "at": ""
+      },
+      "hmd_automatic_switching": {
+        "ht": "Switches automatically between full VR and theater mode, such as for menus.",
+        "at": ""
+      },
+      "hmd_ipdscale": {
+        "ht": "Scales the distance between your eyes in VR, which changes how large the world looks. 1 matches real scale.",
+        "at": ""
+      },
+      "hmd_infinity_projection_distance": {
+        "ht": "How far away vehicle HUD elements appear to float in VR.",
+        "at": ""
+      },
+      "hmd_monitor_mirror_mode": {
+        "ht": "What your monitor shows while you play in VR.",
+        "at": ""
+      },
+      "hmd_monitor_mirror_mode_smoothing": {
+        "ht": "Smooths the mirrored view on your monitor, so head movement looks less shaky to anyone watching.",
+        "at": ""
+      },
+      "hmd_actor_control_mode": {
+        "ht": "How your headset's movement controls your character on foot in VR.",
+        "at": ""
+      },
+      "hmd_actor_control_mode_ads_direct_offset": {
+        "ht": "When you aim down sights in VR, your aim follows your head directly.",
+        "at": ""
+      },
+      "hmd_reset_on_fps_ads": {
+        "ht": "Recenters your VR view when you aim down sights on foot.",
+        "at": ""
+      },
+      "hmd_fps_ads_dominant_eye": {
+        "ht": "Which eye lines up with your sights when you aim down sights in VR.",
+        "at": ""
+      },
+      "hmd_visor_aspect_modifier": {
+        "ht": "Adjusts the shape of helmet visor and lens displays in VR.",
+        "at": ""
+      },
+      "hmd_visor_distance": {
+        "ht": "How far from your eyes visor and lens displays appear in VR.",
+        "at": ""
+      },
+      "hmd_visor_height": {
+        "ht": "How high visor and lens displays appear in VR.",
+        "at": ""
+      },
+      "hmd_visor_scale": {
+        "ht": "How large visor and lens displays appear in VR.",
+        "at": ""
+      },
+      "hmd_visor_enabled": {
+        "ht": "Shows helmet visor and lens displays in VR.",
+        "at": ""
+      },
+      "hmd_uiscale": {
+        "ht": "How large menus and other UI appear in VR.",
+        "at": ""
+      },
+      "hmd_uidistance": {
+        "ht": "How far away menus and other UI appear in VR.",
+        "at": ""
+      },
+      "hmd_uiheight": {
+        "ht": "How high menus and other UI appear in VR.",
+        "at": ""
+      },
+      "hmd_cursor_size": {
+        "ht": "How large the 3D cursor is in VR.",
+        "at": ""
+      },
+      "hmd_cursor_sensitivity": {
+        "ht": "How fast the 3D cursor moves in VR.",
+        "at": ""
+      },
+      "hmd_cursor_follows_head": {
+        "ht": "The 3D cursor follows where you turn your head in VR.",
+        "at": ""
+      },
+      "hmd_cursor_use_eye_tracking": {
+        "ht": "Moves the 3D cursor with eye tracking, on headsets that support it.",
+        "at": ""
+      },
+      "hmd_mobiglas_distance": {
+        "ht": "How far from you the mobiGlas appears in VR.",
+        "at": ""
+      },
+      "hmd_depth_of_field": {
+        "ht": "Applies depth-of-field blur in VR.",
+        "at": ""
+      },
+      "hmd_gameplay_zoom_strength": {
+        "ht": "How far your view zooms in VR when you use zoom in gameplay.",
+        "at": ""
+      },
+      "headtracking_toggle": {
+        "ht": "Turns head tracking on, so your view follows your real head movement.",
+        "at": ""
+      },
+      "headtracking_enable_seat_position_offset": {
+        "ht": "In cockpits, lets head tracking move your head side to side, up and down, and forward and back, not just turn it.",
+        "at": ""
+      },
+      "headtracking_third_person_camera_toggle": {
+        "ht": "Head tracking also moves the external (third-person) camera.",
+        "at": ""
+      },
+      "headtracking_third_person_disable_during_inventory": {
+        "ht": "Turns head tracking off for the external camera while your inventory is open.",
+        "at": ""
+      },
+      "headtracking_disable_during_seat": {
+        "ht": "Turns head tracking off while you're seated.",
+        "at": ""
+      },
+      "headtracking_disable_during_walking": {
+        "ht": "Turns head tracking off while you're on foot.",
+        "at": ""
+      },
+      "headtracking_disable_during_ads": {
+        "ht": "Turns head tracking off while you aim down sights.",
+        "at": ""
+      },
+      "headtracking_disable_during_mobi_glas": {
+        "ht": "Turns head tracking off while your mobiGlas is open.",
+        "at": ""
+      },
+      "headtracking_disable_during_im": {
+        "ht": "Turns head tracking off while you're in interaction mode.",
+        "at": ""
+      },
+      "headtracking_disable_during_vehicle_ads": {
+        "ht": "Turns head tracking off while you use precision targeting in a vehicle.",
+        "at": ""
+      },
+      "headtracking_toggle_auto_calibrate": {
+        "ht": "Recenters head tracking automatically when you turn it on.",
+        "at": ""
+      },
+      "headtracking_source": {
+        "ht": "Which head-tracking device or software to use.",
+        "at": ""
+      },
+      "headtracking_enable_roll_seat": {
+        "ht": "Lets your view tilt with your head while you're seated.",
+        "at": ""
+      },
+      "headtracking_enable_roll_fps": {
+        "ht": "Lets your view tilt with your head while you're on foot.",
+        "at": ""
+      },
+      "headtracking_hold_use_raw_during_hold": {
+        "ht": "While you hold the head-tracking button, your view follows the tracker's raw position instead of the recentered one.",
+        "at": ""
+      },
+      "headtracking_inactivity_time": {
+        "ht": "Turns head tracking off after this many seconds without input from the tracker.",
+        "at": ""
+      },
+      "headtracking_global_smoothing_position": {
+        "ht": "Smooths head-tracking position. 0 turns smoothing off.",
+        "at": ""
+      },
+      "headtracking_global_smoothing_rotation": {
+        "ht": "Smooths head-tracking rotation. 0 turns smoothing off.",
+        "at": ""
+      },
+      "preferred_audio_input_device_hash": {
+        "ht": "Which microphone the game uses for voice chat.",
+        "at": ""
+      },
+      "mute_microphone_vo_ip": {
+        "ht": "Mutes your microphone in voice chat.",
+        "at": ""
+      },
+      "microphone_volume": {
+        "ht": "How loud your microphone is to other players, in percent.",
+        "at": ""
+      },
+      "audio_voipvolume": {
+        "ht": "How loud other players' voices are.",
+        "at": ""
+      },
+      "enable_level_activated_voice_transmission": {
+        "ht": "Transmits your voice automatically when you speak loudly enough, instead of only while you hold push-to-talk.",
+        "at": ""
+      },
+      "voice_level_on_threshold": {
+        "ht": "How loud you have to speak, in decibels, before voice activation starts transmitting. Values closer to 0 need a louder voice.",
+        "at": ""
+      },
+      "fo_ipcamera_selection": {
+        "ht": "Which webcam to use for facial tracking.",
+        "at": ""
+      },
+      "fo_ipcamera_rotation": {
+        "ht": "Rotates the webcam image for facial tracking, for cameras mounted sideways or upside down.",
+        "at": ""
+      },
+      "head_tracking_faceware_pitch_multiplier": {
+        "ht": "How far your view tilts up and down for a given head movement, when a webcam tracks your head.",
+        "at": ""
+      },
+      "head_tracking_faceware_yaw_multiplier": {
+        "ht": "How far your view turns left and right for a given head movement, when a webcam tracks your head.",
+        "at": ""
+      },
+      "head_tracking_faceware_roll_multiplier": {
+        "ht": "How far your view rolls for a given head tilt, when a webcam tracks your head.",
+        "at": ""
+      },
+      "head_tracking_face_ware_deadzone_offset": {
+        "ht": "How far, in degrees, your head has to move before webcam head tracking responds.",
+        "at": ""
+      },
+      "head_tracking_face_ware_deadzone_rotation_yaw": {
+        "ht": "How far, in degrees, you can turn your head left or right from center before webcam tracking turns your view.",
+        "at": ""
+      },
+      "head_tracking_face_ware_deadzone_rotation_pitch": {
+        "ht": "How far, in degrees, you can tilt your head up or down from center before webcam tracking tilts your view.",
+        "at": ""
+      },
+      "head_tracking_face_ware_deadzone_rotation_roll": {
+        "ht": "How far, in degrees, you can tilt your head sideways from center before webcam tracking rolls your view.",
+        "at": ""
+      },
+      "head_tracking_face_ware_smoothing": {
+        "ht": "How quickly webcam head tracking follows your movement. Lower values are smoother but slower.",
+        "at": ""
+      },
+      "head_tracking_face_ware_position_scale": {
+        "ht": "How far your view moves for a given head movement when a webcam tracks your head's position.",
+        "at": ""
+      },
+      "head_tracking_face_ware_position_dead_zone_left_right": {
+        "ht": "How far you can move your head left or right before webcam tracking moves your view.",
+        "at": ""
+      },
+      "head_tracking_face_ware_position_dead_zone_up_down": {
+        "ht": "How far you can move your head up or down before webcam tracking moves your view.",
+        "at": ""
+      },
+      "head_tracking_face_ware_position_dead_zone_forward_back": {
+        "ht": "How far you can move your head forward or back before webcam tracking moves your view.",
+        "at": ""
+      },
+      "head_tracking_face_ware_couple_position_offset_to_orientation": {
+        "ht": "Shifts your view's position as you turn your head, the way a real head moves, when a webcam tracks your head.",
+        "at": ""
+      },
+      "tobii_enabled": {
+        "ht": "Turns on Tobii extended view, where your view follows your eyes and head.",
+        "at": ""
+      },
+      "tobii_head_position_scale": {
+        "ht": "How far your view moves for a given head movement with Tobii.",
+        "at": ""
+      },
+      "tobii_head_position_dead_zone_x": {
+        "ht": "How far you can move your head left or right before Tobii moves your view.",
+        "at": ""
+      },
+      "tobii_head_position_dead_zone_y": {
+        "ht": "How far you can move your head forward or back before Tobii moves your view.",
+        "at": ""
+      },
+      "tobii_head_position_dead_zone_z": {
+        "ht": "How far you can move your head up or down before Tobii moves your view.",
+        "at": ""
+      },
+      "tobii_couple_position_offset_to_orientation": {
+        "ht": "Shifts your view's position as you turn your head, the way a real head moves, with Tobii.",
+        "at": ""
+      },
+      "tobii_gaze_based_target_selection": {
+        "ht": "Selects targets by looking at them.",
+        "at": ""
+      },
+      "tobii_gaze_based_missile_lock": {
+        "ht": "Locks missiles onto what you're looking at.",
+        "at": ""
+      },
+      "tobii_gaze_based_bomb_desired_impact_point": {
+        "ht": "Sets where your bombs should land by looking at the spot.",
+        "at": ""
+      },
+      "tobii_gaze_input_method_profile0": {
+        "ht": "How your gaze moves your view while you're seated.",
+        "at": ""
+      },
+      "tobii_camera_boost_value_profile0": {
+        "ht": "While seated, how much further your view turns when you look toward the edge of the screen.",
+        "at": ""
+      },
+      "tobii_camera_boost_gaze_deadzone_profile0": {
+        "ht": "While seated, how far from the center of the screen you have to look before the camera boost starts.",
+        "at": ""
+      },
+      "tobii_input_mix_eye_head_tracking_ratio_profile0": {
+        "ht": "While seated, how much your view follows your eyes versus your head, from 0 (eyes only) to 1 (head only).",
+        "at": ""
+      },
+      "tobii_input_mix_gaze_responsiveness_profile0": {
+        "ht": "While seated, how quickly your view reacts to where you look.",
+        "at": ""
+      },
+      "tobii_head_sensitivity_yaw_profile0": {
+        "ht": "While seated, how far your view turns left and right for a given head movement.",
+        "at": ""
+      },
+      "tobii_head_sensitivity_pitch_profile0": {
+        "ht": "While seated, how far your view tilts up and down for a given head movement.",
+        "at": ""
+      },
+      "tobii_head_sensitivity_roll_profile0": {
+        "ht": "While seated, how far your view rolls for a given head tilt.",
+        "at": ""
+      },
+      "tobii_head_center_stabilization_profile0": {
+        "ht": "While seated, steadies your view while you look near the center of the screen.",
+        "at": ""
+      },
+      "tobii_head_view_auto_center_profile0": {
+        "ht": "While seated, recenters your view automatically when you look back at the center of the screen.",
+        "at": ""
+      },
+      "tobii_gaze_input_method_profile1": {
+        "ht": "How your gaze moves your view while you're on foot.",
+        "at": ""
+      },
+      "tobii_camera_boost_value_profile1": {
+        "ht": "On foot, how much further your view turns when you look toward the edge of the screen.",
+        "at": ""
+      },
+      "tobii_camera_boost_gaze_deadzone_profile1": {
+        "ht": "On foot, how far from the center of the screen you have to look before the camera boost starts.",
+        "at": ""
+      },
+      "tobii_input_mix_eye_head_tracking_ratio_profile1": {
+        "ht": "On foot, how much your view follows your eyes versus your head, from 0 (eyes only) to 1 (head only).",
+        "at": ""
+      },
+      "tobii_input_mix_gaze_responsiveness_profile1": {
+        "ht": "On foot, how quickly your view reacts to where you look.",
+        "at": ""
+      },
+      "tobii_head_sensitivity_yaw_profile1": {
+        "ht": "On foot, how far your view turns left and right for a given head movement.",
+        "at": ""
+      },
+      "tobii_head_sensitivity_pitch_profile1": {
+        "ht": "On foot, how far your view tilts up and down for a given head movement.",
+        "at": ""
+      },
+      "tobii_head_sensitivity_roll_profile1": {
+        "ht": "On foot, how far your view rolls for a given head tilt.",
+        "at": ""
+      },
+      "tobii_head_center_stabilization_profile1": {
+        "ht": "On foot, steadies your view while you look near the center of the screen.",
+        "at": ""
+      },
+      "tobii_head_view_auto_center_profile1": {
+        "ht": "On foot, recenters your view automatically when you look back at the center of the screen.",
+        "at": ""
+      }
+    },
+    "section_count": {
+      "ht": "{count} settings",
+      "at": ""
+    },
+    "section_count_one": {
+      "ht": "1 setting",
+      "at": ""
     }
   }
 }

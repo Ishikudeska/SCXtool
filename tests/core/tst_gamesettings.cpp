@@ -3,6 +3,7 @@
 #include "core/gamesettings/Bindings.h"
 #include "core/gamesettings/GameProfile.h"
 #include "core/gamesettings/SettingsCatalog.h"
+#include "core/i18n/Translator.h"
 
 #include <QDir>
 #include <QFile>
@@ -332,6 +333,9 @@ private slots:
         QSet<QString> tabs;
         for (const QJsonValue &t : root.value(QLatin1StringView("tabs")).toArray())
             tabs.insert(t.toObject().value(QLatin1StringView("id")).toString());
+        const core::i18n::Catalog english = core::i18n::Catalog::load(
+            QStringLiteral(SC_SOURCE_DIR "/resources/languages"), QStringLiteral("english"));
+        const QSet<QString> gameDescribed = {QStringLiteral("EnableFacewareSystemLive")};
         QSet<QString> names;
         for (const QJsonValue &s : root.value(QLatin1StringView("sections")).toArray()) {
             QVERIFY(tabs.contains(s.toObject().value(QLatin1StringView("tab")).toString()));
@@ -340,6 +344,11 @@ private slots:
                 const QString name = entry.value(QLatin1StringView("name")).toString();
                 QVERIFY2(!names.contains(name), qPrintable(name));
                 names.insert(name);
+                const QString description = entry.value(QLatin1StringView("description")).toString();
+                if (gameDescribed.contains(name))
+                    QVERIFY2(description.isEmpty(), qPrintable(name));
+                else
+                    QVERIFY2(!english.lookup(description).isEmpty(), qPrintable(name));
                 const QJsonValue choices = entry.value(QLatin1StringView("choices"));
                 if (choices.isString())
                     QVERIFY2(

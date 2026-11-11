@@ -100,6 +100,8 @@ public:
     void setTheme(const QString &theme);
     QString uiMode() const;
     void setUiMode(const QString &mode);
+    QString gameSettingsInfo() const;
+    void setGameSettingsInfo(const QString &mode);
     bool includeNewLines() const;
     void setIncludeNewLines(bool enabled);
     bool oneDriveWarningDismissed() const;

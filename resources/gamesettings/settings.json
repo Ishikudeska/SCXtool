@@ -65,230 +65,230 @@
     {
       "id": "gameplay.general", "tab": "gameplay", "label": "game_settings.sections.general",
       "settings": [
-        { "name": "EnableCinematicCamera", "label": "@pause_OptionsCinematicCameras", "type": "toggle" },
-        { "name": "ControlHintsEnabled", "label": "@pause_OptionsControlHints", "type": "toggle" },
-        { "name": "Vibration", "label": "@pause_OptionsVibration", "type": "toggle" },
-        { "name": "CameraSpringMovement", "label": "@pause_OptionsCameraSpringMovement", "type": "toggle" },
-        { "name": "ShowHints", "label": "@pause_OptionsShowHints", "type": "toggle" },
-        { "name": "ShipEntryLabelsEnabled", "label": "@pause_OptionsShipEntryLabelsEnabled", "type": "toggle" },
-        { "name": "ReportCrimeIfIgnoring", "label": "@pause_OptionsReportCrimeIfIgnoring", "type": "toggle" },
-        { "name": "TextInputRepeatDelay", "label": "@pause_OptionsTextInputRepeatDelay", "type": "number", "unit": "=s" },
-        { "name": "TextInputRepeatRate", "label": "@pause_OptionsTextInputRepeatRate", "type": "number" },
-        { "name": "StarMapZoomSpeed", "label": "@pause_zoomSpeed", "type": "number" }
+        { "name": "EnableCinematicCamera", "label": "@pause_OptionsCinematicCameras", "type": "toggle", "description": "game_settings.descriptions.enable_cinematic_camera" },
+        { "name": "ControlHintsEnabled", "label": "@pause_OptionsControlHints", "type": "toggle", "description": "game_settings.descriptions.control_hints_enabled" },
+        { "name": "Vibration", "label": "@pause_OptionsVibration", "type": "toggle", "description": "game_settings.descriptions.vibration" },
+        { "name": "CameraSpringMovement", "label": "@pause_OptionsCameraSpringMovement", "type": "toggle", "description": "game_settings.descriptions.camera_spring_movement" },
+        { "name": "ShowHints", "label": "@pause_OptionsShowHints", "type": "toggle", "description": "game_settings.descriptions.show_hints" },
+        { "name": "ShipEntryLabelsEnabled", "label": "@pause_OptionsShipEntryLabelsEnabled", "type": "toggle", "description": "game_settings.descriptions.ship_entry_labels_enabled" },
+        { "name": "ReportCrimeIfIgnoring", "label": "@pause_OptionsReportCrimeIfIgnoring", "type": "toggle", "description": "game_settings.descriptions.report_crime_if_ignoring" },
+        { "name": "TextInputRepeatDelay", "label": "@pause_OptionsTextInputRepeatDelay", "type": "number", "unit": "=s", "description": "game_settings.descriptions.text_input_repeat_delay" },
+        { "name": "TextInputRepeatRate", "label": "@pause_OptionsTextInputRepeatRate", "type": "number", "description": "game_settings.descriptions.text_input_repeat_rate" },
+        { "name": "StarMapZoomSpeed", "label": "@pause_zoomSpeed", "type": "number", "description": "game_settings.descriptions.star_map_zoom_speed" }
       ]
     },
     {
       "id": "gameplay.subtitles", "tab": "gameplay", "label": "game_settings.sections.subtitles",
       "settings": [
-        { "name": "SubtitlesEnabled", "label": "@pause_SubtitlesEnabled", "type": "toggle" },
-        { "name": "ContextualDialogSubtitles", "label": "@pause_OptionsContextualDialogSubtitles", "type": "toggle" },
-        { "name": "CockpitAudioSubtitles", "label": "@pause_OptionsCockpitAudioSubtitles", "type": "toggle" }
+        { "name": "SubtitlesEnabled", "label": "@pause_SubtitlesEnabled", "type": "toggle", "description": "game_settings.descriptions.subtitles_enabled" },
+        { "name": "ContextualDialogSubtitles", "label": "@pause_OptionsContextualDialogSubtitles", "type": "toggle", "description": "game_settings.descriptions.contextual_dialog_subtitles" },
+        { "name": "CockpitAudioSubtitles", "label": "@pause_OptionsCockpitAudioSubtitles", "type": "toggle", "description": "game_settings.descriptions.cockpit_audio_subtitles" }
       ]
     },
     {
       "id": "gameplay.on_foot", "tab": "gameplay", "label": "game_settings.sections.on_foot",
       "settings": [
-        { "name": "SprintToggle", "label": "@pause_OptionsSprintToggle", "type": "toggle" },
-        { "name": "CrouchToggle", "label": "@pause_OptionsCrouchToggle", "type": "toggle" },
-        { "name": "ProneToggle", "label": "@pause_OptionsProneToggle", "type": "toggle" },
-        { "name": "HoldToggleZoom", "label": "@pause_OptionsZoomToggle", "type": "toggle" },
-        { "name": "InteractionToggle", "label": "@pause_OptionsInteractionToggle", "type": "toggle" },
-        { "name": "InputPromptDisplayInputIcon", "label": "@pause_OptionsInteractionPromptDisplayInputIcon", "type": "toggle" },
-        { "name": "InteractionHighlightMode", "label": "@pause_OptionsInteractionHighlightMode", "type": "number" },
-        { "name": "LeanToggle", "label": "@pause_OptionsLeanToggle", "type": "toggle" },
-        { "name": "CrosshairMode", "label": "@pause_OptionsCrosshairMode", "type": "number" },
-        { "name": "CrosshairOpacity", "label": "@pause_OptionsCrosshairOpacity", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%" },
-        { "name": "HitmarkerMode", "label": "@pause_OptionsHitmarkerMode", "type": "toggle" },
-        { "name": "WeaponMountUseFPSRotation", "label": "@pause_OptionsWeaponMountUseFPSRotation", "type": "toggle" }
+        { "name": "SprintToggle", "label": "@pause_OptionsSprintToggle", "type": "toggle", "description": "game_settings.descriptions.sprint_toggle" },
+        { "name": "CrouchToggle", "label": "@pause_OptionsCrouchToggle", "type": "toggle", "description": "game_settings.descriptions.crouch_toggle" },
+        { "name": "ProneToggle", "label": "@pause_OptionsProneToggle", "type": "toggle", "description": "game_settings.descriptions.prone_toggle" },
+        { "name": "HoldToggleZoom", "label": "@pause_OptionsZoomToggle", "type": "toggle", "description": "game_settings.descriptions.hold_toggle_zoom" },
+        { "name": "InteractionToggle", "label": "@pause_OptionsInteractionToggle", "type": "toggle", "description": "game_settings.descriptions.interaction_toggle" },
+        { "name": "InputPromptDisplayInputIcon", "label": "@pause_OptionsInteractionPromptDisplayInputIcon", "type": "toggle", "description": "game_settings.descriptions.input_prompt_display_input_icon" },
+        { "name": "InteractionHighlightMode", "label": "@pause_OptionsInteractionHighlightMode", "type": "number", "description": "game_settings.descriptions.interaction_highlight_mode" },
+        { "name": "LeanToggle", "label": "@pause_OptionsLeanToggle", "type": "toggle", "description": "game_settings.descriptions.lean_toggle" },
+        { "name": "CrosshairMode", "label": "@pause_OptionsCrosshairMode", "type": "number", "description": "game_settings.descriptions.crosshair_mode" },
+        { "name": "CrosshairOpacity", "label": "@pause_OptionsCrosshairOpacity", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%", "description": "game_settings.descriptions.crosshair_opacity" },
+        { "name": "HitmarkerMode", "label": "@pause_OptionsHitmarkerMode", "type": "toggle", "description": "game_settings.descriptions.hitmarker_mode" },
+        { "name": "WeaponMountUseFPSRotation", "label": "@pause_OptionsWeaponMountUseFPSRotation", "type": "toggle", "description": "game_settings.descriptions.weapon_mount_use_fpsrotation" }
       ]
     },
     {
       "id": "gameplay.flight_defaults", "tab": "gameplay", "label": "game_settings.sections.flight_defaults",
       "settings": [
-        { "name": "IFCS_Setting_AutoPrecisionModeEnabled", "label": "@pause_options_flight_options_auto_precision", "type": "toggle" },
-        { "name": "IFCS_Setting_CoupledEnabled", "label": "@pause_options_flight_options_coupled", "type": "toggle", "invert": true },
-        { "name": "IFCS_Setting_EspEnabled", "label": "@pause_options_flight_options_esp", "type": "toggle" },
-        { "name": "IFCS_Setting_GravityCompensationEnabled", "label": "@pause_options_flight_options_gravity_compensation", "type": "toggle" },
-        { "name": "IFCS_Setting_WindCompensationEnabled", "label": "@pause_options_flight_options_wind_compensation", "type": "toggle" },
-        { "name": "IFCS_Setting_GSafeEnabled", "label": "@pause_options_flight_options_gsafe", "type": "toggle" },
-        { "name": "IFCS_Setting_GSafeDisabledByBoost", "label": "@pause_options_flight_options_gsafe_disabled_by_boost", "type": "toggle" },
-        { "name": "IFCS_Setting_StickyThrottleEnabled", "label": "@pause_options_flight_options_cruise_mode", "type": "toggle" },
-        { "name": "IFCS_Setting_SpacebrakeEnablesBoost", "label": "@pause_options_flight_options_space_brake_engages_boost", "type": "toggle" },
-        { "name": "IFCS_Setting_SpeedLimiterOn", "label": "@pause_options_flight_options_speed_limiter_enabled", "type": "toggle" },
-        { "name": "IFCS_Setting_ProximityAssistDefaultEnabled", "label": "@pause_options_flight_options_proximity_assist_enabled", "type": "toggle" },
-        { "name": "IFCS_Setting_ProximityAssistLandingEnabled", "label": "game_settings.labels.proximity_assist_landing", "type": "toggle" },
-        { "name": "IFCS_Setting_StabilityEnabled", "label": "game_settings.labels.stability", "type": "toggle" },
-        { "name": "IFCS_Setting_CommandBehaviourEnabled", "label": "@pause_options_flight_options_command_behaviour_enabled", "type": "toggle" },
-        { "name": "IFCS_Setting_CoreFunctionality_Enabled", "label": "game_settings.labels.ifcs_core", "type": "toggle" },
-        { "name": "Engineering_AutomaticPowerDistributionEnabled", "label": "@pause_options_automatic_power_redistribution_enabled", "type": "toggle" },
-        { "name": "LightGroupController_Setting_LightsEnabled", "label": "@pause_options_light_group_controller_lights_enabled", "type": "toggle" }
+        { "name": "IFCS_Setting_AutoPrecisionModeEnabled", "label": "@pause_options_flight_options_auto_precision", "type": "toggle", "description": "game_settings.descriptions.ifcs_setting_auto_precision_mode_enabled" },
+        { "name": "IFCS_Setting_CoupledEnabled", "label": "@pause_options_flight_options_coupled", "type": "toggle", "invert": true, "description": "game_settings.descriptions.ifcs_setting_coupled_enabled" },
+        { "name": "IFCS_Setting_EspEnabled", "label": "@pause_options_flight_options_esp", "type": "toggle", "description": "game_settings.descriptions.ifcs_setting_esp_enabled" },
+        { "name": "IFCS_Setting_GravityCompensationEnabled", "label": "@pause_options_flight_options_gravity_compensation", "type": "toggle", "description": "game_settings.descriptions.ifcs_setting_gravity_compensation_enabled" },
+        { "name": "IFCS_Setting_WindCompensationEnabled", "label": "@pause_options_flight_options_wind_compensation", "type": "toggle", "description": "game_settings.descriptions.ifcs_setting_wind_compensation_enabled" },
+        { "name": "IFCS_Setting_GSafeEnabled", "label": "@pause_options_flight_options_gsafe", "type": "toggle", "description": "game_settings.descriptions.ifcs_setting_gsafe_enabled" },
+        { "name": "IFCS_Setting_GSafeDisabledByBoost", "label": "@pause_options_flight_options_gsafe_disabled_by_boost", "type": "toggle", "description": "game_settings.descriptions.ifcs_setting_gsafe_disabled_by_boost" },
+        { "name": "IFCS_Setting_StickyThrottleEnabled", "label": "@pause_options_flight_options_cruise_mode", "type": "toggle", "description": "game_settings.descriptions.ifcs_setting_sticky_throttle_enabled" },
+        { "name": "IFCS_Setting_SpacebrakeEnablesBoost", "label": "@pause_options_flight_options_space_brake_engages_boost", "type": "toggle", "description": "game_settings.descriptions.ifcs_setting_spacebrake_enables_boost" },
+        { "name": "IFCS_Setting_SpeedLimiterOn", "label": "@pause_options_flight_options_speed_limiter_enabled", "type": "toggle", "description": "game_settings.descriptions.ifcs_setting_speed_limiter_on" },
+        { "name": "IFCS_Setting_ProximityAssistDefaultEnabled", "label": "@pause_options_flight_options_proximity_assist_enabled", "type": "toggle", "description": "game_settings.descriptions.ifcs_setting_proximity_assist_default_enabled" },
+        { "name": "IFCS_Setting_ProximityAssistLandingEnabled", "label": "game_settings.labels.proximity_assist_landing", "type": "toggle", "description": "game_settings.descriptions.ifcs_setting_proximity_assist_landing_enabled" },
+        { "name": "IFCS_Setting_StabilityEnabled", "label": "game_settings.labels.stability", "type": "toggle", "description": "game_settings.descriptions.ifcs_setting_stability_enabled" },
+        { "name": "IFCS_Setting_CommandBehaviourEnabled", "label": "@pause_options_flight_options_command_behaviour_enabled", "type": "toggle", "description": "game_settings.descriptions.ifcs_setting_command_behaviour_enabled" },
+        { "name": "IFCS_Setting_CoreFunctionality_Enabled", "label": "game_settings.labels.ifcs_core", "type": "toggle", "description": "game_settings.descriptions.ifcs_setting_core_functionality_enabled" },
+        { "name": "Engineering_AutomaticPowerDistributionEnabled", "label": "@pause_options_automatic_power_redistribution_enabled", "type": "toggle", "description": "game_settings.descriptions.engineering_automatic_power_distribution_enabled" },
+        { "name": "LightGroupController_Setting_LightsEnabled", "label": "@pause_options_light_group_controller_lights_enabled", "type": "toggle", "description": "game_settings.descriptions.light_group_controller_setting_lights_enabled" }
       ]
     },
     {
       "id": "gameplay.flight_input", "tab": "gameplay", "label": "game_settings.sections.flight_input",
       "settings": [
-        { "name": "FlightThrustInvertToggle", "label": "@pause_OptionsThrustInvertToggle", "type": "toggle" },
-        { "name": "FlightRelativeThrottleTrapTime", "label": "@pause_options_flight_rel_throttle_trap_time", "type": "number", "unit": "=s" },
-        { "name": "FlightRelativeThrottleTrapThreshold", "label": "@pause_options_flight_rel_throttle_threshold", "type": "number" },
-        { "name": "FlightCoreDisabledSensitivityRotation", "label": "@pause_options_flight_core_disabled_sensitivity_rotation", "type": "number" },
-        { "name": "FlightCoreDisabledSensitivityTranslation", "label": "@pause_options_flight_core_disabled_sensitivity_translation", "type": "number" }
+        { "name": "FlightThrustInvertToggle", "label": "@pause_OptionsThrustInvertToggle", "type": "toggle", "description": "game_settings.descriptions.flight_thrust_invert_toggle" },
+        { "name": "FlightRelativeThrottleTrapTime", "label": "@pause_options_flight_rel_throttle_trap_time", "type": "number", "unit": "=s", "description": "game_settings.descriptions.flight_relative_throttle_trap_time" },
+        { "name": "FlightRelativeThrottleTrapThreshold", "label": "@pause_options_flight_rel_throttle_threshold", "type": "number", "description": "game_settings.descriptions.flight_relative_throttle_trap_threshold" },
+        { "name": "FlightCoreDisabledSensitivityRotation", "label": "@pause_options_flight_core_disabled_sensitivity_rotation", "type": "number", "description": "game_settings.descriptions.flight_core_disabled_sensitivity_rotation" },
+        { "name": "FlightCoreDisabledSensitivityTranslation", "label": "@pause_options_flight_core_disabled_sensitivity_translation", "type": "number", "description": "game_settings.descriptions.flight_core_disabled_sensitivity_translation" }
       ]
     },
     {
       "id": "gameplay.hud", "tab": "gameplay", "label": "game_settings.sections.hud",
       "settings": [
-        { "name": "FlightController_Setting_AdvancedHudScmEnabled", "label": "@pause_options_flight_options_advanced_hud_scm_enabled", "type": "toggle" },
-        { "name": "FlightController_Setting_AdvancedHudNavEnabled", "label": "@pause_options_flight_options_advanced_hud_nav_enabled", "type": "toggle" },
-        { "name": "FlightController_Setting_AdvancedHudLabelsEnabled", "label": "@pause_options_flight_options_labels_enabled", "type": "toggle" },
-        { "name": "FlightController_Setting_CoursePredictionEnabled", "label": "@pause_options_flight_options_course_prediction_enabled", "type": "toggle" },
-        { "name": "FlightController_Setting_LightAmplificationEnabled", "label": "@pause_options_flight_options_light_amplification_enabled", "type": "toggle" },
-        { "name": "Turret_Setting_LightAmplificationEnabled", "label": "@pause_options_turret_light_amplification_enabled", "type": "toggle" },
-        { "name": "VelocityIndicatorDisplayType", "label": "@pause_Options_velocity_indicator_display", "type": "number" }
+        { "name": "FlightController_Setting_AdvancedHudScmEnabled", "label": "@pause_options_flight_options_advanced_hud_scm_enabled", "type": "toggle", "description": "game_settings.descriptions.flight_controller_setting_advanced_hud_scm_enabled" },
+        { "name": "FlightController_Setting_AdvancedHudNavEnabled", "label": "@pause_options_flight_options_advanced_hud_nav_enabled", "type": "toggle", "description": "game_settings.descriptions.flight_controller_setting_advanced_hud_nav_enabled" },
+        { "name": "FlightController_Setting_AdvancedHudLabelsEnabled", "label": "@pause_options_flight_options_labels_enabled", "type": "toggle", "description": "game_settings.descriptions.flight_controller_setting_advanced_hud_labels_enabled" },
+        { "name": "FlightController_Setting_CoursePredictionEnabled", "label": "@pause_options_flight_options_course_prediction_enabled", "type": "toggle", "description": "game_settings.descriptions.flight_controller_setting_course_prediction_enabled" },
+        { "name": "FlightController_Setting_LightAmplificationEnabled", "label": "@pause_options_flight_options_light_amplification_enabled", "type": "toggle", "description": "game_settings.descriptions.flight_controller_setting_light_amplification_enabled" },
+        { "name": "Turret_Setting_LightAmplificationEnabled", "label": "@pause_options_turret_light_amplification_enabled", "type": "toggle", "description": "game_settings.descriptions.turret_setting_light_amplification_enabled" },
+        { "name": "VelocityIndicatorDisplayType", "label": "@pause_Options_velocity_indicator_display", "type": "number", "description": "game_settings.descriptions.velocity_indicator_display_type" }
       ]
     },
     {
       "id": "gameplay.weapons", "tab": "gameplay", "label": "game_settings.sections.weapons",
       "settings": [
-        { "name": "Weapon_Setting_FallbackConvergenceDistance", "label": "@pause_options_weapons_fallback_convergence_distance", "type": "number", "unit": "=m" },
-        { "name": "Weapon_Setting_Gimbals_Locked_Pilot", "label": "@pause_options_weapons_gimbals_locked_pilot", "type": "toggle" },
-        { "name": "Weapon_Setting_Gimbals_Locked_Gunner", "label": "@pause_options_weapons_gimbals_locked_gunner", "type": "toggle" },
-        { "name": "Weapon_Setting_Gimbals_Locked_Driver", "label": "@pause_options_weapons_gimbals_locked_driver", "type": "toggle" },
-        { "name": "Weapon_Setting_Magnified_UI", "label": "@pause_options_weapons_magnified_ui", "type": "toggle" },
-        { "name": "Weapon_Setting_Precision_Lines", "label": "@pause_options_weapons_precision_lines", "type": "toggle" },
-        { "name": "Weapon_Setting_Staggered_Firing", "label": "@pause_options_weapons_staggered_fire", "type": "toggle" },
-        { "name": "Weapon_Setting_Lag_Pips", "label": "@pause_options_weapons_lag_pips", "type": "toggle" },
-        { "name": "Weapon_Setting_Single_Pips", "label": "@pause_options_weapons_single_pips", "type": "toggle" },
-        { "name": "Weapon_Setting_Fading_Pips", "label": "@pause_options_weapons_fading_pips", "type": "toggle" },
-        { "name": "ManualGimbalModeShipsDefault", "label": "@pause_options_spaceship_manual_gimbal_default", "type": "number" },
-        { "name": "ManualGimbalModeShipsFreeLook", "label": "@pause_options_spaceship_manual_gimbal_freelook", "type": "number" },
-        { "name": "ManualGimbalModeMgvDefault", "label": "@pause_options_mgv_manual_gimbal_default", "type": "number" },
-        { "name": "ManualGimbalModeMgvFreeLook", "label": "@pause_options_mgv_manual_gimbal_freelook", "type": "number" },
-        { "name": "ManualGimbalModeTurretsDefault", "label": "@pause_options_turret_manual_gimbal_default", "type": "number" },
-        { "name": "ManualGimbalModeTurretsFreeLook", "label": "@pause_options_turret_manual_gimbal_freelook", "type": "number" },
-        { "name": "MissilesIncreaseCountLoop", "label": "@pause_OptionsMissileIncreaseCountLoop", "type": "toggle" },
-        { "name": "BombsDesiredImpactPointDirection", "label": "@pause_OptionsBombsDesiredImpactPointDirection", "type": "number" }
+        { "name": "Weapon_Setting_FallbackConvergenceDistance", "label": "@pause_options_weapons_fallback_convergence_distance", "type": "number", "unit": "=m", "description": "game_settings.descriptions.weapon_setting_fallback_convergence_distance" },
+        { "name": "Weapon_Setting_Gimbals_Locked_Pilot", "label": "@pause_options_weapons_gimbals_locked_pilot", "type": "toggle", "description": "game_settings.descriptions.weapon_setting_gimbals_locked_pilot" },
+        { "name": "Weapon_Setting_Gimbals_Locked_Gunner", "label": "@pause_options_weapons_gimbals_locked_gunner", "type": "toggle", "description": "game_settings.descriptions.weapon_setting_gimbals_locked_gunner" },
+        { "name": "Weapon_Setting_Gimbals_Locked_Driver", "label": "@pause_options_weapons_gimbals_locked_driver", "type": "toggle", "description": "game_settings.descriptions.weapon_setting_gimbals_locked_driver" },
+        { "name": "Weapon_Setting_Magnified_UI", "label": "@pause_options_weapons_magnified_ui", "type": "toggle", "description": "game_settings.descriptions.weapon_setting_magnified_ui" },
+        { "name": "Weapon_Setting_Precision_Lines", "label": "@pause_options_weapons_precision_lines", "type": "toggle", "description": "game_settings.descriptions.weapon_setting_precision_lines" },
+        { "name": "Weapon_Setting_Staggered_Firing", "label": "@pause_options_weapons_staggered_fire", "type": "toggle", "description": "game_settings.descriptions.weapon_setting_staggered_firing" },
+        { "name": "Weapon_Setting_Lag_Pips", "label": "@pause_options_weapons_lag_pips", "type": "toggle", "description": "game_settings.descriptions.weapon_setting_lag_pips" },
+        { "name": "Weapon_Setting_Single_Pips", "label": "@pause_options_weapons_single_pips", "type": "toggle", "description": "game_settings.descriptions.weapon_setting_single_pips" },
+        { "name": "Weapon_Setting_Fading_Pips", "label": "@pause_options_weapons_fading_pips", "type": "toggle", "description": "game_settings.descriptions.weapon_setting_fading_pips" },
+        { "name": "ManualGimbalModeShipsDefault", "label": "@pause_options_spaceship_manual_gimbal_default", "type": "number", "description": "game_settings.descriptions.manual_gimbal_mode_ships_default" },
+        { "name": "ManualGimbalModeShipsFreeLook", "label": "@pause_options_spaceship_manual_gimbal_freelook", "type": "number", "description": "game_settings.descriptions.manual_gimbal_mode_ships_free_look" },
+        { "name": "ManualGimbalModeMgvDefault", "label": "@pause_options_mgv_manual_gimbal_default", "type": "number", "description": "game_settings.descriptions.manual_gimbal_mode_mgv_default" },
+        { "name": "ManualGimbalModeMgvFreeLook", "label": "@pause_options_mgv_manual_gimbal_freelook", "type": "number", "description": "game_settings.descriptions.manual_gimbal_mode_mgv_free_look" },
+        { "name": "ManualGimbalModeTurretsDefault", "label": "@pause_options_turret_manual_gimbal_default", "type": "number", "description": "game_settings.descriptions.manual_gimbal_mode_turrets_default" },
+        { "name": "ManualGimbalModeTurretsFreeLook", "label": "@pause_options_turret_manual_gimbal_freelook", "type": "number", "description": "game_settings.descriptions.manual_gimbal_mode_turrets_free_look" },
+        { "name": "MissilesIncreaseCountLoop", "label": "@pause_OptionsMissileIncreaseCountLoop", "type": "toggle", "description": "game_settings.descriptions.missiles_increase_count_loop" },
+        { "name": "BombsDesiredImpactPointDirection", "label": "@pause_OptionsBombsDesiredImpactPointDirection", "type": "number", "description": "game_settings.descriptions.bombs_desired_impact_point_direction" }
       ]
     },
     {
       "id": "gameplay.vjoy", "tab": "gameplay", "label": "game_settings.sections.vjoy",
       "settings": [
-        { "name": "VJoyAnglePilots", "label": "@pause_options_vjoy_angle_pilot", "type": "number", "unit": "=°" },
-        { "name": "VJoyUseRawInput", "label": "@pause_options_vjoy_pilot_use_raw_input", "type": "toggle" },
-        { "name": "VJoyCombinedDeadZone", "label": "@pause_Options_vjoy_pilot_deadzone", "type": "number", "unit": "=%" },
-        { "name": "VJoyVisibility", "label": "@pause_Options_vjoy_pilot_visibility", "type": "choice",
+        { "name": "VJoyAnglePilots", "label": "@pause_options_vjoy_angle_pilot", "type": "number", "unit": "=°", "description": "game_settings.descriptions.vjoy_angle_pilots" },
+        { "name": "VJoyUseRawInput", "label": "@pause_options_vjoy_pilot_use_raw_input", "type": "toggle", "description": "game_settings.descriptions.vjoy_use_raw_input" },
+        { "name": "VJoyCombinedDeadZone", "label": "@pause_Options_vjoy_pilot_deadzone", "type": "number", "unit": "=%", "description": "game_settings.descriptions.vjoy_combined_dead_zone" },
+        { "name": "VJoyVisibility", "label": "@pause_Options_vjoy_pilot_visibility", "type": "choice", "description": "game_settings.descriptions.vjoy_visibility",
           "choices": [
             { "value": "0", "label": "@pause_Options_vjoy_visibility_never" },
             { "value": "1", "label": "@pause_Options_vjoy_visibility_mouse_input_only" },
             { "value": "2", "label": "@pause_Options_vjoy_visibility_always" }
           ] },
-        { "name": "VJoyShowDeadzone", "label": "@pause_Options_vjoy_pilot_draw_deadzone", "type": "toggle" },
-        { "name": "VJoyMgvAngle", "label": "@pause_options_vjoy_angle_mgv", "type": "number", "unit": "=°" },
-        { "name": "VJoyMgvCombinedDeadZone", "label": "@pause_Options_vjoy_mgv_deadzone", "type": "number", "unit": "=%" },
-        { "name": "VJoyTurretAngle", "label": "@pause_options_vjoy_angle_turret", "type": "number", "unit": "=°" },
-        { "name": "VJoyTurretCombinedDeadZone", "label": "@pause_Options_vjoy_turret_deadzone", "type": "number", "unit": "=%" }
+        { "name": "VJoyShowDeadzone", "label": "@pause_Options_vjoy_pilot_draw_deadzone", "type": "toggle", "description": "game_settings.descriptions.vjoy_show_deadzone" },
+        { "name": "VJoyMgvAngle", "label": "@pause_options_vjoy_angle_mgv", "type": "number", "unit": "=°", "description": "game_settings.descriptions.vjoy_mgv_angle" },
+        { "name": "VJoyMgvCombinedDeadZone", "label": "@pause_Options_vjoy_mgv_deadzone", "type": "number", "unit": "=%", "description": "game_settings.descriptions.vjoy_mgv_combined_dead_zone" },
+        { "name": "VJoyTurretAngle", "label": "@pause_options_vjoy_angle_turret", "type": "number", "unit": "=°", "description": "game_settings.descriptions.vjoy_turret_angle" },
+        { "name": "VJoyTurretCombinedDeadZone", "label": "@pause_Options_vjoy_turret_deadzone", "type": "number", "unit": "=%", "description": "game_settings.descriptions.vjoy_turret_combined_dead_zone" }
       ]
     },
     {
       "id": "gameplay.esp", "tab": "gameplay", "label": "game_settings.sections.esp",
       "settings": [
-        { "name": "PilotEspStrength", "label": "@pause_options_esp_strength", "type": "number" },
-        { "name": "PilotEspDampeningAmount", "label": "@pause_options_esp_dampening", "type": "number" },
-        { "name": "PilotEspDampeningIncludeRoll", "label": "@pause_options_esp_dampening_include_roll", "type": "toggle" },
-        { "name": "TurretsEspDefaultOn", "label": "@pause_Options_turret_esp_default_on", "type": "toggle" },
-        { "name": "TurretsEspStrength", "label": "@pause_Options_turret_esp_strength", "type": "number" },
-        { "name": "TurretsEspDampening", "label": "@pause_Options_turret_esp_dampening", "type": "number" },
-        { "name": "TurretDefaultMouseMode", "label": "@pause_options_turret_default_mouse_mode", "type": "number" },
-        { "name": "TurretRelativeMouseModeAdaptiveZoomSensitivity", "label": "@pause_options_turret_adaptive_zoom_sensitivity", "type": "toggle" }
+        { "name": "PilotEspStrength", "label": "@pause_options_esp_strength", "type": "number", "description": "game_settings.descriptions.pilot_esp_strength" },
+        { "name": "PilotEspDampeningAmount", "label": "@pause_options_esp_dampening", "type": "number", "description": "game_settings.descriptions.pilot_esp_dampening_amount" },
+        { "name": "PilotEspDampeningIncludeRoll", "label": "@pause_options_esp_dampening_include_roll", "type": "toggle", "description": "game_settings.descriptions.pilot_esp_dampening_include_roll" },
+        { "name": "TurretsEspDefaultOn", "label": "@pause_Options_turret_esp_default_on", "type": "toggle", "description": "game_settings.descriptions.turrets_esp_default_on" },
+        { "name": "TurretsEspStrength", "label": "@pause_Options_turret_esp_strength", "type": "number", "description": "game_settings.descriptions.turrets_esp_strength" },
+        { "name": "TurretsEspDampening", "label": "@pause_Options_turret_esp_dampening", "type": "number", "description": "game_settings.descriptions.turrets_esp_dampening" },
+        { "name": "TurretDefaultMouseMode", "label": "@pause_options_turret_default_mouse_mode", "type": "number", "description": "game_settings.descriptions.turret_default_mouse_mode" },
+        { "name": "TurretRelativeMouseModeAdaptiveZoomSensitivity", "label": "@pause_options_turret_adaptive_zoom_sensitivity", "type": "toggle", "description": "game_settings.descriptions.turret_relative_mouse_mode_adaptive_zoom_sensitivity" }
       ]
     },
     {
       "id": "gameplay.tools", "tab": "gameplay", "label": "game_settings.sections.tools",
       "settings": [
-        { "name": "SalvageFreeGimbalLocksRotation", "label": "@pause_Options_salvage_free_gimbal_locks_rotation", "type": "toggle" },
-        { "name": "SalvageAimNudgeSensitivity", "label": "@pause_Options_salvage_aim_nudge_sensitivity", "type": "number" },
-        { "name": "TractorBeamRotationMode", "label": "@pause_Options_tractor_beam_rotation_mode", "type": "toggle" }
+        { "name": "SalvageFreeGimbalLocksRotation", "label": "@pause_Options_salvage_free_gimbal_locks_rotation", "type": "toggle", "description": "game_settings.descriptions.salvage_free_gimbal_locks_rotation" },
+        { "name": "SalvageAimNudgeSensitivity", "label": "@pause_Options_salvage_aim_nudge_sensitivity", "type": "number", "description": "game_settings.descriptions.salvage_aim_nudge_sensitivity" },
+        { "name": "TractorBeamRotationMode", "label": "@pause_Options_tractor_beam_rotation_mode", "type": "toggle", "description": "game_settings.descriptions.tractor_beam_rotation_mode" }
       ]
     },
     {
       "id": "gameplay.targeting", "tab": "gameplay", "label": "game_settings.sections.targeting",
       "settings": [
-        { "name": "TargetingShowHeading", "label": "@pause_OptionsTargetingShowHeading", "type": "toggle" },
-        { "name": "TargetingShowDistance", "label": "@pause_OptionsTargetingShowDistance", "type": "toggle" },
-        { "name": "TargetingShowName", "label": "@pause_OptionsTargetingShowName", "type": "toggle" },
-        { "name": "TargetingShowTrail", "label": "@pause_OptionsTargetingShowTrail", "type": "toggle" },
-        { "name": "ShowSelectedTargetReticle", "label": "@pause_options_show_selected_target_reticle", "type": "toggle" },
-        { "name": "TargetSelectionDirectionSource", "label": "@pause_TargetSelectionDirectionSource", "type": "number" },
-        { "name": "TargetingPinnedOverflowBehaviour", "label": "@pause_OptionsTargetingPinnedOverflowBehaviour", "type": "choice",
+        { "name": "TargetingShowHeading", "label": "@pause_OptionsTargetingShowHeading", "type": "toggle", "description": "game_settings.descriptions.targeting_show_heading" },
+        { "name": "TargetingShowDistance", "label": "@pause_OptionsTargetingShowDistance", "type": "toggle", "description": "game_settings.descriptions.targeting_show_distance" },
+        { "name": "TargetingShowName", "label": "@pause_OptionsTargetingShowName", "type": "toggle", "description": "game_settings.descriptions.targeting_show_name" },
+        { "name": "TargetingShowTrail", "label": "@pause_OptionsTargetingShowTrail", "type": "toggle", "description": "game_settings.descriptions.targeting_show_trail" },
+        { "name": "ShowSelectedTargetReticle", "label": "@pause_options_show_selected_target_reticle", "type": "toggle", "description": "game_settings.descriptions.show_selected_target_reticle" },
+        { "name": "TargetSelectionDirectionSource", "label": "@pause_TargetSelectionDirectionSource", "type": "number", "description": "game_settings.descriptions.target_selection_direction_source" },
+        { "name": "TargetingPinnedOverflowBehaviour", "label": "@pause_OptionsTargetingPinnedOverflowBehaviour", "type": "choice", "description": "game_settings.descriptions.targeting_pinned_overflow_behaviour",
           "choices": [
             { "value": "0", "label": "@pause_OptionsTargetingPinnedOverflowDisabled" },
             { "value": "1", "label": "@pause_OptionsTargetingPinnedOverflowEnabled" }
           ] },
-        { "name": "AutoZoomOnSelectedTarget", "label": "@pause_OptionsAutoZoomOnSelectedTarget", "type": "toggle" },
-        { "name": "AutoZoomOnSelectedTargetStrength", "label": "@pause_OptionsAutoZoomOnSelectedTargetStrength", "type": "number" },
-        { "name": "TargetingArrowDisplayMode", "label": "@pause_OptionsTargetingArrowDisplayMode", "type": "number" }
+        { "name": "AutoZoomOnSelectedTarget", "label": "@pause_OptionsAutoZoomOnSelectedTarget", "type": "toggle", "description": "game_settings.descriptions.auto_zoom_on_selected_target" },
+        { "name": "AutoZoomOnSelectedTargetStrength", "label": "@pause_OptionsAutoZoomOnSelectedTargetStrength", "type": "number", "description": "game_settings.descriptions.auto_zoom_on_selected_target_strength" },
+        { "name": "TargetingArrowDisplayMode", "label": "@pause_OptionsTargetingArrowDisplayMode", "type": "number", "description": "game_settings.descriptions.targeting_arrow_display_mode" }
       ]
     },
     {
       "id": "gameplay.look_ahead", "tab": "gameplay", "label": "game_settings.sections.look_ahead",
       "settings": [
-        { "name": "LookAheadEnabledSpaceship", "label": "@pause_options_look_ahead_ship_enabled", "type": "toggle" },
-        { "name": "LookAheadStrengthForward", "label": "@pause_OptionsLookAheadConfigForward", "type": "number" },
-        { "name": "LookAheadStrengthVelocityVector", "label": "@pause_OptionsLookAheadConfigVelocityVector", "type": "number" },
-        { "name": "LookAheadStrengthYawPitch", "label": "@pause_OptionsLookAheadConfigYawPitch", "type": "number" },
-        { "name": "LookAheadStrengthRoll", "label": "@pause_OptionsLookAheadConfigRoll", "type": "number" },
-        { "name": "LookAheadStrengthJumpPointSpline", "label": "@pause_OptionsLookAheadJumpPointTunnel", "type": "number" },
-        { "name": "LookAheadStrengthVJoy", "label": "@pause_OptionsLookAheadVjoy", "type": "number" },
-        { "name": "LookAheadStrengthHorizonLookAt", "label": "@pause_OptionsLookAheadConfigHorizonLookAt", "type": "number" },
-        { "name": "LookAheadStrengthHorizonAlignment", "label": "@pause_OptionsLookAheadConfigHorizonAlignment", "type": "number" },
-        { "name": "LookAheadStrengthTargetSoft", "label": "@pause_OptionsLookAheadConfigTarget", "type": "number" },
-        { "name": "LookAheadAutoTargetPadlockEnabled", "label": "@pause_options_look_ahead_auto_padlock_enabled", "type": "toggle" },
-        { "name": "LookAheadStrengthQuantumBoostTarget", "label": "@pause_OptionsLookAheadQuantumBoostTarget", "type": "number" },
-        { "name": "LookAheadDampeningZone", "label": "@pause_options_look_ahead_dampening_zone", "type": "number", "unit": "=°" },
-        { "name": "LookAheadAdsEnablesPadlock", "label": "game_settings.labels.ads_padlock", "type": "toggle" },
-        { "name": "LookAheadEnabledTurret", "label": "@pause_options_look_ahead_turret_enabled", "type": "toggle" },
-        { "name": "LookAheadStrengthTurretForward", "label": "@pause_options_look_ahead_turret_forward", "type": "number" },
-        { "name": "LookAheadStrengthTurretTargetSoft", "label": "@pause_options_look_ahead_turret_target_tracking", "type": "number" },
-        { "name": "LookAheadStrengthTurretVJoy", "label": "@pause_options_look_ahead_turret_vjoy", "type": "number" },
-        { "name": "LookAheadStrengthTurretPitchYaw", "label": "@pause_options_look_ahead_turret_pitch_yaw", "type": "number" },
-        { "name": "LookAheadEnabledMGV", "label": "@pause_options_look_ahead_mgv_enabled", "type": "toggle" },
-        { "name": "LookAheadStrengthMgvForward", "label": "@pause_options_look_ahead_mgv_forward", "type": "number" },
-        { "name": "LookAheadStrengthMgvTargetSoft", "label": "@pause_options_look_ahead_mgv_target_tracking", "type": "number" },
-        { "name": "LookAheadStrengthMgvVJoy", "label": "@pause_options_look_ahead_mgv_vjoy", "type": "number" },
-        { "name": "LookAheadStrengthMgvPitchYaw", "label": "@pause_options_look_ahead_mgv_pitch_yaw", "type": "number" },
-        { "name": "LookAheadStrengthMgvHorizonAlignment", "label": "@pause_options_look_ahead_mgv_horizon_alignment", "type": "number" }
+        { "name": "LookAheadEnabledSpaceship", "label": "@pause_options_look_ahead_ship_enabled", "type": "toggle", "description": "game_settings.descriptions.look_ahead_enabled_spaceship" },
+        { "name": "LookAheadStrengthForward", "label": "@pause_OptionsLookAheadConfigForward", "type": "number", "description": "game_settings.descriptions.look_ahead_strength_forward" },
+        { "name": "LookAheadStrengthVelocityVector", "label": "@pause_OptionsLookAheadConfigVelocityVector", "type": "number", "description": "game_settings.descriptions.look_ahead_strength_velocity_vector" },
+        { "name": "LookAheadStrengthYawPitch", "label": "@pause_OptionsLookAheadConfigYawPitch", "type": "number", "description": "game_settings.descriptions.look_ahead_strength_yaw_pitch" },
+        { "name": "LookAheadStrengthRoll", "label": "@pause_OptionsLookAheadConfigRoll", "type": "number", "description": "game_settings.descriptions.look_ahead_strength_roll" },
+        { "name": "LookAheadStrengthJumpPointSpline", "label": "@pause_OptionsLookAheadJumpPointTunnel", "type": "number", "description": "game_settings.descriptions.look_ahead_strength_jump_point_spline" },
+        { "name": "LookAheadStrengthVJoy", "label": "@pause_OptionsLookAheadVjoy", "type": "number", "description": "game_settings.descriptions.look_ahead_strength_vjoy" },
+        { "name": "LookAheadStrengthHorizonLookAt", "label": "@pause_OptionsLookAheadConfigHorizonLookAt", "type": "number", "description": "game_settings.descriptions.look_ahead_strength_horizon_look_at" },
+        { "name": "LookAheadStrengthHorizonAlignment", "label": "@pause_OptionsLookAheadConfigHorizonAlignment", "type": "number", "description": "game_settings.descriptions.look_ahead_strength_horizon_alignment" },
+        { "name": "LookAheadStrengthTargetSoft", "label": "@pause_OptionsLookAheadConfigTarget", "type": "number", "description": "game_settings.descriptions.look_ahead_strength_target_soft" },
+        { "name": "LookAheadAutoTargetPadlockEnabled", "label": "@pause_options_look_ahead_auto_padlock_enabled", "type": "toggle", "description": "game_settings.descriptions.look_ahead_auto_target_padlock_enabled" },
+        { "name": "LookAheadStrengthQuantumBoostTarget", "label": "@pause_OptionsLookAheadQuantumBoostTarget", "type": "number", "description": "game_settings.descriptions.look_ahead_strength_quantum_boost_target" },
+        { "name": "LookAheadDampeningZone", "label": "@pause_options_look_ahead_dampening_zone", "type": "number", "unit": "=°", "description": "game_settings.descriptions.look_ahead_dampening_zone" },
+        { "name": "LookAheadAdsEnablesPadlock", "label": "game_settings.labels.ads_padlock", "type": "toggle", "description": "game_settings.descriptions.look_ahead_ads_enables_padlock" },
+        { "name": "LookAheadEnabledTurret", "label": "@pause_options_look_ahead_turret_enabled", "type": "toggle", "description": "game_settings.descriptions.look_ahead_enabled_turret" },
+        { "name": "LookAheadStrengthTurretForward", "label": "@pause_options_look_ahead_turret_forward", "type": "number", "description": "game_settings.descriptions.look_ahead_strength_turret_forward" },
+        { "name": "LookAheadStrengthTurretTargetSoft", "label": "@pause_options_look_ahead_turret_target_tracking", "type": "number", "description": "game_settings.descriptions.look_ahead_strength_turret_target_soft" },
+        { "name": "LookAheadStrengthTurretVJoy", "label": "@pause_options_look_ahead_turret_vjoy", "type": "number", "description": "game_settings.descriptions.look_ahead_strength_turret_vjoy" },
+        { "name": "LookAheadStrengthTurretPitchYaw", "label": "@pause_options_look_ahead_turret_pitch_yaw", "type": "number", "description": "game_settings.descriptions.look_ahead_strength_turret_pitch_yaw" },
+        { "name": "LookAheadEnabledMGV", "label": "@pause_options_look_ahead_mgv_enabled", "type": "toggle", "description": "game_settings.descriptions.look_ahead_enabled_mgv" },
+        { "name": "LookAheadStrengthMgvForward", "label": "@pause_options_look_ahead_mgv_forward", "type": "number", "description": "game_settings.descriptions.look_ahead_strength_mgv_forward" },
+        { "name": "LookAheadStrengthMgvTargetSoft", "label": "@pause_options_look_ahead_mgv_target_tracking", "type": "number", "description": "game_settings.descriptions.look_ahead_strength_mgv_target_soft" },
+        { "name": "LookAheadStrengthMgvVJoy", "label": "@pause_options_look_ahead_mgv_vjoy", "type": "number", "description": "game_settings.descriptions.look_ahead_strength_mgv_vjoy" },
+        { "name": "LookAheadStrengthMgvPitchYaw", "label": "@pause_options_look_ahead_mgv_pitch_yaw", "type": "number", "description": "game_settings.descriptions.look_ahead_strength_mgv_pitch_yaw" },
+        { "name": "LookAheadStrengthMgvHorizonAlignment", "label": "@pause_options_look_ahead_mgv_horizon_alignment", "type": "number", "description": "game_settings.descriptions.look_ahead_strength_mgv_horizon_alignment" }
       ]
     },
     {
       "id": "gameplay.camera", "tab": "gameplay", "label": "game_settings.sections.camera",
       "settings": [
-        { "name": "GForceHeadBobScale", "label": "@pause_OptionsGForceHeadBobScale", "type": "number" },
-        { "name": "GForceBoostZoomScale", "label": "@pause_OptionsGForceZoomScale", "type": "number" },
-        { "name": "ShakeScale", "label": "@pause_OptionsShake", "type": "number" },
-        { "name": "VehicleWeaponRecoilScale", "label": "@pause_OptionsVehicleWeaponRecoilScale", "type": "number" },
-        { "name": "VehicleSeatExitNeedsHold", "label": "@pause_options_vehicle_seat_exit_needs_hold", "type": "toggle" }
+        { "name": "GForceHeadBobScale", "label": "@pause_OptionsGForceHeadBobScale", "type": "number", "description": "game_settings.descriptions.gforce_head_bob_scale" },
+        { "name": "GForceBoostZoomScale", "label": "@pause_OptionsGForceZoomScale", "type": "number", "description": "game_settings.descriptions.gforce_boost_zoom_scale" },
+        { "name": "ShakeScale", "label": "@pause_OptionsShake", "type": "number", "description": "game_settings.descriptions.shake_scale" },
+        { "name": "VehicleWeaponRecoilScale", "label": "@pause_OptionsVehicleWeaponRecoilScale", "type": "number", "description": "game_settings.descriptions.vehicle_weapon_recoil_scale" },
+        { "name": "VehicleSeatExitNeedsHold", "label": "@pause_options_vehicle_seat_exit_needs_hold", "type": "toggle", "description": "game_settings.descriptions.vehicle_seat_exit_needs_hold" }
       ]
     },
     {
       "id": "gameplay.social", "tab": "gameplay", "label": "game_settings.sections.social",
       "settings": [
-        { "name": "ShowPartyNameplate", "label": "@pause_OptionsShowPartyNameplate", "type": "toggle" },
-        { "name": "PartyNameplateDistance", "label": "@pause_OptionsPartyNameplateDistance", "type": "number", "unit": "=m" },
-        { "name": "ShowContactFriendlyNameplate", "label": "@pause_OptionsShowContactFriendlyNameplate", "type": "toggle" },
-        { "name": "ShowContactNeutralHostileNameplate", "label": "@pause_OptionsShowContactNeutralHostileNameplate", "type": "toggle" },
-        { "name": "ShowContactDistance", "label": "@pause_OptionsShowContactDistance", "type": "toggle" },
-        { "name": "FriendRequests", "label": "@pause_OptionsFriendRequests", "type": "toggle" },
-        { "name": "FriendRequestsNotifications", "label": "@pause_OptionsFriendRequestsNotifications", "type": "toggle" },
-        { "name": "RestrictPartyInvitesNotifications", "label": "@pause_OptionsPartyInvitesNotifications", "type": "choice",
+        { "name": "ShowPartyNameplate", "label": "@pause_OptionsShowPartyNameplate", "type": "toggle", "description": "game_settings.descriptions.show_party_nameplate" },
+        { "name": "PartyNameplateDistance", "label": "@pause_OptionsPartyNameplateDistance", "type": "number", "unit": "=m", "description": "game_settings.descriptions.party_nameplate_distance" },
+        { "name": "ShowContactFriendlyNameplate", "label": "@pause_OptionsShowContactFriendlyNameplate", "type": "toggle", "description": "game_settings.descriptions.show_contact_friendly_nameplate" },
+        { "name": "ShowContactNeutralHostileNameplate", "label": "@pause_OptionsShowContactNeutralHostileNameplate", "type": "toggle", "description": "game_settings.descriptions.show_contact_neutral_hostile_nameplate" },
+        { "name": "ShowContactDistance", "label": "@pause_OptionsShowContactDistance", "type": "toggle", "description": "game_settings.descriptions.show_contact_distance" },
+        { "name": "FriendRequests", "label": "@pause_OptionsFriendRequests", "type": "toggle", "description": "game_settings.descriptions.friend_requests" },
+        { "name": "FriendRequestsNotifications", "label": "@pause_OptionsFriendRequestsNotifications", "type": "toggle", "description": "game_settings.descriptions.friend_requests_notifications" },
+        { "name": "RestrictPartyInvitesNotifications", "label": "@pause_OptionsPartyInvitesNotifications", "type": "choice", "description": "game_settings.descriptions.restrict_party_invites_notifications",
           "choices": [
             { "value": "0", "label": "@pause_OptionsPartyInvitesNotifications_Anyone" },
             { "value": "1", "label": "@pause_OptionsPartyInvitesNotifications_FriendsOnly" }
           ] },
-        { "name": "RestrictCurrencyTransferNotifications", "label": "@pause_OptionsCurrencyTransferNotifcations", "type": "choice",
+        { "name": "RestrictCurrencyTransferNotifications", "label": "@pause_OptionsCurrencyTransferNotifcations", "type": "choice", "description": "game_settings.descriptions.restrict_currency_transfer_notifications",
           "choices": [
             { "value": "0", "label": "@pause_OptionsCurrencyTransferNotifcations_Anyone" },
             { "value": "1", "label": "@pause_OptionsCurrencyTransferNotifcations_FriendsOnly" }
           ] },
-        { "name": "RestrictCommsCallsNotifications", "label": "@pause_OptionsCommsCallsNotifications", "type": "choice",
+        { "name": "RestrictCommsCallsNotifications", "label": "@pause_OptionsCommsCallsNotifications", "type": "choice", "description": "game_settings.descriptions.restrict_comms_calls_notifications",
           "choices": [
             { "value": "0", "label": "@pause_OptionsCommsCallsNotifications_Anyone" },
             { "value": "1", "label": "@pause_OptionsCommsCallsNotifications_FriendsOnly" }
@@ -298,39 +298,39 @@
     {
       "id": "gameplay.scanning", "tab": "gameplay", "label": "game_settings.sections.scanning",
       "settings": [
-        { "name": "ShowEmissionsText", "label": "@pause_OptionsShowEmissionsText", "type": "toggle" },
-        { "name": "LockVehiclePingToScanMode", "label": "@scan_data_lock_ping_controls", "type": "toggle" },
-        { "name": "ShowScanWaveHighlightsVehicle", "label": "@scan_data_show_scan_highlight_vehicles", "type": "toggle" },
-        { "name": "ShowScanWaveHighlightsFPS", "label": "@scan_data_show_scan_highlight_fps", "type": "toggle" }
+        { "name": "ShowEmissionsText", "label": "@pause_OptionsShowEmissionsText", "type": "toggle", "description": "game_settings.descriptions.show_emissions_text" },
+        { "name": "LockVehiclePingToScanMode", "label": "@scan_data_lock_ping_controls", "type": "toggle", "description": "game_settings.descriptions.lock_vehicle_ping_to_scan_mode" },
+        { "name": "ShowScanWaveHighlightsVehicle", "label": "@scan_data_show_scan_highlight_vehicles", "type": "toggle", "description": "game_settings.descriptions.show_scan_wave_highlights_vehicle" },
+        { "name": "ShowScanWaveHighlightsFPS", "label": "@scan_data_show_scan_highlight_fps", "type": "toggle", "description": "game_settings.descriptions.show_scan_wave_highlights_fps" }
       ]
     },
     {
       "id": "graphics.display", "tab": "graphics", "label": "game_settings.sections.display",
       "settings": [
-        { "name": "Width", "label": "game_settings.labels.width", "type": "number", "unit": "=px", "restart": true },
-        { "name": "Height", "label": "game_settings.labels.height", "type": "number", "unit": "=px", "restart": true },
-        { "name": "WindowMode", "label": "@pause_OptionsWindowMode", "type": "number", "restart": true },
-        { "name": "VSync", "label": "@pause_VSync", "type": "toggle" },
-        { "name": "AspectModifier", "label": "@pause_OptionsUIAspectModifier", "type": "number" },
-        { "name": "QRCode", "label": "@pause_OptionsQRCode", "type": "toggle" }
+        { "name": "Width", "label": "game_settings.labels.width", "type": "number", "unit": "=px", "restart": true, "description": "game_settings.descriptions.width" },
+        { "name": "Height", "label": "game_settings.labels.height", "type": "number", "unit": "=px", "restart": true, "description": "game_settings.descriptions.height" },
+        { "name": "WindowMode", "label": "@pause_OptionsWindowMode", "type": "number", "restart": true, "description": "game_settings.descriptions.window_mode" },
+        { "name": "VSync", "label": "@pause_VSync", "type": "toggle", "description": "game_settings.descriptions.vsync" },
+        { "name": "AspectModifier", "label": "@pause_OptionsUIAspectModifier", "type": "number", "description": "game_settings.descriptions.aspect_modifier" },
+        { "name": "QRCode", "label": "@pause_OptionsQRCode", "type": "toggle", "description": "game_settings.descriptions.qrcode" }
       ]
     },
     {
       "id": "graphics.upscaling", "tab": "graphics", "label": "game_settings.sections.upscaling",
       "settings": [
-        { "name": "Upscaling", "label": "@pause_OptionsUpscaling", "type": "choice",
+        { "name": "Upscaling", "label": "@pause_OptionsUpscaling", "type": "choice", "description": "game_settings.descriptions.upscaling",
           "choices": [
             { "value": "0", "label": "=Native AA" },
             { "value": "1", "label": "=Quality (66%)" },
             { "value": "2", "label": "=Balanced (57%)" },
             { "value": "3", "label": "=Performance (50%)" }
           ] },
-        { "name": "UpscalingTechnique", "label": "@pause_OptionsUpscalingTechnique", "type": "choice",
+        { "name": "UpscalingTechnique", "label": "@pause_OptionsUpscalingTechnique", "type": "choice", "description": "game_settings.descriptions.upscaling_technique",
           "choices": [
             { "value": "0", "label": "=CIG TSR (Recommended)" },
             { "value": "1", "label": "=NVidia DLSS/DLAA" }
           ] },
-        { "name": "UpscalingModel", "label": "@pause_OptionsUpscalingModel", "type": "choice",
+        { "name": "UpscalingModel", "label": "@pause_OptionsUpscalingModel", "type": "choice", "description": "game_settings.descriptions.upscaling_model",
           "choices": [
             { "value": "0", "label": "=Convolutional Neural Network" },
             { "value": "1", "label": "=Transformer" }
@@ -340,15 +340,15 @@
     {
       "id": "graphics.hdr", "tab": "graphics", "label": "game_settings.sections.hdr",
       "settings": [
-        { "name": "HDR", "label": "@pause_OptionsHDR", "type": "toggle" },
-        { "name": "HDRRefWhite", "label": "@pause_OptionsHDRReferenceWhite", "type": "number", "unit": "=nits" },
-        { "name": "HDRMaxBrightness", "label": "@pause_OptionsHDRMaxBrightness", "type": "number", "unit": "=nits" }
+        { "name": "HDR", "label": "@pause_OptionsHDR", "type": "toggle", "description": "game_settings.descriptions.hdr" },
+        { "name": "HDRRefWhite", "label": "@pause_OptionsHDRReferenceWhite", "type": "number", "unit": "=nits", "description": "game_settings.descriptions.hdrref_white" },
+        { "name": "HDRMaxBrightness", "label": "@pause_OptionsHDRMaxBrightness", "type": "number", "unit": "=nits", "description": "game_settings.descriptions.hdrmax_brightness" }
       ]
     },
     {
       "id": "graphics.quality", "tab": "graphics", "label": "game_settings.sections.quality",
       "settings": [
-        { "name": "SysSpec", "label": "@pause_OptionsQuality", "type": "choice",
+        { "name": "SysSpec", "label": "@pause_OptionsQuality", "type": "choice", "description": "game_settings.descriptions.sys_spec",
           "choices": [
             { "value": "-1", "label": "@pause_options_autodetect" },
             { "value": "1", "label": "@pause_options_low" },
@@ -356,72 +356,72 @@
             { "value": "3", "label": "@pause_options_high" },
             { "value": "4", "label": "@pause_options_very_high" }
           ] },
-        { "name": "GlobalIllumination", "label": "@pause_OptionsGlobalIllumination", "type": "number" },
-        { "name": "SysSpec_ObjectDetail", "label": "@pause_OptionsObjectDetail", "type": "choice", "choices": "quality" },
-        { "name": "SysSpec_ObjectViewDistance", "label": "@pause_OptionsObjectViewDistance", "type": "choice", "choices": "quality" },
-        { "name": "SysSpec_TextureQuality", "label": "@pause_OptionsTexturesQuality", "type": "choice", "choices": "quality" },
-        { "name": "SysSpec_TextureDetail", "label": "@pause_OptionsTexturesDetail", "type": "choice", "choices": "quality" },
-        { "name": "SysSpec_TextureGround", "label": "@pause_OptionsTexturesGround", "type": "choice", "choices": "quality" },
-        { "name": "SysSpec_TextureFiltering", "label": "@pause_OptionsTexturesFiltering", "type": "choice", "choices": "quality" },
-        { "name": "SysSpec_ShadowMaps", "label": "@pause_OptionsShadows", "type": "choice", "choices": "quality" },
-        { "name": "SysSpec_ShadowScreenSpace", "label": "@pause_OptionsScreenSpaceShadows", "type": "choice", "choices": "quality" },
-        { "name": "SysSpec_PlanetTerrainVirtualTextures", "label": "@pause_OptionsPlanetTerrainVirtualTextures", "type": "choice", "choices": "quality" },
-        { "name": "SysSpec_PlanetVolumetricClouds", "label": "@pause_OptionsPlanetVolumetricClouds", "type": "choice", "choices": "quality" },
-        { "name": "SysSpec_GasCloud", "label": "@pause_OptionsGasCloud", "type": "choice", "choices": "quality" },
-        { "name": "SysSpec_Fog", "label": "@pause_OptionsFog", "type": "choice", "choices": "quality" },
-        { "name": "SysSpec_WaterCaustics", "label": "@pause_OptionsWaterCaustics", "type": "choice", "choices": "quality" },
-        { "name": "SysSpec_WaterSim", "label": "@pause_OptionsWaterSim", "type": "choice", "choices": "quality" },
-        { "name": "SysSpec_Particles", "label": "@pause_OptionsParticles", "type": "choice", "choices": "quality" },
-        { "name": "SysSpec_Shading", "label": "@pause_OptionsShading", "type": "choice", "choices": "quality" },
-        { "name": "SysSpec_PostProcessing", "label": "@pause_OptionsPostEffects", "type": "choice", "choices": "quality" },
-        { "name": "SysSpec_VideoComms", "label": "@pause_OptionsVideoComms", "type": "choice", "choices": "quality" }
+        { "name": "GlobalIllumination", "label": "@pause_OptionsGlobalIllumination", "type": "number", "description": "game_settings.descriptions.global_illumination" },
+        { "name": "SysSpec_ObjectDetail", "label": "@pause_OptionsObjectDetail", "type": "choice", "choices": "quality", "description": "game_settings.descriptions.sys_spec_object_detail" },
+        { "name": "SysSpec_ObjectViewDistance", "label": "@pause_OptionsObjectViewDistance", "type": "choice", "choices": "quality", "description": "game_settings.descriptions.sys_spec_object_view_distance" },
+        { "name": "SysSpec_TextureQuality", "label": "@pause_OptionsTexturesQuality", "type": "choice", "choices": "quality", "description": "game_settings.descriptions.sys_spec_texture_quality" },
+        { "name": "SysSpec_TextureDetail", "label": "@pause_OptionsTexturesDetail", "type": "choice", "choices": "quality", "description": "game_settings.descriptions.sys_spec_texture_detail" },
+        { "name": "SysSpec_TextureGround", "label": "@pause_OptionsTexturesGround", "type": "choice", "choices": "quality", "description": "game_settings.descriptions.sys_spec_texture_ground" },
+        { "name": "SysSpec_TextureFiltering", "label": "@pause_OptionsTexturesFiltering", "type": "choice", "choices": "quality", "description": "game_settings.descriptions.sys_spec_texture_filtering" },
+        { "name": "SysSpec_ShadowMaps", "label": "@pause_OptionsShadows", "type": "choice", "choices": "quality", "description": "game_settings.descriptions.sys_spec_shadow_maps" },
+        { "name": "SysSpec_ShadowScreenSpace", "label": "@pause_OptionsScreenSpaceShadows", "type": "choice", "choices": "quality", "description": "game_settings.descriptions.sys_spec_shadow_screen_space" },
+        { "name": "SysSpec_PlanetTerrainVirtualTextures", "label": "@pause_OptionsPlanetTerrainVirtualTextures", "type": "choice", "choices": "quality", "description": "game_settings.descriptions.sys_spec_planet_terrain_virtual_textures" },
+        { "name": "SysSpec_PlanetVolumetricClouds", "label": "@pause_OptionsPlanetVolumetricClouds", "type": "choice", "choices": "quality", "description": "game_settings.descriptions.sys_spec_planet_volumetric_clouds" },
+        { "name": "SysSpec_GasCloud", "label": "@pause_OptionsGasCloud", "type": "choice", "choices": "quality", "description": "game_settings.descriptions.sys_spec_gas_cloud" },
+        { "name": "SysSpec_Fog", "label": "@pause_OptionsFog", "type": "choice", "choices": "quality", "description": "game_settings.descriptions.sys_spec_fog" },
+        { "name": "SysSpec_WaterCaustics", "label": "@pause_OptionsWaterCaustics", "type": "choice", "choices": "quality", "description": "game_settings.descriptions.sys_spec_water_caustics" },
+        { "name": "SysSpec_WaterSim", "label": "@pause_OptionsWaterSim", "type": "choice", "choices": "quality", "description": "game_settings.descriptions.sys_spec_water_sim" },
+        { "name": "SysSpec_Particles", "label": "@pause_OptionsParticles", "type": "choice", "choices": "quality", "description": "game_settings.descriptions.sys_spec_particles" },
+        { "name": "SysSpec_Shading", "label": "@pause_OptionsShading", "type": "choice", "choices": "quality", "description": "game_settings.descriptions.sys_spec_shading" },
+        { "name": "SysSpec_PostProcessing", "label": "@pause_OptionsPostEffects", "type": "choice", "choices": "quality", "description": "game_settings.descriptions.sys_spec_post_processing" },
+        { "name": "SysSpec_VideoComms", "label": "@pause_OptionsVideoComms", "type": "choice", "choices": "quality", "description": "game_settings.descriptions.sys_spec_video_comms" }
       ]
     },
     {
       "id": "graphics.image", "tab": "graphics", "label": "game_settings.sections.image",
       "settings": [
-        { "name": "Gamma", "label": "@pause_OptionsGamma", "type": "number" },
-        { "name": "Brightness", "label": "@pause_OptionsBrightness", "type": "slider", "min": 0, "max": 1, "step": 0.01, "decimals": 2 },
-        { "name": "Contrast", "label": "@pause_OptionsContrast", "type": "slider", "min": 0, "max": 1, "step": 0.01, "decimals": 2 },
-        { "name": "FOV", "label": "@pause_OptionsFOV", "type": "number", "unit": "=°" },
-        { "name": "FOV - Social", "label": "game_settings.labels.fov_social", "type": "number", "unit": "=°" },
-        { "name": "FOV - Combat", "label": "game_settings.labels.fov_combat", "type": "number", "unit": "=°" },
-        { "name": "MotionBlur", "label": "@pause_MotionBlur", "type": "toggle" },
-        { "name": "Sharpening", "label": "@pause_Sharpening", "type": "number" },
-        { "name": "ChromaticAberration", "label": "@pause_ChromaticAberration", "type": "toggle" },
-        { "name": "FilmGrain", "label": "@pause_FilmGrain", "type": "toggle" }
+        { "name": "Gamma", "label": "@pause_OptionsGamma", "type": "number", "description": "game_settings.descriptions.gamma" },
+        { "name": "Brightness", "label": "@pause_OptionsBrightness", "type": "slider", "min": 0, "max": 1, "step": 0.01, "decimals": 2, "description": "game_settings.descriptions.brightness" },
+        { "name": "Contrast", "label": "@pause_OptionsContrast", "type": "slider", "min": 0, "max": 1, "step": 0.01, "decimals": 2, "description": "game_settings.descriptions.contrast" },
+        { "name": "FOV", "label": "@pause_OptionsFOV", "type": "number", "unit": "=°", "description": "game_settings.descriptions.fov" },
+        { "name": "FOV - Social", "label": "game_settings.labels.fov_social", "type": "number", "unit": "=°", "description": "game_settings.descriptions.fov_social" },
+        { "name": "FOV - Combat", "label": "game_settings.labels.fov_combat", "type": "number", "unit": "=°", "description": "game_settings.descriptions.fov_combat" },
+        { "name": "MotionBlur", "label": "@pause_MotionBlur", "type": "toggle", "description": "game_settings.descriptions.motion_blur" },
+        { "name": "Sharpening", "label": "@pause_Sharpening", "type": "number", "description": "game_settings.descriptions.sharpening" },
+        { "name": "ChromaticAberration", "label": "@pause_ChromaticAberration", "type": "toggle", "description": "game_settings.descriptions.chromatic_aberration" },
+        { "name": "FilmGrain", "label": "@pause_FilmGrain", "type": "toggle", "description": "game_settings.descriptions.film_grain" }
       ]
     },
     {
       "id": "audio.general", "tab": "audio", "label": "game_settings.sections.general",
       "settings": [
-        { "name": "IgnoreWindowFocus", "label": "@pause_OptionsAudioIgnoreWindowFocus", "type": "toggle" },
-        { "name": "EnableCombatMusic", "label": "@pause_OptionsEnableCombatMusic", "type": "toggle" }
+        { "name": "IgnoreWindowFocus", "label": "@pause_OptionsAudioIgnoreWindowFocus", "type": "toggle", "description": "game_settings.descriptions.ignore_window_focus" },
+        { "name": "EnableCombatMusic", "label": "@pause_OptionsEnableCombatMusic", "type": "toggle", "description": "game_settings.descriptions.enable_combat_music" }
       ]
     },
     {
       "id": "audio.volume", "tab": "audio", "label": "game_settings.sections.volume",
       "settings": [
-        { "name": "AudioMasterVolume", "label": "@pause_OptionsMasterVolume", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%" },
-        { "name": "AudioSfxVolume", "label": "@pause_OptionsSoundEffectsVolume", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%" },
-        { "name": "AudioMusicVolume", "label": "@pause_OptionsMusicVolume", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%" },
-        { "name": "AudioSpeechVolume", "label": "@pause_OptionsSpeechVolume", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%" },
-        { "name": "AudioShipComputerSpeechVolume", "label": "@pause_OptionsShipComputerSpeechVolume", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%" },
-        { "name": "AudioSimulationAnnouncerVolume", "label": "@pause_OptionsSimulationAnnouncerVolume", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%" },
-        { "name": "VideoVolume", "label": "@pause_OptionsFlashSoundVolume", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%" },
-        { "name": "EnableRaceCommentary", "label": "@pause_OptionsEnableRaceCommentary", "type": "toggle" }
+        { "name": "AudioMasterVolume", "label": "@pause_OptionsMasterVolume", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%", "description": "game_settings.descriptions.audio_master_volume" },
+        { "name": "AudioSfxVolume", "label": "@pause_OptionsSoundEffectsVolume", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%", "description": "game_settings.descriptions.audio_sfx_volume" },
+        { "name": "AudioMusicVolume", "label": "@pause_OptionsMusicVolume", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%", "description": "game_settings.descriptions.audio_music_volume" },
+        { "name": "AudioSpeechVolume", "label": "@pause_OptionsSpeechVolume", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%", "description": "game_settings.descriptions.audio_speech_volume" },
+        { "name": "AudioShipComputerSpeechVolume", "label": "@pause_OptionsShipComputerSpeechVolume", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%", "description": "game_settings.descriptions.audio_ship_computer_speech_volume" },
+        { "name": "AudioSimulationAnnouncerVolume", "label": "@pause_OptionsSimulationAnnouncerVolume", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%", "description": "game_settings.descriptions.audio_simulation_announcer_volume" },
+        { "name": "VideoVolume", "label": "@pause_OptionsFlashSoundVolume", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%", "description": "game_settings.descriptions.video_volume" },
+        { "name": "EnableRaceCommentary", "label": "@pause_OptionsEnableRaceCommentary", "type": "toggle", "description": "game_settings.descriptions.enable_race_commentary" }
       ]
     },
     {
       "id": "audio.output", "tab": "audio", "label": "game_settings.sections.output",
       "settings": [
-        { "name": "AudioDynamicRangePreset", "label": "@pause_OptionsDynamicRange", "type": "number" },
-        { "name": "AudioPanningRule", "label": "@pause_OptionsAudioPanningRule", "type": "choice",
+        { "name": "AudioDynamicRangePreset", "label": "@pause_OptionsDynamicRange", "type": "number", "description": "game_settings.descriptions.audio_dynamic_range_preset" },
+        { "name": "AudioPanningRule", "label": "@pause_OptionsAudioPanningRule", "type": "choice", "description": "game_settings.descriptions.audio_panning_rule",
           "choices": [
             { "value": "0", "label": "@pause_OptionsAudioPanningRuleSpeakers" },
             { "value": "1", "label": "@pause_OptionsAudioPanningRuleHeadphones" }
           ] },
-        { "name": "AudioShipComputerVerbosityPreset", "label": "@pause_OptionsShipComputerVerbosity", "type": "choice",
+        { "name": "AudioShipComputerVerbosityPreset", "label": "@pause_OptionsShipComputerVerbosity", "type": "choice", "description": "game_settings.descriptions.audio_ship_computer_verbosity_preset",
           "choices": [
             { "value": "0", "label": "@pause_OptionsAudioShipVerbosityOff" },
             { "value": "1", "label": "@pause_OptionsAudioLowShipVerbosity" },
@@ -429,150 +429,150 @@
             { "value": "3", "label": "@pause_OptionsAudioHighShipVerbosity" },
             { "value": "4", "label": "@pause_OptionsAudioFullShipVerbosity" }
           ] },
-        { "name": "AudioShakeStrength", "label": "@pause_OptionsAudioCameraShakeStrength", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%" }
+        { "name": "AudioShakeStrength", "label": "@pause_OptionsAudioCameraShakeStrength", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%", "description": "game_settings.descriptions.audio_shake_strength" }
       ]
     },
     {
       "id": "controls.mouse", "tab": "controls", "label": "game_settings.sections.mouse",
       "settings": [
-        { "name": "MouseSensitivity", "label": "@pause_OptionsMouseSensitivity", "type": "number" },
-        { "name": "ADSMouseSensitivity", "label": "@pause_OptionsMouseADSSensitivity", "type": "number" },
-        { "name": "ZoomSensitivityMultiplierToggle", "label": "@pause_OptionsMouseADSSensitivityZoomMultiplierToggle", "type": "toggle" },
-        { "name": "ZoomSensitivityMultiplier", "label": "@pause_OptionsMouseADSSensitivityZoomMultiplier", "type": "number" },
-        { "name": "InvertYMouse", "label": "@pause_OptionsInvertMouse", "type": "toggle" },
-        { "name": "MouseAcceleration", "label": "@pause_OptionsMouseAcceleration", "type": "number" },
-        { "name": "MouseSmoothing", "label": "@pause_OptionsMouseSmoothing", "type": "number" }
+        { "name": "MouseSensitivity", "label": "@pause_OptionsMouseSensitivity", "type": "number", "description": "game_settings.descriptions.mouse_sensitivity" },
+        { "name": "ADSMouseSensitivity", "label": "@pause_OptionsMouseADSSensitivity", "type": "number", "description": "game_settings.descriptions.adsmouse_sensitivity" },
+        { "name": "ZoomSensitivityMultiplierToggle", "label": "@pause_OptionsMouseADSSensitivityZoomMultiplierToggle", "type": "toggle", "description": "game_settings.descriptions.zoom_sensitivity_multiplier_toggle" },
+        { "name": "ZoomSensitivityMultiplier", "label": "@pause_OptionsMouseADSSensitivityZoomMultiplier", "type": "number", "description": "game_settings.descriptions.zoom_sensitivity_multiplier" },
+        { "name": "InvertYMouse", "label": "@pause_OptionsInvertMouse", "type": "toggle", "description": "game_settings.descriptions.invert_ymouse" },
+        { "name": "MouseAcceleration", "label": "@pause_OptionsMouseAcceleration", "type": "number", "description": "game_settings.descriptions.mouse_acceleration" },
+        { "name": "MouseSmoothing", "label": "@pause_OptionsMouseSmoothing", "type": "number", "description": "game_settings.descriptions.mouse_smoothing" }
       ]
     },
     {
       "id": "controls.controller", "tab": "controls", "label": "game_settings.sections.controller",
       "settings": [
-        { "name": "Sensitivity", "label": "game_settings.labels.controller_sensitivity", "type": "number" },
-        { "name": "InvertYController", "label": "@pause_OptionsInvertController", "type": "toggle" },
-        { "name": "AimAssistance", "label": "game_settings.labels.aim_assistance", "type": "toggle" }
+        { "name": "Sensitivity", "label": "game_settings.labels.controller_sensitivity", "type": "number", "description": "game_settings.descriptions.sensitivity" },
+        { "name": "InvertYController", "label": "@pause_OptionsInvertController", "type": "toggle", "description": "game_settings.descriptions.invert_ycontroller" },
+        { "name": "AimAssistance", "label": "game_settings.labels.aim_assistance", "type": "toggle", "description": "game_settings.descriptions.aim_assistance" }
       ]
     },
     {
       "id": "comms.vr", "tab": "comms", "label": "game_settings.sections.vr",
       "settings": [
-        { "name": "HmdVR", "label": "@hmd_OptionsEnableVR", "type": "number" },
-        { "name": "HmdTheaterMode", "label": "@hmd_OptionsTheaterMode", "type": "toggle" },
-        { "name": "HmdTheaterModeScale", "label": "@hmd_OptionsTheaterModeScale", "type": "number" },
-        { "name": "HmdTheaterModeDistance", "label": "@hmd_OptionsTheaterModeDistance", "type": "number" },
-        { "name": "HmdTheaterModeCurvature", "label": "@hmd_OptionsTheaterModeCurvature", "type": "number" },
-        { "name": "HmdAutomaticSwitching", "label": "@hmd_OptionsAutomaticSwitching", "type": "toggle" },
-        { "name": "HmdIPDScale", "label": "@hmd_OptionsIPDScale", "type": "number" },
-        { "name": "HmdInfinityProjectionDistance", "label": "@hmd_OptionsInfinityProjectionDistance", "type": "number" },
-        { "name": "HmdMonitorMirrorMode", "label": "@hmd_OptionsMonitorMirrorMode", "type": "number" },
-        { "name": "HmdMonitorMirrorModeSmoothing", "label": "@hmd_OptionsMonitorMirrorModeSmoothing", "type": "number" },
-        { "name": "HmdActorControlMode", "label": "@hmd_OptionsActorControlMode", "type": "number" },
-        { "name": "HmdActorControlModeAdsDirectOffset", "label": "@hmd_OptionsActorControlModeAdsDirectOffset", "type": "toggle" },
-        { "name": "HmdResetOnFpsAds", "label": "@hmd_OptionsResetOnFpsAds", "type": "toggle" },
-        { "name": "HmdFpsAdsDominantEye", "label": "@hmd_OptionsFpsAdsDominantEye", "type": "number" },
-        { "name": "HmdVisorAspectModifier", "label": "@hmd_OptionsVisorAspectModifier", "type": "number" },
-        { "name": "HmdVisorDistance", "label": "@hmd_OptionsVisorDistance", "type": "number" },
-        { "name": "HmdVisorHeight", "label": "@hmd_OptionsVisorHeight", "type": "number" },
-        { "name": "HmdVisorScale", "label": "@hmd_OptionsVisorScale", "type": "number" },
-        { "name": "HmdVisorEnabled", "label": "@hmd_OptionsVisorEnabled", "type": "toggle" },
-        { "name": "HmdUIScale", "label": "@hmd_OptionsUIScale", "type": "number" },
-        { "name": "HmdUIDistance", "label": "@hmd_OptionsUIDistance", "type": "number" },
-        { "name": "HmdUIHeight", "label": "@hmd_OptionsUIHeight", "type": "number" },
-        { "name": "HmdCursorSize", "label": "@hmd_OptionsCursorSize", "type": "number" },
-        { "name": "HmdCursorSensitivity", "label": "@hmd_OptionsCursorSensitivity", "type": "number" },
-        { "name": "HmdCursorFollowsHead", "label": "@hmd_OptionsCursorFollowsHead", "type": "toggle" },
-        { "name": "HmdCursorUseEyeTracking", "label": "@hmd_OptionsCursorUseEyeTracking", "type": "toggle" },
-        { "name": "HmdMobiglasDistance", "label": "@hmd_OptionsMobiglasDistance", "type": "number" },
-        { "name": "HmdDepthOfField", "label": "@hmd_OptionsDepthOfField", "type": "toggle" },
-        { "name": "HmdGameplayZoomStrength", "label": "@hmd_OptionsGameplayZoomStrength", "type": "number" }
+        { "name": "HmdVR", "label": "@hmd_OptionsEnableVR", "type": "number", "description": "game_settings.descriptions.hmd_vr" },
+        { "name": "HmdTheaterMode", "label": "@hmd_OptionsTheaterMode", "type": "toggle", "description": "game_settings.descriptions.hmd_theater_mode" },
+        { "name": "HmdTheaterModeScale", "label": "@hmd_OptionsTheaterModeScale", "type": "number", "description": "game_settings.descriptions.hmd_theater_mode_scale" },
+        { "name": "HmdTheaterModeDistance", "label": "@hmd_OptionsTheaterModeDistance", "type": "number", "description": "game_settings.descriptions.hmd_theater_mode_distance" },
+        { "name": "HmdTheaterModeCurvature", "label": "@hmd_OptionsTheaterModeCurvature", "type": "number", "description": "game_settings.descriptions.hmd_theater_mode_curvature" },
+        { "name": "HmdAutomaticSwitching", "label": "@hmd_OptionsAutomaticSwitching", "type": "toggle", "description": "game_settings.descriptions.hmd_automatic_switching" },
+        { "name": "HmdIPDScale", "label": "@hmd_OptionsIPDScale", "type": "number", "description": "game_settings.descriptions.hmd_ipdscale" },
+        { "name": "HmdInfinityProjectionDistance", "label": "@hmd_OptionsInfinityProjectionDistance", "type": "number", "description": "game_settings.descriptions.hmd_infinity_projection_distance" },
+        { "name": "HmdMonitorMirrorMode", "label": "@hmd_OptionsMonitorMirrorMode", "type": "number", "description": "game_settings.descriptions.hmd_monitor_mirror_mode" },
+        { "name": "HmdMonitorMirrorModeSmoothing", "label": "@hmd_OptionsMonitorMirrorModeSmoothing", "type": "number", "description": "game_settings.descriptions.hmd_monitor_mirror_mode_smoothing" },
+        { "name": "HmdActorControlMode", "label": "@hmd_OptionsActorControlMode", "type": "number", "description": "game_settings.descriptions.hmd_actor_control_mode" },
+        { "name": "HmdActorControlModeAdsDirectOffset", "label": "@hmd_OptionsActorControlModeAdsDirectOffset", "type": "toggle", "description": "game_settings.descriptions.hmd_actor_control_mode_ads_direct_offset" },
+        { "name": "HmdResetOnFpsAds", "label": "@hmd_OptionsResetOnFpsAds", "type": "toggle", "description": "game_settings.descriptions.hmd_reset_on_fps_ads" },
+        { "name": "HmdFpsAdsDominantEye", "label": "@hmd_OptionsFpsAdsDominantEye", "type": "number", "description": "game_settings.descriptions.hmd_fps_ads_dominant_eye" },
+        { "name": "HmdVisorAspectModifier", "label": "@hmd_OptionsVisorAspectModifier", "type": "number", "description": "game_settings.descriptions.hmd_visor_aspect_modifier" },
+        { "name": "HmdVisorDistance", "label": "@hmd_OptionsVisorDistance", "type": "number", "description": "game_settings.descriptions.hmd_visor_distance" },
+        { "name": "HmdVisorHeight", "label": "@hmd_OptionsVisorHeight", "type": "number", "description": "game_settings.descriptions.hmd_visor_height" },
+        { "name": "HmdVisorScale", "label": "@hmd_OptionsVisorScale", "type": "number", "description": "game_settings.descriptions.hmd_visor_scale" },
+        { "name": "HmdVisorEnabled", "label": "@hmd_OptionsVisorEnabled", "type": "toggle", "description": "game_settings.descriptions.hmd_visor_enabled" },
+        { "name": "HmdUIScale", "label": "@hmd_OptionsUIScale", "type": "number", "description": "game_settings.descriptions.hmd_uiscale" },
+        { "name": "HmdUIDistance", "label": "@hmd_OptionsUIDistance", "type": "number", "description": "game_settings.descriptions.hmd_uidistance" },
+        { "name": "HmdUIHeight", "label": "@hmd_OptionsUIHeight", "type": "number", "description": "game_settings.descriptions.hmd_uiheight" },
+        { "name": "HmdCursorSize", "label": "@hmd_OptionsCursorSize", "type": "number", "description": "game_settings.descriptions.hmd_cursor_size" },
+        { "name": "HmdCursorSensitivity", "label": "@hmd_OptionsCursorSensitivity", "type": "number", "description": "game_settings.descriptions.hmd_cursor_sensitivity" },
+        { "name": "HmdCursorFollowsHead", "label": "@hmd_OptionsCursorFollowsHead", "type": "toggle", "description": "game_settings.descriptions.hmd_cursor_follows_head" },
+        { "name": "HmdCursorUseEyeTracking", "label": "@hmd_OptionsCursorUseEyeTracking", "type": "toggle", "description": "game_settings.descriptions.hmd_cursor_use_eye_tracking" },
+        { "name": "HmdMobiglasDistance", "label": "@hmd_OptionsMobiglasDistance", "type": "number", "description": "game_settings.descriptions.hmd_mobiglas_distance" },
+        { "name": "HmdDepthOfField", "label": "@hmd_OptionsDepthOfField", "type": "toggle", "description": "game_settings.descriptions.hmd_depth_of_field" },
+        { "name": "HmdGameplayZoomStrength", "label": "@hmd_OptionsGameplayZoomStrength", "type": "number", "description": "game_settings.descriptions.hmd_gameplay_zoom_strength" }
       ]
     },
     {
       "id": "comms.head_tracking", "tab": "comms", "label": "game_settings.sections.head_tracking",
       "settings": [
-        { "name": "HeadtrackingToggle", "label": "@pause_OptionsHeadtrackingToggleEnabled", "type": "toggle" },
-        { "name": "HeadtrackingEnableSeatPositionOffset", "label": "@pause_OptionsHeadtrackingSeatPositionOffsetEnabled", "type": "toggle" },
-        { "name": "HeadtrackingThirdPersonCameraToggle", "label": "@pause_OptionsHeadtrackingToggleThirdPersonCameraEnabled", "type": "toggle" },
-        { "name": "HeadtrackingThirdPersonDisableDuringInventory", "label": "@pause_OptionsHeadtrackingThirdPersonDisableDuringInventory", "type": "toggle" },
-        { "name": "HeadtrackingDisableDuringSeat", "label": "@pause_OptionsHeadtrackingToggleDisableDuringSeat", "type": "toggle" },
-        { "name": "HeadtrackingDisableDuringWalking", "label": "@pause_OptionsHeadtrackingToggleDisableDuringWalking", "type": "toggle" },
-        { "name": "HeadtrackingDisableDuringADS", "label": "@pause_OptionsHeadtrackingToggleDisableDuringADS", "type": "toggle" },
-        { "name": "HeadtrackingDisableDuringMobiGlas", "label": "@pause_OptionsHeadtrackingToggleDisableDuringMobiGlas", "type": "toggle" },
-        { "name": "HeadtrackingDisableDuringIM", "label": "@pause_OptionsHeadtrackingToggleDisableDuringIM", "type": "toggle" },
-        { "name": "HeadtrackingDisableDuringVehicleAds", "label": "@pause_OptionsHeadtrackingToggleDisableDuringVehicleAds", "type": "toggle" },
-        { "name": "HeadtrackingToggleAutoCalibrate", "label": "@pause_OptionsHeadtrackingToggleAutoCalibrate", "type": "toggle" },
-        { "name": "HeadtrackingSource", "label": "@pause_OptionsHeadtrackingSource", "type": "number" },
-        { "name": "HeadtrackingEnableRollSeat", "label": "@pause_OptionsHeadtrackingEnableRollSeat", "type": "toggle" },
-        { "name": "HeadtrackingEnableRollFPS", "label": "@pause_OptionsHeadtrackingEnableRollFPS", "type": "toggle" },
-        { "name": "HeadtrackingHoldUseRawDuringHold", "label": "@pause_OptionsHeadTrackingHoldUseRawDuringHold", "type": "toggle" },
-        { "name": "HeadtrackingInactivityTime", "label": "@pause_OptionsHeadTrackingInactivityTime", "type": "number", "unit": "=s" },
-        { "name": "HeadtrackingGlobalSmoothingPosition", "label": "@pause_options_headtracking_global_smoothing_position", "type": "number" },
-        { "name": "HeadtrackingGlobalSmoothingRotation", "label": "@pause_options_headtracking_global_smoothing_rotation", "type": "number" }
+        { "name": "HeadtrackingToggle", "label": "@pause_OptionsHeadtrackingToggleEnabled", "type": "toggle", "description": "game_settings.descriptions.headtracking_toggle" },
+        { "name": "HeadtrackingEnableSeatPositionOffset", "label": "@pause_OptionsHeadtrackingSeatPositionOffsetEnabled", "type": "toggle", "description": "game_settings.descriptions.headtracking_enable_seat_position_offset" },
+        { "name": "HeadtrackingThirdPersonCameraToggle", "label": "@pause_OptionsHeadtrackingToggleThirdPersonCameraEnabled", "type": "toggle", "description": "game_settings.descriptions.headtracking_third_person_camera_toggle" },
+        { "name": "HeadtrackingThirdPersonDisableDuringInventory", "label": "@pause_OptionsHeadtrackingThirdPersonDisableDuringInventory", "type": "toggle", "description": "game_settings.descriptions.headtracking_third_person_disable_during_inventory" },
+        { "name": "HeadtrackingDisableDuringSeat", "label": "@pause_OptionsHeadtrackingToggleDisableDuringSeat", "type": "toggle", "description": "game_settings.descriptions.headtracking_disable_during_seat" },
+        { "name": "HeadtrackingDisableDuringWalking", "label": "@pause_OptionsHeadtrackingToggleDisableDuringWalking", "type": "toggle", "description": "game_settings.descriptions.headtracking_disable_during_walking" },
+        { "name": "HeadtrackingDisableDuringADS", "label": "@pause_OptionsHeadtrackingToggleDisableDuringADS", "type": "toggle", "description": "game_settings.descriptions.headtracking_disable_during_ads" },
+        { "name": "HeadtrackingDisableDuringMobiGlas", "label": "@pause_OptionsHeadtrackingToggleDisableDuringMobiGlas", "type": "toggle", "description": "game_settings.descriptions.headtracking_disable_during_mobi_glas" },
+        { "name": "HeadtrackingDisableDuringIM", "label": "@pause_OptionsHeadtrackingToggleDisableDuringIM", "type": "toggle", "description": "game_settings.descriptions.headtracking_disable_during_im" },
+        { "name": "HeadtrackingDisableDuringVehicleAds", "label": "@pause_OptionsHeadtrackingToggleDisableDuringVehicleAds", "type": "toggle", "description": "game_settings.descriptions.headtracking_disable_during_vehicle_ads" },
+        { "name": "HeadtrackingToggleAutoCalibrate", "label": "@pause_OptionsHeadtrackingToggleAutoCalibrate", "type": "toggle", "description": "game_settings.descriptions.headtracking_toggle_auto_calibrate" },
+        { "name": "HeadtrackingSource", "label": "@pause_OptionsHeadtrackingSource", "type": "number", "description": "game_settings.descriptions.headtracking_source" },
+        { "name": "HeadtrackingEnableRollSeat", "label": "@pause_OptionsHeadtrackingEnableRollSeat", "type": "toggle", "description": "game_settings.descriptions.headtracking_enable_roll_seat" },
+        { "name": "HeadtrackingEnableRollFPS", "label": "@pause_OptionsHeadtrackingEnableRollFPS", "type": "toggle", "description": "game_settings.descriptions.headtracking_enable_roll_fps" },
+        { "name": "HeadtrackingHoldUseRawDuringHold", "label": "@pause_OptionsHeadTrackingHoldUseRawDuringHold", "type": "toggle", "description": "game_settings.descriptions.headtracking_hold_use_raw_during_hold" },
+        { "name": "HeadtrackingInactivityTime", "label": "@pause_OptionsHeadTrackingInactivityTime", "type": "number", "unit": "=s", "description": "game_settings.descriptions.headtracking_inactivity_time" },
+        { "name": "HeadtrackingGlobalSmoothingPosition", "label": "@pause_options_headtracking_global_smoothing_position", "type": "number", "description": "game_settings.descriptions.headtracking_global_smoothing_position" },
+        { "name": "HeadtrackingGlobalSmoothingRotation", "label": "@pause_options_headtracking_global_smoothing_rotation", "type": "number", "description": "game_settings.descriptions.headtracking_global_smoothing_rotation" }
       ]
     },
     {
       "id": "comms.voice", "tab": "comms", "label": "game_settings.sections.voice",
       "settings": [
-        { "name": "PreferredAudioInputDeviceHash", "label": "@pause_OptionsMicrophoneDevice", "type": "number" },
-        { "name": "MuteMicrophoneVoIP", "label": "@pause_OptionsMuteMicrophone", "type": "toggle" },
-        { "name": "MicrophoneVolume", "label": "@pause_OptionsMicrophoneVolume", "type": "number", "unit": "=%" },
-        { "name": "AudioVOIPVolume", "label": "@pause_OptionsVOIPVolume", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%" },
-        { "name": "EnableLevelActivatedVoiceTransmission", "label": "@pause_OptionsLevelActivatedVoiceTx", "type": "toggle" },
-        { "name": "VoiceLevelOnThreshold", "label": "@pause_OptionsVoiceLevelOnThreshold", "type": "number", "unit": "=dB" }
+        { "name": "PreferredAudioInputDeviceHash", "label": "@pause_OptionsMicrophoneDevice", "type": "number", "description": "game_settings.descriptions.preferred_audio_input_device_hash" },
+        { "name": "MuteMicrophoneVoIP", "label": "@pause_OptionsMuteMicrophone", "type": "toggle", "description": "game_settings.descriptions.mute_microphone_vo_ip" },
+        { "name": "MicrophoneVolume", "label": "@pause_OptionsMicrophoneVolume", "type": "number", "unit": "=%", "description": "game_settings.descriptions.microphone_volume" },
+        { "name": "AudioVOIPVolume", "label": "@pause_OptionsVOIPVolume", "type": "slider", "min": 0, "max": 1, "step": 0.01, "scale": 100, "decimals": 0, "unit": "=%", "description": "game_settings.descriptions.audio_voipvolume" },
+        { "name": "EnableLevelActivatedVoiceTransmission", "label": "@pause_OptionsLevelActivatedVoiceTx", "type": "toggle", "description": "game_settings.descriptions.enable_level_activated_voice_transmission" },
+        { "name": "VoiceLevelOnThreshold", "label": "@pause_OptionsVoiceLevelOnThreshold", "type": "number", "unit": "=dB", "description": "game_settings.descriptions.voice_level_on_threshold" }
       ]
     },
     {
       "id": "comms.foip", "tab": "comms", "label": "game_settings.sections.foip",
       "settings": [
         { "name": "EnableFacewareSystemLive", "label": "@pause_OptionsEnableFOIP", "type": "number" },
-        { "name": "FoIPCameraSelection", "label": "@pause_OptionsFoIPCamera", "type": "number" },
-        { "name": "FoIPCameraRotation", "label": "@pause_OptionsFoIPCameraRotation", "type": "number" },
-        { "name": "HeadTrackingFacewarePitchMultiplier", "label": "@pause_OptionsHeadTrackingPitchMultiplier", "type": "number" },
-        { "name": "HeadTrackingFacewareYawMultiplier", "label": "@pause_OptionsHeadTrackingYawMultiplier", "type": "number" },
-        { "name": "HeadTrackingFacewareRollMultiplier", "label": "@pause_OptionsHeadTrackingRollMultiplier", "type": "number" },
-        { "name": "HeadTrackingFaceWareDeadzoneOffset", "label": "@pause_OptionsHeadTrackingFaceWareDeadzoneOffset", "type": "number", "unit": "=°" },
-        { "name": "HeadTrackingFaceWareDeadzoneRotationYaw", "label": "@pause_options_head_tracking_faceware_rotation_deadzone_yaw", "type": "number", "unit": "=°" },
-        { "name": "HeadTrackingFaceWareDeadzoneRotationPitch", "label": "@pause_options_head_tracking_faceware_rotation_deadzone_pitch", "type": "number", "unit": "=°" },
-        { "name": "HeadTrackingFaceWareDeadzoneRotationRoll", "label": "@pause_options_head_tracking_faceware_rotation_deadzone_roll", "type": "number", "unit": "=°" },
-        { "name": "HeadTrackingFaceWareSmoothing", "label": "@pause_OptionsHeadTrackingFaceWareSmoothing", "type": "number" },
-        { "name": "HeadTrackingFaceWarePositionScale", "label": "@pause_options_faceware_position_scale", "type": "number" },
-        { "name": "HeadTrackingFaceWarePositionDeadZoneLeftRight", "label": "@pause_options_faceware_position_deadzone_left_right", "type": "number" },
-        { "name": "HeadTrackingFaceWarePositionDeadZoneUpDown", "label": "@pause_options_faceware_position_deadzone_up_down", "type": "number" },
-        { "name": "HeadTrackingFaceWarePositionDeadZoneForwardBack", "label": "@pause_options_faceware_position_deadzone_forward_back", "type": "number" },
-        { "name": "HeadTrackingFaceWareCouplePositionOffsetToOrientation", "label": "@pause_options_faceware_couple_position_offset_to_orientation", "type": "toggle" }
+        { "name": "FoIPCameraSelection", "label": "@pause_OptionsFoIPCamera", "type": "number", "description": "game_settings.descriptions.fo_ipcamera_selection" },
+        { "name": "FoIPCameraRotation", "label": "@pause_OptionsFoIPCameraRotation", "type": "number", "description": "game_settings.descriptions.fo_ipcamera_rotation" },
+        { "name": "HeadTrackingFacewarePitchMultiplier", "label": "@pause_OptionsHeadTrackingPitchMultiplier", "type": "number", "description": "game_settings.descriptions.head_tracking_faceware_pitch_multiplier" },
+        { "name": "HeadTrackingFacewareYawMultiplier", "label": "@pause_OptionsHeadTrackingYawMultiplier", "type": "number", "description": "game_settings.descriptions.head_tracking_faceware_yaw_multiplier" },
+        { "name": "HeadTrackingFacewareRollMultiplier", "label": "@pause_OptionsHeadTrackingRollMultiplier", "type": "number", "description": "game_settings.descriptions.head_tracking_faceware_roll_multiplier" },
+        { "name": "HeadTrackingFaceWareDeadzoneOffset", "label": "@pause_OptionsHeadTrackingFaceWareDeadzoneOffset", "type": "number", "unit": "=°", "description": "game_settings.descriptions.head_tracking_face_ware_deadzone_offset" },
+        { "name": "HeadTrackingFaceWareDeadzoneRotationYaw", "label": "@pause_options_head_tracking_faceware_rotation_deadzone_yaw", "type": "number", "unit": "=°", "description": "game_settings.descriptions.head_tracking_face_ware_deadzone_rotation_yaw" },
+        { "name": "HeadTrackingFaceWareDeadzoneRotationPitch", "label": "@pause_options_head_tracking_faceware_rotation_deadzone_pitch", "type": "number", "unit": "=°", "description": "game_settings.descriptions.head_tracking_face_ware_deadzone_rotation_pitch" },
+        { "name": "HeadTrackingFaceWareDeadzoneRotationRoll", "label": "@pause_options_head_tracking_faceware_rotation_deadzone_roll", "type": "number", "unit": "=°", "description": "game_settings.descriptions.head_tracking_face_ware_deadzone_rotation_roll" },
+        { "name": "HeadTrackingFaceWareSmoothing", "label": "@pause_OptionsHeadTrackingFaceWareSmoothing", "type": "number", "description": "game_settings.descriptions.head_tracking_face_ware_smoothing" },
+        { "name": "HeadTrackingFaceWarePositionScale", "label": "@pause_options_faceware_position_scale", "type": "number", "description": "game_settings.descriptions.head_tracking_face_ware_position_scale" },
+        { "name": "HeadTrackingFaceWarePositionDeadZoneLeftRight", "label": "@pause_options_faceware_position_deadzone_left_right", "type": "number", "description": "game_settings.descriptions.head_tracking_face_ware_position_dead_zone_left_right" },
+        { "name": "HeadTrackingFaceWarePositionDeadZoneUpDown", "label": "@pause_options_faceware_position_deadzone_up_down", "type": "number", "description": "game_settings.descriptions.head_tracking_face_ware_position_dead_zone_up_down" },
+        { "name": "HeadTrackingFaceWarePositionDeadZoneForwardBack", "label": "@pause_options_faceware_position_deadzone_forward_back", "type": "number", "description": "game_settings.descriptions.head_tracking_face_ware_position_dead_zone_forward_back" },
+        { "name": "HeadTrackingFaceWareCouplePositionOffsetToOrientation", "label": "@pause_options_faceware_couple_position_offset_to_orientation", "type": "toggle", "description": "game_settings.descriptions.head_tracking_face_ware_couple_position_offset_to_orientation" }
       ]
     },
     {
       "id": "comms.tobii", "tab": "comms", "label": "game_settings.sections.tobii",
       "settings": [
-        { "name": "TobiiEnabled", "label": "@pause_options_head_tracking_tobii_enabled", "type": "toggle" },
-        { "name": "TobiiHeadPositionScale", "label": "@pause_options_head_tracking_tobii_position_scale", "type": "number" },
-        { "name": "TobiiHeadPositionDeadZoneX", "label": "@pause_options_head_tracking_tobii_position_deadzone_x", "type": "number" },
-        { "name": "TobiiHeadPositionDeadZoneY", "label": "@pause_options_head_tracking_tobii_position_deadzone_y", "type": "number" },
-        { "name": "TobiiHeadPositionDeadZoneZ", "label": "@pause_options_head_tracking_tobii_position_deadzone_z", "type": "number" },
-        { "name": "TobiiCouplePositionOffsetToOrientation", "label": "@pause_options_head_tracking_tobii_couple_position_offset_to_orientation", "type": "toggle" },
-        { "name": "TobiiGazeBasedTargetSelection", "label": "@pause_options_head_tracking_tobii_gaze_target_selection", "type": "toggle" },
-        { "name": "TobiiGazeBasedMissileLock", "label": "@pause_options_head_tracking_tobii_gaze_missile_lock", "type": "toggle" },
-        { "name": "TobiiGazeBasedBombDesiredImpactPoint", "label": "@pause_options_head_tracking_tobii_gaze_bomb_desired_impact_point", "type": "toggle" },
-        { "name": "TobiiGazeInputMethod_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_gaze_input_method", "type": "number" },
-        { "name": "TobiiCameraBoostValue_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_camera_boost_value", "type": "number" },
-        { "name": "TobiiCameraBoostGazeDeadzone_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_camera_boost_gaze_deadzone", "type": "number" },
-        { "name": "TobiiInputMixEyeHeadTrackingRatio_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_eye_head_tracking_ratio", "type": "number" },
-        { "name": "TobiiInputMixGazeResponsiveness_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_gaze_responsiveness", "type": "number" },
-        { "name": "TobiiHeadSensitivityYaw_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_head_sensitivity_yaw", "type": "number" },
-        { "name": "TobiiHeadSensitivityPitch_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_head_sensitivity_pitch", "type": "number" },
-        { "name": "TobiiHeadSensitivityRoll_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_head_sensitivity_roll", "type": "number" },
-        { "name": "TobiiHeadCenterStabilization_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_head_center_stabilization", "type": "number" },
-        { "name": "TobiiHeadViewAutoCenter_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_head_view_auto_center", "type": "toggle" },
-        { "name": "TobiiGazeInputMethod_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_gaze_input_method", "type": "number" },
-        { "name": "TobiiCameraBoostValue_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_camera_boost_value", "type": "number" },
-        { "name": "TobiiCameraBoostGazeDeadzone_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_camera_boost_gaze_deadzone", "type": "number" },
-        { "name": "TobiiInputMixEyeHeadTrackingRatio_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_eye_head_tracking_ratio", "type": "number" },
-        { "name": "TobiiInputMixGazeResponsiveness_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_gaze_responsiveness", "type": "number" },
-        { "name": "TobiiHeadSensitivityYaw_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_head_sensitivity_yaw", "type": "number" },
-        { "name": "TobiiHeadSensitivityPitch_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_head_sensitivity_pitch", "type": "number" },
-        { "name": "TobiiHeadSensitivityRoll_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_head_sensitivity_roll", "type": "number" },
-        { "name": "TobiiHeadCenterStabilization_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_head_center_stabilization", "type": "number" },
-        { "name": "TobiiHeadViewAutoCenter_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_head_view_auto_center", "type": "toggle" }
+        { "name": "TobiiEnabled", "label": "@pause_options_head_tracking_tobii_enabled", "type": "toggle", "description": "game_settings.descriptions.tobii_enabled" },
+        { "name": "TobiiHeadPositionScale", "label": "@pause_options_head_tracking_tobii_position_scale", "type": "number", "description": "game_settings.descriptions.tobii_head_position_scale" },
+        { "name": "TobiiHeadPositionDeadZoneX", "label": "@pause_options_head_tracking_tobii_position_deadzone_x", "type": "number", "description": "game_settings.descriptions.tobii_head_position_dead_zone_x" },
+        { "name": "TobiiHeadPositionDeadZoneY", "label": "@pause_options_head_tracking_tobii_position_deadzone_y", "type": "number", "description": "game_settings.descriptions.tobii_head_position_dead_zone_y" },
+        { "name": "TobiiHeadPositionDeadZoneZ", "label": "@pause_options_head_tracking_tobii_position_deadzone_z", "type": "number", "description": "game_settings.descriptions.tobii_head_position_dead_zone_z" },
+        { "name": "TobiiCouplePositionOffsetToOrientation", "label": "@pause_options_head_tracking_tobii_couple_position_offset_to_orientation", "type": "toggle", "description": "game_settings.descriptions.tobii_couple_position_offset_to_orientation" },
+        { "name": "TobiiGazeBasedTargetSelection", "label": "@pause_options_head_tracking_tobii_gaze_target_selection", "type": "toggle", "description": "game_settings.descriptions.tobii_gaze_based_target_selection" },
+        { "name": "TobiiGazeBasedMissileLock", "label": "@pause_options_head_tracking_tobii_gaze_missile_lock", "type": "toggle", "description": "game_settings.descriptions.tobii_gaze_based_missile_lock" },
+        { "name": "TobiiGazeBasedBombDesiredImpactPoint", "label": "@pause_options_head_tracking_tobii_gaze_bomb_desired_impact_point", "type": "toggle", "description": "game_settings.descriptions.tobii_gaze_based_bomb_desired_impact_point" },
+        { "name": "TobiiGazeInputMethod_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_gaze_input_method", "type": "number", "description": "game_settings.descriptions.tobii_gaze_input_method_profile0" },
+        { "name": "TobiiCameraBoostValue_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_camera_boost_value", "type": "number", "description": "game_settings.descriptions.tobii_camera_boost_value_profile0" },
+        { "name": "TobiiCameraBoostGazeDeadzone_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_camera_boost_gaze_deadzone", "type": "number", "description": "game_settings.descriptions.tobii_camera_boost_gaze_deadzone_profile0" },
+        { "name": "TobiiInputMixEyeHeadTrackingRatio_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_eye_head_tracking_ratio", "type": "number", "description": "game_settings.descriptions.tobii_input_mix_eye_head_tracking_ratio_profile0" },
+        { "name": "TobiiInputMixGazeResponsiveness_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_gaze_responsiveness", "type": "number", "description": "game_settings.descriptions.tobii_input_mix_gaze_responsiveness_profile0" },
+        { "name": "TobiiHeadSensitivityYaw_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_head_sensitivity_yaw", "type": "number", "description": "game_settings.descriptions.tobii_head_sensitivity_yaw_profile0" },
+        { "name": "TobiiHeadSensitivityPitch_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_head_sensitivity_pitch", "type": "number", "description": "game_settings.descriptions.tobii_head_sensitivity_pitch_profile0" },
+        { "name": "TobiiHeadSensitivityRoll_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_head_sensitivity_roll", "type": "number", "description": "game_settings.descriptions.tobii_head_sensitivity_roll_profile0" },
+        { "name": "TobiiHeadCenterStabilization_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_head_center_stabilization", "type": "number", "description": "game_settings.descriptions.tobii_head_center_stabilization_profile0" },
+        { "name": "TobiiHeadViewAutoCenter_Profile0", "label": "@pause_options_head_tracking_tobii_profile0_head_view_auto_center", "type": "toggle", "description": "game_settings.descriptions.tobii_head_view_auto_center_profile0" },
+        { "name": "TobiiGazeInputMethod_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_gaze_input_method", "type": "number", "description": "game_settings.descriptions.tobii_gaze_input_method_profile1" },
+        { "name": "TobiiCameraBoostValue_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_camera_boost_value", "type": "number", "description": "game_settings.descriptions.tobii_camera_boost_value_profile1" },
+        { "name": "TobiiCameraBoostGazeDeadzone_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_camera_boost_gaze_deadzone", "type": "number", "description": "game_settings.descriptions.tobii_camera_boost_gaze_deadzone_profile1" },
+        { "name": "TobiiInputMixEyeHeadTrackingRatio_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_eye_head_tracking_ratio", "type": "number", "description": "game_settings.descriptions.tobii_input_mix_eye_head_tracking_ratio_profile1" },
+        { "name": "TobiiInputMixGazeResponsiveness_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_gaze_responsiveness", "type": "number", "description": "game_settings.descriptions.tobii_input_mix_gaze_responsiveness_profile1" },
+        { "name": "TobiiHeadSensitivityYaw_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_head_sensitivity_yaw", "type": "number", "description": "game_settings.descriptions.tobii_head_sensitivity_yaw_profile1" },
+        { "name": "TobiiHeadSensitivityPitch_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_head_sensitivity_pitch", "type": "number", "description": "game_settings.descriptions.tobii_head_sensitivity_pitch_profile1" },
+        { "name": "TobiiHeadSensitivityRoll_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_head_sensitivity_roll", "type": "number", "description": "game_settings.descriptions.tobii_head_sensitivity_roll_profile1" },
+        { "name": "TobiiHeadCenterStabilization_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_head_center_stabilization", "type": "number", "description": "game_settings.descriptions.tobii_head_center_stabilization_profile1" },
+        { "name": "TobiiHeadViewAutoCenter_Profile1", "label": "@pause_options_head_tracking_tobii_profile1_head_view_auto_center", "type": "toggle", "description": "game_settings.descriptions.tobii_head_view_auto_center_profile1" }
       ]
     }
   ],

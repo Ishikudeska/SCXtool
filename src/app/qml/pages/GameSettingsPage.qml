@@ -10,10 +10,128 @@ Item {
     property bool active: false
     readonly property bool ready: gs.status === "ready"
     readonly property bool settingsTab: gs.tab !== "keybinds"
+    readonly property bool sidePanel: gs.infoMode === "sidebar"
+    readonly property color inspectedColor: Qt.rgba(Theme.highlight.r, Theme.highlight.g, Theme.highlight.b, 0.18)
+    property var inspected: null
+    property var foldedSections: ({})
+    readonly property bool filtering: gs.search !== "" || gs.modifiedOnly
+    readonly property var inspectedInfo: page.describe(page.inspected, gs.revision)
+
+    function inspect(target) {
+        if (page.sidePanel)
+            page.inspected = target
+    }
+    function sectionFolded(id) {
+        if (page.filtering)
+            return false
+        return id in page.foldedSections ? page.foldedSections[id] : id.endsWith(".other")
+    }
+    function toggleSection(id) {
+        const next = Object.assign({}, page.foldedSections)
+        next[id] = !page.sectionFolded(id)
+        page.foldedSections = next
+    }
+    function isInspected(kind, key) {
+        return page.sidePanel && page.inspected !== null && page.inspected.kind === kind && page.inspected.key === key
+    }
+    function showInfo(item, target) {
+        infoPopup.target = target
+        infoPopup.anchorItem = item
+        infoPopup.open()
+    }
+    function hideInfo(item) {
+        if (infoPopup.anchorItem === item)
+            infoPopup.close()
+    }
+    function settingValueText(row) {
+        const unit = row.unit !== "" ? " " + row.unit : ""
+        if (row.kind === "toggle")
+            return row.checked ? qsTr("game_settings.on") : qsTr("game_settings.off")
+        if (row.kind === "choice")
+            return row.choiceIndex >= 0 && row.choiceIndex < row.choices.length ? row.choices[row.choiceIndex].label : row.value
+        if (row.kind === "slider")
+            return Number(row.number).toFixed(row.decimals) + unit
+        return row.value !== "" ? row.value + unit : "—"
+    }
+    function describe(target, revision) {
+        if (!target)
+            return null
+        const on = qsTr("game_settings.on")
+        const off = qsTr("game_settings.off")
+        const changed = { text: qsTr("game_settings.modified_tip"), color: Theme.em4 }
+        if (target.kind === "setting") {
+            const row = gs.settingState(target.key, revision)
+            if (!row.name)
+                return null
+            const details = [{ label: qsTr("game_settings.info.current"), value: page.settingValueText(row) }]
+            if (row.defaultText !== "")
+                details.push({ label: qsTr("game_settings.info.default"), value: row.defaultText })
+            if (row.kind === "slider") {
+                const unit = row.unit !== "" ? " " + row.unit : ""
+                details.push({ label: qsTr("game_settings.info.range"),
+                               value: App.fmt(qsTr("game_settings.info.range_value"),
+                                              { min: Number(row.min).toFixed(row.decimals) + unit,
+                                                max: Number(row.max).toFixed(row.decimals) + unit }) })
+            }
+            if (row.kind === "choice")
+                details.push({ label: qsTr("game_settings.info.options"), value: row.choices.map(c => c.label).join(", ") })
+            details.push({ label: qsTr("game_settings.info.attribute"), value: row.name })
+            if (row.cvar)
+                details.push({ label: qsTr("game_settings.info.cvar"), value: row.cvar })
+            const notes = []
+            if (row.restart)
+                notes.push({ text: qsTr("game_settings.restart_tip"), color: Theme.dim })
+            if (row.pending)
+                notes.push({ text: qsTr("game_settings.pending_tip"), color: Theme.action("needsApply") })
+            else if (row.modified)
+                notes.push(changed)
+            return { title: row.label, description: row.description, details: details, notes: notes }
+        }
+        if (target.kind === "option") {
+            const row = gs.optionState(target.key, revision)
+            if (!row.group)
+                return null
+            const details = []
+            if (row.showInvert)
+                details.push({ label: qsTr("game_settings.invert"), value: row.inverted ? on : off })
+            if (row.showCurve)
+                details.push({ label: qsTr("game_settings.exponent"), value: row.exponent !== "" ? row.exponent : row.defaultExponent })
+            details.push({ label: qsTr("game_settings.info.group"), value: row.group })
+            if (row.invertCvar !== "")
+                details.push({ label: qsTr("game_settings.info.invert_cvar"), value: row.invertCvar })
+            const notes = []
+            if (row.hasCurve)
+                notes.push({ text: qsTr("game_settings.info.has_curve"), color: Theme.dim })
+            if (row.modified)
+                notes.push(changed)
+            return { title: row.label,
+                     description: row.showInvert || row.showCurve ? qsTr("game_settings.info.option_desc") : qsTr("game_settings.input_devices_desc"),
+                     details: details, notes: notes }
+        }
+        if (target.kind === "axis") {
+            const row = gs.axisState(target.key, revision)
+            if (!row.input)
+                return null
+            return { title: row.label, description: qsTr("game_settings.info.axis_desc"),
+                     details: [{ label: qsTr("game_settings.deadzone"), value: row.deadzone !== "" ? row.deadzone : "0" },
+                               { label: qsTr("game_settings.saturation"), value: row.saturation !== "" ? row.saturation : "1" },
+                               { label: qsTr("game_settings.info.input"), value: row.input }],
+                     notes: [] }
+        }
+        return null
+    }
 
     GameSettingsController {
         id: gs
         active: page.active
+    }
+
+    Connections {
+        target: gs
+        function onTabChanged() {
+            page.inspected = null
+            infoPopup.close()
+        }
     }
 
     component SmallButton: AppButton {
@@ -30,6 +148,88 @@ Item {
         enabled: shown
     }
 
+    component InfoIcon: Rectangle {
+        id: infoIcon
+        property var target: null
+        visible: !page.sidePanel
+        implicitWidth: 16
+        implicitHeight: 16
+        radius: 8
+        color: "transparent"
+        border.color: iconHover.hovered ? Theme.highlight : Theme.dim
+        Label {
+            anchors.centerIn: parent
+            text: "i"
+            font.pixelSize: 11
+            font.bold: true
+            color: iconHover.hovered ? Theme.highlight : Theme.dim
+        }
+        HoverHandler {
+            id: iconHover
+            onHoveredChanged: hovered ? page.showInfo(infoIcon, infoIcon.target) : page.hideInfo(infoIcon)
+        }
+    }
+
+    component InfoView: ColumnLayout {
+        id: infoView
+        property var info: null
+        property bool selectable: false
+        readonly property bool described: infoView.info !== null && infoView.info.description !== ""
+        spacing: 8
+        Label {
+            Layout.fillWidth: true
+            text: infoView.info !== null ? infoView.info.title : ""
+            color: Theme.title
+            font.bold: true
+            font.pixelSize: 15
+            wrapMode: Text.WordWrap
+        }
+        Label {
+            Layout.fillWidth: true
+            text: infoView.described ? infoView.info.description : qsTr("game_settings.info.no_description")
+            color: infoView.described ? Theme.text : Theme.placeholder
+            font.italic: !infoView.described
+            wrapMode: Text.WordWrap
+        }
+        Repeater {
+            model: infoView.info !== null ? infoView.info.details : []
+            delegate: RowLayout {
+                id: detail
+                required property var modelData
+                Layout.fillWidth: true
+                spacing: 10
+                Label {
+                    Layout.preferredWidth: 110
+                    Layout.alignment: Qt.AlignTop
+                    text: detail.modelData.label
+                    color: Theme.dim
+                    wrapMode: Text.WordWrap
+                }
+                TextEdit {
+                    Layout.fillWidth: true
+                    text: detail.modelData.value
+                    color: Theme.text
+                    font.pixelSize: Theme.fontSize
+                    readOnly: true
+                    selectByMouse: infoView.selectable
+                    selectionColor: Theme.highlight
+                    selectedTextColor: Theme.highlightedText
+                    wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                }
+            }
+        }
+        Repeater {
+            model: infoView.info !== null ? infoView.info.notes : []
+            delegate: Label {
+                required property var modelData
+                Layout.fillWidth: true
+                text: "• " + modelData.text
+                color: modelData.color
+                wrapMode: Text.WordWrap
+            }
+        }
+    }
+
     component NumberField: TextField {
         id: numberField
         property string committed: ""
@@ -43,110 +243,127 @@ Item {
         RegularExpressionValidator { id: numberRegex; regularExpression: /^-?[0-9]*[.]?[0-9]*$/ }
     }
 
-    component SettingRow: RowLayout {
+    component SettingRow: Rectangle {
         id: settingRow
         required property var base
         readonly property var row: gs.settingState(base.name, gs.revision)
         Layout.fillWidth: true
-        spacing: 10
+        implicitHeight: settingLine.implicitHeight + 6
+        radius: Theme.radius
+        color: page.isInspected("setting", base.name) ? page.inspectedColor : "transparent"
 
-        Rectangle {
-            implicitWidth: 6
-            implicitHeight: 6
-            radius: 3
-            color: settingRow.row.pending ? Theme.action("needsApply") : settingRow.row.modified ? Theme.em4 : "transparent"
-            ToolTip.visible: dotArea.containsMouse && (settingRow.row.pending || settingRow.row.modified)
-            ToolTip.text: settingRow.row.pending ? qsTr("game_settings.pending_tip") : qsTr("game_settings.modified_tip")
-            MouseArea { id: dotArea; anchors.fill: parent; anchors.margins: -4; hoverEnabled: true }
+        HoverHandler {
+            onHoveredChanged: if (hovered) page.inspect({ kind: "setting", key: settingRow.base.name })
         }
-        Label {
-            id: settingLabel
-            Layout.preferredWidth: Math.max(220, settingRow.width * 0.42)
-            Layout.maximumWidth: Math.max(220, settingRow.width * 0.42)
-            text: settingRow.row.label + (settingRow.row.restart ? "  ⟳" : "")
-            color: Theme.text
-            wrapMode: Text.WordWrap
-            ToolTip.visible: labelArea.containsMouse
-            ToolTip.delay: 500
-            ToolTip.text: [settingRow.row.description,
-                           App.fmt(qsTr("game_settings.setting_tip"), { name: settingRow.row.name, cvar: settingRow.row.cvar || "—" }),
-                           settingRow.row.restart ? qsTr("game_settings.restart_tip") : ""].filter(s => s !== "").join("\n\n")
-            MouseArea { id: labelArea; anchors.fill: parent; hoverEnabled: true; acceptedButtons: Qt.NoButton }
-        }
-        Loader {
-            Layout.fillWidth: true
-            sourceComponent: settingRow.row.kind === "toggle" ? toggleEditor
-                           : settingRow.row.kind === "slider" ? sliderEditor
-                           : settingRow.row.kind === "choice" ? choiceEditor : fieldEditor
-            Component {
-                id: toggleEditor
-                AppCheckBox {
-                    text: checked ? qsTr("game_settings.on") : qsTr("game_settings.off")
-                    checked: settingRow.row.checked
-                    enabled: page.ready
-                    onToggled: gs.setToggle(settingRow.row.name, checked)
+
+        RowLayout {
+            id: settingLine
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin: 4
+            anchors.rightMargin: 4
+            spacing: 10
+
+            Rectangle {
+                implicitWidth: 6
+                implicitHeight: 6
+                radius: 3
+                color: settingRow.row.pending ? Theme.action("needsApply") : settingRow.row.modified ? Theme.em4 : "transparent"
+                ToolTip.visible: dotArea.containsMouse && (settingRow.row.pending || settingRow.row.modified)
+                ToolTip.text: settingRow.row.pending ? qsTr("game_settings.pending_tip") : qsTr("game_settings.modified_tip")
+                MouseArea { id: dotArea; anchors.fill: parent; anchors.margins: -4; hoverEnabled: true }
+            }
+            RowLayout {
+                Layout.preferredWidth: Math.max(220, settingRow.width * 0.42)
+                Layout.maximumWidth: Math.max(220, settingRow.width * 0.42)
+                spacing: 6
+                Label {
+                    Layout.fillWidth: true
+                    text: settingRow.row.label + (settingRow.row.restart ? "  ⟳" : "")
+                    color: Theme.text
+                    wrapMode: Text.WordWrap
+                }
+                InfoIcon {
+                    Layout.alignment: Qt.AlignTop
+                    target: ({ kind: "setting", key: settingRow.base.name })
                 }
             }
-            Component {
-                id: sliderEditor
-                RowLayout {
-                    spacing: 8
-                    Slider {
-                        id: slider
-                        Layout.fillWidth: true
-                        Layout.maximumWidth: 320
-                        from: settingRow.row.min
-                        to: settingRow.row.max
-                        stepSize: settingRow.row.step
-                        value: settingRow.row.number
+            Loader {
+                Layout.fillWidth: true
+                sourceComponent: settingRow.row.kind === "toggle" ? toggleEditor
+                               : settingRow.row.kind === "slider" ? sliderEditor
+                               : settingRow.row.kind === "choice" ? choiceEditor : fieldEditor
+                Component {
+                    id: toggleEditor
+                    AppCheckBox {
+                        text: checked ? qsTr("game_settings.on") : qsTr("game_settings.off")
+                        checked: settingRow.row.checked
                         enabled: page.ready
-                        onPressedChanged: if (!pressed) gs.setValue(settingRow.row.name, String(value))
+                        onToggled: gs.setToggle(settingRow.row.name, checked)
                     }
-                    Label {
-                        text: slider.value.toFixed(settingRow.row.decimals) + (settingRow.row.unit !== "" ? " " + settingRow.row.unit : "")
-                        color: Theme.text
-                        Layout.preferredWidth: 70
+                }
+                Component {
+                    id: sliderEditor
+                    RowLayout {
+                        spacing: 8
+                        Slider {
+                            id: slider
+                            Layout.fillWidth: true
+                            Layout.maximumWidth: 320
+                            from: settingRow.row.min
+                            to: settingRow.row.max
+                            stepSize: settingRow.row.step
+                            value: settingRow.row.number
+                            enabled: page.ready
+                            onPressedChanged: if (!pressed) gs.setValue(settingRow.row.name, String(value))
+                        }
+                        Label {
+                            text: slider.value.toFixed(settingRow.row.decimals) + (settingRow.row.unit !== "" ? " " + settingRow.row.unit : "")
+                            color: Theme.text
+                            Layout.preferredWidth: 70
+                        }
+                        Item { Layout.fillWidth: true }
                     }
-                    Item { Layout.fillWidth: true }
                 }
-            }
-            Component {
-                id: choiceEditor
-                ComboBox {
-                    implicitWidth: 260
-                    model: settingRow.row.choices
-                    textRole: "label"
-                    currentIndex: settingRow.row.choiceIndex
-                    enabled: page.ready
-                    onActivated: index => gs.setValue(settingRow.row.name, settingRow.row.choices[index].value)
-                }
-            }
-            Component {
-                id: fieldEditor
-                RowLayout {
-                    spacing: 6
-                    NumberField {
-                        committed: settingRow.row.value
-                        numeric: settingRow.row.kind !== "text"
-                        implicitWidth: settingRow.row.kind === "text" ? 220 : 110
+                Component {
+                    id: choiceEditor
+                    ComboBox {
+                        implicitWidth: 260
+                        model: settingRow.row.choices
+                        textRole: "label"
+                        currentIndex: settingRow.row.choiceIndex
                         enabled: page.ready
-                        onCommit: value => gs.setValue(settingRow.row.name, value)
+                        onActivated: index => gs.setValue(settingRow.row.name, settingRow.row.choices[index].value)
                     }
-                    Label { text: settingRow.row.unit; color: Theme.dim; visible: text !== "" }
-                    Item { Layout.fillWidth: true }
+                }
+                Component {
+                    id: fieldEditor
+                    RowLayout {
+                        spacing: 6
+                        NumberField {
+                            committed: settingRow.row.value
+                            numeric: settingRow.row.kind !== "text"
+                            implicitWidth: settingRow.row.kind === "text" ? 220 : 110
+                            enabled: page.ready
+                            onCommit: value => gs.setValue(settingRow.row.name, value)
+                        }
+                        Label { text: settingRow.row.unit; color: Theme.dim; visible: text !== "" }
+                        Item { Layout.fillWidth: true }
+                    }
                 }
             }
-        }
-        Label {
-            text: settingRow.row.defaultText !== "" ? App.fmt(qsTr("game_settings.default_value"), { value: settingRow.row.defaultText }) : ""
-            color: Theme.placeholder
-            font.pixelSize: Theme.smallFont
-            Layout.preferredWidth: 150
-            elide: Text.ElideRight
-        }
-        ResetButton {
-            shown: page.ready && (settingRow.row.modified || settingRow.row.pending)
-            onClicked: gs.resetValue(settingRow.row.name)
+            Label {
+                text: settingRow.row.defaultText !== "" ? App.fmt(qsTr("game_settings.default_value"), { value: settingRow.row.defaultText }) : ""
+                color: Theme.placeholder
+                font.pixelSize: Theme.smallFont
+                Layout.preferredWidth: 150
+                elide: Text.ElideRight
+            }
+            ResetButton {
+                shown: page.ready && (settingRow.row.modified || settingRow.row.pending)
+                onClicked: gs.resetValue(settingRow.row.name)
+            }
         }
     }
 
@@ -157,8 +374,13 @@ Item {
             required property var modelData
             Layout.fillWidth: true
             title: modelData.title
+            collapsible: !page.filtering
+            collapsed: page.sectionFolded(modelData.id)
+            collapsedNote: modelData.rows.length === 1 ? qsTr("game_settings.section_count_one")
+                         : App.fmt(qsTr("game_settings.section_count"), { count: modelData.rows.length })
+            onToggleRequested: page.toggleSection(modelData.id)
             Repeater {
-                model: sectionBox.modelData.rows
+                model: sectionBox.collapsed ? [] : sectionBox.modelData.rows
                 delegate: SettingRow {
                     required property var modelData
                     base: modelData
@@ -297,244 +519,331 @@ Item {
                 checked: gs.modifiedOnly
                 onToggled: gs.modifiedOnly = checked
             }
+            Label { text: qsTr("game_settings.info.mode_label"); color: Theme.text }
+            ComboBox {
+                objectName: "gameSettingsInfoMode"
+                implicitWidth: 150
+                model: [qsTr("game_settings.info.mode_popup"), qsTr("game_settings.info.mode_sidebar")]
+                currentIndex: page.sidePanel ? 1 : 0
+                onActivated: index => gs.infoMode = index === 1 ? "sidebar" : "popup"
+                ToolTip.visible: hovered
+                ToolTip.delay: 500
+                ToolTip.text: qsTr("game_settings.info.mode_tip")
+            }
         }
 
-        Rectangle {
+        RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
             visible: page.ready
-            color: Theme.base
-            border.color: Theme.border
-            radius: Theme.radius
+            spacing: 8
 
-            ScrollView {
-                id: settingsScroll
-                anchors.fill: parent
-                anchors.margins: 8
-                visible: page.settingsTab
-                clip: true
-                contentWidth: availableWidth
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                color: Theme.base
+                border.color: Theme.border
+                radius: Theme.radius
 
-                ColumnLayout {
-                    width: settingsScroll.availableWidth
-                    spacing: 10
+                ScrollView {
+                    id: settingsScroll
+                    anchors.fill: parent
+                    anchors.margins: 8
+                    visible: page.settingsTab
+                    clip: true
+                    contentWidth: availableWidth
 
-                    Section {
-                        Layout.fillWidth: true
-                        visible: gs.tab === "controls"
-                        title: qsTr("game_settings.sections.input_devices")
-                        description: qsTr("game_settings.input_devices_desc")
-                        RowLayout {
-                            spacing: 8
-                            Label { text: qsTr("game_settings.device_label"); color: Theme.text }
-                            ComboBox {
-                                implicitWidth: 360
-                                model: gs.optionDevices
-                                textRole: "title"
-                                currentIndex: gs.optionDevice
-                                onActivated: index => gs.optionDevice = index
+                    ColumnLayout {
+                        width: settingsScroll.availableWidth
+                        spacing: 10
+
+                        Section {
+                            Layout.fillWidth: true
+                            visible: gs.tab === "controls"
+                            title: qsTr("game_settings.sections.input_devices")
+                            description: qsTr("game_settings.input_devices_desc")
+                            collapsible: !page.filtering
+                            collapsed: page.sectionFolded("controls.input_devices")
+                            onToggleRequested: page.toggleSection("controls.input_devices")
+                            RowLayout {
+                                spacing: 8
+                                Label { text: qsTr("game_settings.device_label"); color: Theme.text }
+                                ComboBox {
+                                    implicitWidth: 360
+                                    model: gs.optionDevices
+                                    textRole: "title"
+                                    currentIndex: gs.optionDevice
+                                    onActivated: index => gs.optionDevice = index
+                                }
                             }
-                        }
-                        Repeater {
-                            model: gs.optionRows
-                            delegate: RowLayout {
-                                id: optionRow
-                                required property var modelData
-                                readonly property var row: gs.optionState(modelData.group, gs.revision)
-                                readonly property bool heading: !modelData.showInvert && !modelData.showCurve
-                                Layout.fillWidth: true
-                                spacing: 10
-                                Label {
-                                    Layout.preferredWidth: 380
-                                    leftPadding: optionRow.row.depth * 16
-                                    text: optionRow.row.label
-                                    color: optionRow.heading ? Theme.title : Theme.text
-                                    font.bold: optionRow.heading
-                                    elide: Text.ElideRight
-                                    ToolTip.visible: optArea.containsMouse
-                                    ToolTip.delay: 500
-                                    ToolTip.text: optionRow.row.group
-                                                  + (optionRow.row.invertCvar !== "" ? "\n" + App.fmt(qsTr("game_settings.invert_cvar_tip"), { cvar: optionRow.row.invertCvar }) : "")
-                                    MouseArea { id: optArea; anchors.fill: parent; hoverEnabled: true; acceptedButtons: Qt.NoButton }
+                            Repeater {
+                                model: gs.optionRows
+                                delegate: RowLayout {
+                                    id: optionRow
+                                    required property var modelData
+                                    readonly property var row: gs.optionState(modelData.group, gs.revision)
+                                    readonly property bool heading: !modelData.showInvert && !modelData.showCurve
+                                    Layout.fillWidth: true
+                                    spacing: 10
+                                    HoverHandler {
+                                        onHoveredChanged: if (hovered) page.inspect({ kind: "option", key: optionRow.modelData.group })
+                                    }
+                                    RowLayout {
+                                        Layout.preferredWidth: 380
+                                        Layout.maximumWidth: 380
+                                        spacing: 6
+                                        Label {
+                                            Layout.fillWidth: true
+                                            leftPadding: optionRow.row.depth * 16
+                                            text: optionRow.row.label
+                                            color: optionRow.heading ? Theme.title : Theme.text
+                                            font.bold: optionRow.heading
+                                            elide: Text.ElideRight
+                                        }
+                                        InfoIcon { target: ({ kind: "option", key: optionRow.modelData.group }) }
+                                    }
+                                    AppCheckBox {
+                                        visible: !optionRow.heading
+                                        opacity: optionRow.row.showInvert ? 1 : 0
+                                        enabled: optionRow.row.showInvert
+                                        text: qsTr("game_settings.invert")
+                                        checked: optionRow.row.inverted
+                                        onToggled: gs.setInvert(optionRow.row.group, checked)
+                                    }
+                                    RowLayout {
+                                        visible: !optionRow.heading
+                                        opacity: optionRow.row.showCurve ? 1 : 0
+                                        enabled: optionRow.row.showCurve
+                                        spacing: 4
+                                        Label { text: qsTr("game_settings.exponent"); color: Theme.dim }
+                                        NumberField {
+                                            implicitWidth: 80
+                                            committed: optionRow.row.exponent
+                                            placeholderText: optionRow.row.defaultExponent
+                                            onCommit: value => gs.setExponent(optionRow.row.group, value)
+                                        }
+                                        Label {
+                                            visible: optionRow.row.hasCurve
+                                            text: qsTr("game_settings.has_curve")
+                                            color: Theme.placeholder
+                                            font.pixelSize: Theme.smallFont
+                                        }
+                                    }
+                                    Item { Layout.fillWidth: true }
+                                    ResetButton {
+                                        shown: optionRow.row.modified
+                                        onClicked: gs.resetOption(optionRow.row.group)
+                                    }
                                 }
-                                AppCheckBox {
-                                    visible: !optionRow.heading
-                                    opacity: optionRow.row.showInvert ? 1 : 0
-                                    enabled: optionRow.row.showInvert
-                                    text: qsTr("game_settings.invert")
-                                    checked: optionRow.row.inverted
-                                    onToggled: gs.setInvert(optionRow.row.group, checked)
-                                }
-                                RowLayout {
-                                    visible: !optionRow.heading
-                                    opacity: optionRow.row.showCurve ? 1 : 0
-                                    enabled: optionRow.row.showCurve
-                                    spacing: 4
-                                    Label { text: qsTr("game_settings.exponent"); color: Theme.dim }
+                            }
+                            Label {
+                                visible: gs.axisRows.length > 0
+                                text: qsTr("game_settings.axes_heading")
+                                color: Theme.title
+                                font.bold: true
+                                topPadding: 8
+                            }
+                            Repeater {
+                                model: gs.axisRows
+                                delegate: RowLayout {
+                                    id: axisRow
+                                    required property var modelData
+                                    readonly property var row: gs.axisState(modelData.input, gs.revision)
+                                    spacing: 10
+                                    HoverHandler {
+                                        onHoveredChanged: if (hovered) page.inspect({ kind: "axis", key: axisRow.modelData.input })
+                                    }
+                                    RowLayout {
+                                        Layout.preferredWidth: 200
+                                        Layout.maximumWidth: 200
+                                        spacing: 6
+                                        Label { Layout.fillWidth: true; text: axisRow.row.label; color: Theme.text; elide: Text.ElideRight }
+                                        InfoIcon { target: ({ kind: "axis", key: axisRow.modelData.input }) }
+                                    }
+                                    Label { text: qsTr("game_settings.deadzone"); color: Theme.dim }
                                     NumberField {
                                         implicitWidth: 80
-                                        committed: optionRow.row.exponent
-                                        placeholderText: optionRow.row.defaultExponent
-                                        onCommit: value => gs.setExponent(optionRow.row.group, value)
+                                        committed: axisRow.row.deadzone
+                                        placeholderText: "0"
+                                        onCommit: value => gs.setAxisOption(axisRow.row.input, "deadzone", value)
                                     }
-                                    Label {
-                                        visible: optionRow.row.hasCurve
-                                        text: qsTr("game_settings.has_curve")
-                                        color: Theme.placeholder
-                                        font.pixelSize: Theme.smallFont
+                                    Label { text: qsTr("game_settings.saturation"); color: Theme.dim }
+                                    NumberField {
+                                        implicitWidth: 80
+                                        committed: axisRow.row.saturation
+                                        placeholderText: "1"
+                                        onCommit: value => gs.setAxisOption(axisRow.row.input, "saturation", value)
                                     }
-                                }
-                                Item { Layout.fillWidth: true }
-                                ResetButton {
-                                    shown: optionRow.row.modified
-                                    onClicked: gs.resetOption(optionRow.row.group)
                                 }
                             }
                         }
+
+                        SettingSections {}
+
                         Label {
-                            visible: gs.axisRows.length > 0
-                            text: qsTr("game_settings.axes_heading")
-                            color: Theme.title
-                            font.bold: true
-                            topPadding: 8
+                            visible: gs.sections.length === 0 && gs.tab !== "controls"
+                            text: qsTr("game_settings.no_matches")
+                            color: Theme.placeholder
                         }
-                        Repeater {
-                            model: gs.axisRows
-                            delegate: RowLayout {
-                                id: axisRow
-                                required property var modelData
-                                readonly property var row: gs.axisState(modelData.input, gs.revision)
-                                spacing: 10
-                                Label { text: axisRow.row.label; color: Theme.text; Layout.preferredWidth: 200 }
-                                Label { text: qsTr("game_settings.deadzone"); color: Theme.dim }
-                                NumberField {
-                                    implicitWidth: 80
-                                    committed: axisRow.row.deadzone
-                                    placeholderText: "0"
-                                    onCommit: value => gs.setAxisOption(axisRow.row.input, "deadzone", value)
+                    }
+                }
+
+                ListView {
+                    id: bindList
+                    anchors.fill: parent
+                    anchors.margins: 4
+                    visible: !page.settingsTab
+                    clip: true
+                    model: gs.bindRows
+                    boundsBehavior: Flickable.StopAtBounds
+                    ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
+                    delegate: Rectangle {
+                        id: bindRow
+                        required property var modelData
+                        required property int index
+                        readonly property var row: gs.bindState(modelData.map, modelData.action, gs.revision)
+                        width: bindList.width
+                        height: bindLine.implicitHeight + 10
+                        color: index % 2 ? Theme.alternateBase : "transparent"
+                        RowLayout {
+                            id: bindLine
+                            anchors.fill: parent
+                            anchors.leftMargin: 6
+                            anchors.rightMargin: 8
+                            spacing: 10
+                            Rectangle {
+                                implicitWidth: 6
+                                implicitHeight: 6
+                                radius: 3
+                                color: bindRow.row.modified ? Theme.em4 : "transparent"
+                            }
+                            ColumnLayout {
+                                Layout.preferredWidth: 360
+                                Layout.maximumWidth: 360
+                                Layout.fillWidth: false
+                                spacing: 1
+                                Label {
+                                    Layout.fillWidth: true
+                                    text: bindRow.row.label
+                                    color: Theme.text
+                                    elide: Text.ElideRight
                                 }
-                                Label { text: qsTr("game_settings.saturation"); color: Theme.dim }
-                                NumberField {
-                                    implicitWidth: 80
-                                    committed: axisRow.row.saturation
-                                    placeholderText: "1"
-                                    onCommit: value => gs.setAxisOption(axisRow.row.input, "saturation", value)
+                                Label {
+                                    Layout.fillWidth: true
+                                    text: bindRow.row.mapLabel
+                                    color: Theme.dim
+                                    font.pixelSize: Theme.smallFont
+                                    elide: Text.ElideRight
                                 }
+                            }
+                            Label {
+                                Layout.preferredWidth: 260
+                                text: bindRow.row.binding !== "" ? bindRow.row.binding : qsTr("game_settings.unbound")
+                                color: bindRow.row.binding !== "" ? Theme.text : Theme.placeholder
+                                font.bold: bindRow.row.binding !== ""
+                                elide: Text.ElideRight
+                            }
+                            Label {
+                                Layout.fillWidth: true
+                                text: bindRow.row.conflicts !== ""
+                                      ? "⚠ " + App.fmt(qsTr("game_settings.conflict"), { actions: bindRow.row.conflicts }) : ""
+                                color: Theme.action("restore")
+                                font.pixelSize: Theme.smallFont
+                                elide: Text.ElideRight
+                            }
+                            Label {
+                                Layout.preferredWidth: 180
+                                text: bindRow.row.modified
+                                      ? App.fmt(qsTr("game_settings.default_value"),
+                                                { value: bindRow.row.defaultText !== "" ? bindRow.row.defaultText : qsTr("game_settings.unbound") })
+                                      : ""
+                                color: Theme.placeholder
+                                font.pixelSize: Theme.smallFont
+                                elide: Text.ElideRight
+                            }
+                            SmallButton {
+                                text: qsTr("game_settings.bind_btn")
+                                onClicked: capture.openFor(bindRow.modelData)
+                            }
+                            SmallButton {
+                                text: qsTr("game_settings.clear_btn")
+                                enabled: bindRow.row.binding !== ""
+                                onClicked: gs.unbind(bindRow.row.map, bindRow.row.action)
+                            }
+                            ResetButton {
+                                shown: bindRow.row.modified
+                                onClicked: gs.resetBinding(bindRow.row.map, bindRow.row.action)
                             }
                         }
                     }
-
-                    SettingSections {}
-
                     Label {
-                        visible: gs.sections.length === 0 && gs.tab !== "controls"
+                        anchors.centerIn: parent
+                        visible: bindList.count === 0
                         text: qsTr("game_settings.no_matches")
                         color: Theme.placeholder
                     }
                 }
             }
 
-            ListView {
-                id: bindList
-                anchors.fill: parent
-                anchors.margins: 4
-                visible: !page.settingsTab
-                clip: true
-                model: gs.bindRows
-                boundsBehavior: Flickable.StopAtBounds
-                ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
-                delegate: Rectangle {
-                    id: bindRow
-                    required property var modelData
-                    required property int index
-                    readonly property var row: gs.bindState(modelData.map, modelData.action, gs.revision)
-                    width: bindList.width
-                    height: bindLine.implicitHeight + 10
-                    color: index % 2 ? Theme.alternateBase : "transparent"
-                    RowLayout {
-                        id: bindLine
-                        anchors.fill: parent
-                        anchors.leftMargin: 6
-                        anchors.rightMargin: 8
-                        spacing: 10
-                        Rectangle {
-                            implicitWidth: 6
-                            implicitHeight: 6
-                            radius: 3
-                            color: bindRow.row.modified ? Theme.em4 : "transparent"
-                        }
-                        ColumnLayout {
-                            Layout.preferredWidth: 360
-                            Layout.maximumWidth: 360
-                            Layout.fillWidth: false
-                            spacing: 1
-                            Label {
-                                Layout.fillWidth: true
-                                text: bindRow.row.label
-                                color: Theme.text
-                                elide: Text.ElideRight
-                                ToolTip.visible: bindArea.containsMouse
-                                ToolTip.delay: 500
-                                ToolTip.text: [bindRow.row.description,
-                                               bindRow.row.map + " / " + bindRow.row.action].filter(s => s !== "").join("\n\n")
-                                MouseArea { id: bindArea; anchors.fill: parent; hoverEnabled: true; acceptedButtons: Qt.NoButton }
-                            }
-                            Label {
-                                Layout.fillWidth: true
-                                text: bindRow.row.mapLabel
-                                color: Theme.dim
-                                font.pixelSize: Theme.smallFont
-                                elide: Text.ElideRight
-                            }
-                        }
-                        Label {
-                            Layout.preferredWidth: 260
-                            text: bindRow.row.binding !== "" ? bindRow.row.binding : qsTr("game_settings.unbound")
-                            color: bindRow.row.binding !== "" ? Theme.text : Theme.placeholder
-                            font.bold: bindRow.row.binding !== ""
-                            elide: Text.ElideRight
-                        }
-                        Label {
-                            Layout.fillWidth: true
-                            text: bindRow.row.conflicts !== ""
-                                  ? "⚠ " + App.fmt(qsTr("game_settings.conflict"), { actions: bindRow.row.conflicts }) : ""
-                            color: Theme.action("restore")
-                            font.pixelSize: Theme.smallFont
-                            elide: Text.ElideRight
-                        }
-                        Label {
-                            Layout.preferredWidth: 180
-                            text: bindRow.row.modified
-                                  ? App.fmt(qsTr("game_settings.default_value"),
-                                            { value: bindRow.row.defaultText !== "" ? bindRow.row.defaultText : qsTr("game_settings.unbound") })
-                                  : ""
-                            color: Theme.placeholder
-                            font.pixelSize: Theme.smallFont
-                            elide: Text.ElideRight
-                        }
-                        SmallButton {
-                            text: qsTr("game_settings.bind_btn")
-                            onClicked: capture.openFor(bindRow.modelData)
-                        }
-                        SmallButton {
-                            text: qsTr("game_settings.clear_btn")
-                            enabled: bindRow.row.binding !== ""
-                            onClicked: gs.unbind(bindRow.row.map, bindRow.row.action)
-                        }
-                        ResetButton {
-                            shown: bindRow.row.modified
-                            onClicked: gs.resetBinding(bindRow.row.map, bindRow.row.action)
-                        }
+            Rectangle {
+                objectName: "gameSettingsInfoPanel"
+                visible: page.sidePanel && page.settingsTab
+                Layout.preferredWidth: Math.max(260, Math.min(360, page.width * 0.28))
+                Layout.fillHeight: true
+                color: Theme.panel
+                border.color: Theme.border
+                radius: Theme.radius
+
+                ScrollView {
+                    id: infoScroll
+                    anchors.fill: parent
+                    anchors.margins: 12
+                    visible: page.inspectedInfo !== null
+                    clip: true
+                    contentWidth: availableWidth
+
+                    InfoView {
+                        width: infoScroll.availableWidth
+                        info: page.inspectedInfo
+                        selectable: true
                     }
                 }
                 Label {
-                    anchors.centerIn: parent
-                    visible: bindList.count === 0
-                    text: qsTr("game_settings.no_matches")
+                    anchors.fill: parent
+                    anchors.margins: 12
+                    visible: page.inspectedInfo === null
+                    text: qsTr("game_settings.info.empty")
                     color: Theme.placeholder
+                    wrapMode: Text.WordWrap
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
                 }
             }
         }
+    }
+
+    Popup {
+        id: infoPopup
+        property var target: null
+        property Item anchorItem: null
+        parent: Overlay.overlay
+        x: {
+            if (infoPopup.anchorItem === null)
+                return 0
+            const right = infoPopup.anchorItem.mapToItem(infoPopup.parent, infoPopup.anchorItem.width + 8, 0).x
+            return right + infoPopup.width <= infoPopup.parent.width - 8
+                   ? right : Math.max(8, infoPopup.anchorItem.mapToItem(infoPopup.parent, 0, 0).x - infoPopup.width - 8)
+        }
+        y: infoPopup.anchorItem === null ? 0
+           : Math.max(8, Math.min(infoPopup.anchorItem.mapToItem(infoPopup.parent, 0, -8).y,
+                                  infoPopup.parent.height - infoPopup.height - 8))
+        width: Math.min(380, page.width - 40)
+        padding: 12
+        modal: false
+        focus: false
+        closePolicy: Popup.NoAutoClose
+        background: Rectangle { color: Theme.panel; border.color: Theme.border; radius: 6 }
+        contentItem: InfoView { info: page.describe(infoPopup.target, gs.revision) }
     }
 
     Popup {

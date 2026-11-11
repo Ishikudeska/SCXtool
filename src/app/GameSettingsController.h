@@ -31,6 +31,7 @@ class GameSettingsController : public QObject
     Q_PROPERTY(QString tab READ tab WRITE setTab NOTIFY tabChanged)
     Q_PROPERTY(QString search READ search WRITE setSearch NOTIFY filtersChanged)
     Q_PROPERTY(bool modifiedOnly READ modifiedOnly WRITE setModifiedOnly NOTIFY filtersChanged)
+    Q_PROPERTY(QString infoMode READ infoMode WRITE setInfoMode NOTIFY infoModeChanged)
     Q_PROPERTY(QVariantList sections READ sections NOTIFY rowsChanged)
     Q_PROPERTY(int pendingCount READ pendingCount NOTIFY pendingChanged)
     Q_PROPERTY(int revision READ revision NOTIFY revisionChanged)
@@ -62,6 +63,8 @@ public:
     void setSearch(const QString &search);
     bool modifiedOnly() const { return modifiedOnly_; }
     void setModifiedOnly(bool on);
+    QString infoMode() const;
+    void setInfoMode(const QString &mode);
     QVariantList sections() const { return sections_; }
     int pendingCount() const { return pendingCount_; }
     int revision() const { return revision_; }
@@ -124,6 +127,7 @@ signals:
     void pendingChanged();
     void revisionChanged();
     void gameRunningChanged();
+    void infoModeChanged();
 
 private:
     struct Loaded;

@@ -345,6 +345,19 @@ void GameSettingsController::setModifiedOnly(bool on)
     refreshRows();
 }
 
+QString GameSettingsController::infoMode() const
+{
+    return app().settings().gameSettingsInfo();
+}
+
+void GameSettingsController::setInfoMode(const QString &mode)
+{
+    if (mode == infoMode())
+        return;
+    app().settings().setGameSettingsInfo(mode);
+    emit infoModeChanged();
+}
+
 void GameSettingsController::edited()
 {
     int count = 0;
