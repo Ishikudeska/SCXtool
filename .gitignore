@@ -19,3 +19,5 @@ compile_commands.json
 /tools/parity/out/
 
 /smart-citizen-main/
+
+/graphify-out/
