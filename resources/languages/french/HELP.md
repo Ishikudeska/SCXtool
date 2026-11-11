@@ -94,7 +94,7 @@ Utilisez **Importer un INI** dans l'onglet **Paramètres** (aussi disponible dan
 
 ## 11. Exporter un Loc-Pack
 
-Ouvrez le menu **Plus** et choisissez **Exporter un INI…** pour regrouper le `global.ini` actuellement appliqué dans un zip unique, `SmartCitizen-LocPack-{canal}-{AAAAMMJJ}.zip`, que n'importe qui peut déposer dans son dossier `StarCitizen\<canal>\data\Localization\english\` pour utiliser le même loc-pack sans installer SCXtool. Pratique pour partager des préréglages avec des amis ou votre organisation.
+Ouvrez le menu **Plus** et choisissez **Exporter un INI…** pour regrouper le `global.ini` actuellement appliqué dans un zip unique, `SCXtool-LocPack-{canal}-{AAAAMMJJ}.zip`, que n'importe qui peut déposer dans son dossier `StarCitizen\<canal>\data\Localization\english\` pour utiliser le même loc-pack sans installer SCXtool. Pratique pour partager des préréglages avec des amis ou votre organisation.
 
 ## 12. Réinitialiser user.ini
 
@@ -223,7 +223,7 @@ Certaines anomalies de texte proviennent des données de Star Citizen elles-mêm
 
   Quand CIG corrigera STARC-176797, le fichier de correctif pourra être supprimé et la régénération suivante produira de nouveau des descriptions proprement séparées.
 
-- **Missions de ravitaillement affichant des noms de buses corrompus** (par ex. « Nozzle Fuelgiver Grin Nozzlefast » au lieu de « Norfield ») dans la liste POTENTIAL BLUEPRINTS d'une mission. Les récompenses de plans pour les buses de ravitaillement ne renvoient à aucun nom d'entité résolvable dans les données de CIG, contrairement aux autres objets fabricables, donc notre générateur d'enrichissements revenait à une version « slugifiée » du nom de fichier interne au lieu du vrai nom du produit. Corrigé pour les 8 variantes de buses connues (Marlin, Lindstrom, Bendix, Torrez, Ezra, Norfield, Harkin, RN-7s) via une correction de noms connus dans `scripts/generate_enhancements_ini.py` ; relancez **Générer les enrichissements** et **Appliquer au jeu** pour appliquer la correction aux missions déjà rencontrées.
+- **Missions de ravitaillement affichant des noms de buses corrompus** (par ex. « Nozzle Fuelgiver Grin Nozzlefast » au lieu de « Norfield ») dans la liste POTENTIAL BLUEPRINTS d'une mission. Les récompenses de plans pour les buses de ravitaillement ne renvoient à aucun nom d'entité résolvable dans les données de CIG, contrairement aux autres objets fabricables, donc notre générateur d'enrichissements revenait à une version « slugifiée » du nom de fichier interne au lieu du vrai nom du produit. Corrigé pour les 8 variantes de buses connues (Marlin, Lindstrom, Bendix, Torrez, Ezra, Norfield, Harkin, RN-7s) grâce à une liste intégrée de leurs vrais noms ; relancez **Générer les enrichissements** et **Appliquer au jeu** pour appliquer la correction aux missions déjà rencontrées.
 
 ## Retours, bugs et vote des fonctionnalités
 

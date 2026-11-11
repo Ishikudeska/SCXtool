@@ -92,7 +92,7 @@ Use **Import INI** in the **Config** tab (also available under the toolbar's **M
 
 ## 11. Export Loc-Pack
 
-Open the **More** menu and choose **Export INI…** to bundle the currently applied `global.ini` into a single zip — `SmartCitizen++-LocPack-{channel}-{YYYYMMDD}.zip` — that anyone else can drop into their `StarCitizen\<channel>\data\Localization\english\` to run the same loc-pack without installing {app}. Useful for sharing presets with friends or your org.
+Open the **More** menu and choose **Export INI…** to bundle the currently applied `global.ini` into a single zip — `SCXtool-LocPack-{channel}-{YYYYMMDD}.zip` — that anyone else can drop into their `StarCitizen\<channel>\data\Localization\english\` to run the same loc-pack without installing {app}. Useful for sharing presets with friends or your org.
 
 ## 12. Reset user.ini
 
@@ -212,4 +212,4 @@ Some mission text anomalies originate in Star Citizen's own data — a wrong loc
 
   When CIG corrects STARC-176797, the whole patch file can be deleted and the next regenerate produces clean split descriptions again.
 
-- **Refueling missions showing garbled nozzle names** (e.g. "Nozzle Fuelgiver Grin Nozzlefast" instead of "Norfield") in a mission's POTENTIAL BLUEPRINTS list. Fuel nozzle blueprint rewards don't link back to a resolvable entity name in CIG's data the way other craftables do, so our enhancement generator was falling back to a de-slugified version of the internal filename instead of the real product name. Fixed for all 8 known fuel nozzle variants (Marlin, Lindstrom, Bendix, Torrez, Ezra, Norfield, Harkin, RN-7s) via a known-name correction in `scripts/generate_enhancements_ini.py`; re-run **Generate Enhancements** and **Apply to Game** to pick up the fix on missions you've already seen.
+- **Refueling missions showing garbled nozzle names** (e.g. "Nozzle Fuelgiver Grin Nozzlefast" instead of "Norfield") in a mission's POTENTIAL BLUEPRINTS list. Fuel nozzle blueprint rewards don't link back to a resolvable entity name in CIG's data the way other craftables do, so our enhancement generator was falling back to a de-slugified version of the internal filename instead of the real product name. Fixed for all 8 known fuel nozzle variants (Marlin, Lindstrom, Bendix, Torrez, Ezra, Norfield, Harkin, RN-7s) via a built-in list of their real names; re-run **Generate Enhancements** and **Apply to Game** to pick up the fix on missions you've already seen.

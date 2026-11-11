@@ -92,7 +92,7 @@ SCXtool はまた、ランチャーのバージョン文字列（`Frontend_PU_Ve
 
 ## 11. ロックパックのエクスポート
 
-**その他** メニューを開き、**INI をエクスポート…** を選ぶと、現在適用されている `global.ini` を 1 つの zip — `SmartCitizen-LocPack-{channel}-{YYYYMMDD}.zip` — にまとめます。これは、SCXtool をインストールせずに同じロックパックを実行するために、他の誰かが自分の `StarCitizen\<channel>\data\Localization\english\` に入れられるものです。友人やオルグとプリセットを共有するのに便利です。
+**その他** メニューを開き、**INI をエクスポート…** を選ぶと、現在適用されている `global.ini` を 1 つの zip — `SCXtool-LocPack-{channel}-{YYYYMMDD}.zip` — にまとめます。これは、SCXtool をインストールせずに同じロックパックを実行するために、他の誰かが自分の `StarCitizen\<channel>\data\Localization\english\` に入れられるものです。友人やオルグとプリセットを共有するのに便利です。
 
 ## 12. user.ini のリセット
 
@@ -221,7 +221,7 @@ SCXtool は、ウィンドウサイズ、ドッキングされた文字列エデ
 
   CIG が STARC-176797 を修正したら、パッチファイル全体を削除でき、次回の再生成でクリーンに分割された説明が再び生成されます。
 
-- **燃料補給ミッションで文字化けしたノズル名が表示される**（ミッションの POTENTIAL BLUEPRINTS リストで「Norfield」の代わりに「Nozzle Fuelgiver Grin Nozzlefast」など）。燃料ノズルのブループリント報酬は、他のクラフト品のようには CIG のデータ内で解決可能なエンティティ名に結び付いていないため、私たちの拡張ジェネレーターは、実際の製品名ではなく内部ファイル名を読みやすく変換した版にフォールバックしていました。`scripts/generate_enhancements_ini.py` の既知名称による補正で、既知の 8 種の燃料ノズルバリアント（Marlin、Lindstrom、Bendix、Torrez、Ezra、Norfield、Harkin、RN-7s）すべてで修正済みです。すでに見たミッションに修正を反映するには、**拡張を生成** と **拡張を適用** を再実行してください。
+- **燃料補給ミッションで文字化けしたノズル名が表示される**（ミッションの POTENTIAL BLUEPRINTS リストで「Norfield」の代わりに「Nozzle Fuelgiver Grin Nozzlefast」など）。燃料ノズルのブループリント報酬は、他のクラフト品のようには CIG のデータ内で解決可能なエンティティ名に結び付いていないため、私たちの拡張ジェネレーターは、実際の製品名ではなく内部ファイル名を読みやすく変換した版にフォールバックしていました。実際の名称を収めた内蔵リストによる補正で、既知の 8 種の燃料ノズルバリアント（Marlin、Lindstrom、Bendix、Torrez、Ezra、Norfield、Harkin、RN-7s）すべてで修正済みです。すでに見たミッションに修正を反映するには、**拡張を生成** と **拡張を適用** を再実行してください。
 
 ## フィードバック、バグ、機能投票
 

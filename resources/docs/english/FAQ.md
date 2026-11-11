@@ -8,12 +8,13 @@ Easily, and at any time. {app} never edits the game's original files in place, s
 
 - **Toolbar → More → Clear Localization** deletes the custom `global.ini` {app} wrote. The game falls back to its built-in text immediately. Your edits aren't lost, they stay saved in the app and you can re-apply them whenever you like.
 - Prefer to step back one version instead of all the way? **Toolbar → More → Restore Backup** rolls the game file back to a timestamped backup ({app} keeps the last 5, and makes a fresh one every time you Apply).
+- Changed something in the **Game Settings** tab? Click **Backups** there to restore an earlier `attributes.xml` or `actionmaps.xml`. {app} takes a copy before every save and keeps the last 5 of each.
 
 Your personal edits live in `user.ini` in your {app} data folder, separate from the game, so clearing the game file never touches them.
 
 ## Will I get banned for using {app}?
 
-{app} only edits localization text (the words the game shows you), it doesn't touch game logic, give you any advantage, or talk to CIG's servers. Our modifications **should** be fine.
+{app} edits localization text (the words the game shows you) and, from the Game Settings tab, your game options and keybinds. It doesn't touch game logic, give you any advantage, or talk to CIG's servers. Our modifications **should** be fine.
 
 CIG has publicly backed community localization. Their [Community Localization Update](https://robertsspaceindustries.com/spectrum/community/SC/forum/1/thread/star-citizen-community-localization-update) post lays out official support for player-made translations, which we understand to explicitly allow the kind of localization editing {app} does.
 
@@ -23,10 +24,13 @@ That said: the way you use {app} is at your own risk. Our changes should be okay
 
 ## What files does {app} modify?
 
-Just one, and only when you click **Apply Enhancements**:
+Only these, and only when you ask it to:
 
-- `StarCitizen\<channel>\data\Localization\<language>\global.ini` — the game's localization file for the channel (LIVE, PTU, etc.) and language you've selected. {app} backs up the existing file first, then writes the merged result.
-- It also makes sure `g_language` is set in your `user.cfg` so the game loads the right localization. Nothing else in your game install is touched.
+- `StarCitizen\<channel>\data\Localization\<language>\global.ini` — the game's localization file for the channel (LIVE, PTU, etc.) and language you've selected, written when you click **Apply Enhancements**. {app} backs up the existing file first, then writes the merged result.
+- `g_language` in your `user.cfg`, set at the same time so the game loads the right localization.
+- `attributes.xml` (game options) and `actionmaps.xml` (keybinds and controller options) in `StarCitizen\<channel>\user\client\0\Profiles\default\`, written only when you click **Save to Game** in the **Game Settings** tab or restore one of its backups. {app} backs up each file first, and won't write while the game is running.
+
+Nothing else in your game install is touched.
 
 Everything {app} generates for its own use (the source cache, enhancement files, backups, your `user.ini`) lives in your {app} data folder, not in the game.
 

@@ -25,7 +25,7 @@ The software is provided **"as is"**, without warranties or conditions of any ki
 
 {app} is a local desktop application. It sends no telemetry, analytics or crash reports, and has no accounts.
 
-It goes online only to download a language's community `global.ini` when you switch to that language, and to fetch an INI file from a URL when you import one. Your edits, settings, backups and caches stay on your computer:
+It goes online only to check GitHub for a newer version of {app} (on every launch, and when you click **Check for Updates**) and download it if you choose to update, to download a language's community `global.ini` when you switch to that language, and to fetch an INI file from a URL when you import one. The update check sends nothing about you or your PC beyond the app's version. Your edits, settings, backups and caches stay on your computer:
 
 - **Settings** — `%APPDATA%\{app}\settings.ini` (or `data\settings.ini` next to the executable in portable builds).
 - **Your edits, backups and string cache** — `Documents\{app}\<channel>\` by default (configurable on the Config page).
@@ -34,4 +34,4 @@ It goes online only to download a language's community `global.ini` when you swi
 
 ## Use at your own risk
 
-{app} only changes localization text, which CIG supports for community translations. How you use it is your responsibility.
+{app} changes localization text, which CIG supports for community translations, and the game options and keybinds you choose in the Game Settings tab. How you use it is your responsibility.

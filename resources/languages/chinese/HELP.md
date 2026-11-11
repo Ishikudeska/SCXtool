@@ -92,7 +92,7 @@
 
 ## 11. 导出本地化包
 
-打开 **更多** 菜单，选择 **导出 INI…**，将当前应用的 `global.ini` 打包成一个压缩包——`SmartCitizen-LocPack-{频道}-{YYYYMMDD}.zip`——任何人都可以将它放入自己的 `StarCitizen\<频道>\data\Localization\english\` 中，无需安装智慧公民即可运行相同的本地化包。适合与朋友或团队分享预设配置。
+打开 **更多** 菜单，选择 **导出 INI…**，将当前应用的 `global.ini` 打包成一个压缩包——`SCXtool-LocPack-{频道}-{YYYYMMDD}.zip`——任何人都可以将它放入自己的 `StarCitizen\<频道>\data\Localization\english\` 中，无需安装智慧公民即可运行相同的本地化包。适合与朋友或团队分享预设配置。
 
 ## 12. 重置 user.ini
 
@@ -221,7 +221,7 @@
 
   当 CIG 修复 STARC-176797 后，整个补丁文件即可删除，下次重新生成就会再次产生干净的独立描述。
 
-- **加油任务显示乱码喷嘴名称**（例如“Nozzle Fuelgiver Grin Nozzlefast”而不是“Norfield”），出现在任务的“潜在蓝图”列表中。燃料喷嘴的蓝图奖励在 CIG 的数据中无法像其他可制作物品那样关联回可解析的实体名称，因此我们的增强内容生成器曾回退使用内部文件名的去除下划线版本，而不是真实的产品名称。已针对全部 8 种已知燃料喷嘴变体（Marlin、Lindstrom、Bendix、Torrez、Ezra、Norfield、Harkin、RN-7s）在 `scripts/generate_enhancements_ini.py` 中通过已知名称修正进行了修复；重新运行 **生成增强内容** 和 **应用到游戏**，即可让你已经见过的任务采用这一修复。
+- **加油任务显示乱码喷嘴名称**（例如“Nozzle Fuelgiver Grin Nozzlefast”而不是“Norfield”），出现在任务的“潜在蓝图”列表中。燃料喷嘴的蓝图奖励在 CIG 的数据中无法像其他可制作物品那样关联回可解析的实体名称，因此我们的增强内容生成器曾回退使用内部文件名的去除下划线版本，而不是真实的产品名称。已针对全部 8 种已知燃料喷嘴变体（Marlin、Lindstrom、Bendix、Torrez、Ezra、Norfield、Harkin、RN-7s）通过内置的真实名称列表进行了修复；重新运行 **生成增强内容** 和 **应用到游戏**，即可让你已经见过的任务采用这一修复。
 
 ## 反馈、Bug 与功能投票
 

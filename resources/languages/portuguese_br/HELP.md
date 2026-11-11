@@ -94,7 +94,7 @@ Use **Importar INI** na aba **Config** (também disponível no menu **Mais** da 
 
 ## 11. Exportar Loc-Pack
 
-Abra o menu **Mais** e escolha **Exportar INI…** para empacotar o `global.ini` atualmente aplicado em um único zip, `SmartCitizen-LocPack-{canal}-{AAAAMMDD}.zip`, que qualquer pessoa pode soltar em `StarCitizen\<canal>\data\Localization\english\` para usar o mesmo loc-pack sem instalar o SCXtool. Útil para compartilhar configurações com amigos ou com sua org.
+Abra o menu **Mais** e escolha **Exportar INI…** para empacotar o `global.ini` atualmente aplicado em um único zip, `SCXtool-LocPack-{canal}-{AAAAMMDD}.zip`, que qualquer pessoa pode soltar em `StarCitizen\<canal>\data\Localization\english\` para usar o mesmo loc-pack sem instalar o SCXtool. Útil para compartilhar configurações com amigos ou com sua org.
 
 ## 12. Redefinir user.ini
 
@@ -223,7 +223,7 @@ Algumas anomalias de texto têm origem nos próprios dados do Star Citizen: uma 
 
   Quando a CIG corrigir o STARC-176797, o arquivo de patch inteiro pode ser excluído e a próxima regeneração volta a produzir descrições separadas e limpas.
 
-- **Missões de reabastecimento mostrando nomes de bicos corrompidos** (ex.: "Nozzle Fuelgiver Grin Nozzlefast" em vez de "Norfield") na lista POTENTIAL BLUEPRINTS de uma missão. As recompensas de blueprint dos bicos de combustível não remetem a um nome de entidade resolvível nos dados da CIG como os outros itens fabricáveis, então nosso gerador de aprimoramentos caía de volta para uma versão "desmontada" do nome de arquivo interno em vez do nome real do produto. Corrigido para as 8 variantes de bico conhecidas (Marlin, Lindstrom, Bendix, Torrez, Ezra, Norfield, Harkin, RN-7s) por meio de uma correção de nomes conhecidos em `scripts/generate_enhancements_ini.py`; rode **Gerar Aprimoramentos** e **Aplicar ao Jogo** novamente para aplicar a correção em missões que você já viu.
+- **Missões de reabastecimento mostrando nomes de bicos corrompidos** (ex.: "Nozzle Fuelgiver Grin Nozzlefast" em vez de "Norfield") na lista POTENTIAL BLUEPRINTS de uma missão. As recompensas de blueprint dos bicos de combustível não remetem a um nome de entidade resolvível nos dados da CIG como os outros itens fabricáveis, então nosso gerador de aprimoramentos caía de volta para uma versão "desmontada" do nome de arquivo interno em vez do nome real do produto. Corrigido para as 8 variantes de bico conhecidas (Marlin, Lindstrom, Bendix, Torrez, Ezra, Norfield, Harkin, RN-7s) por meio de uma lista embutida com os nomes reais; rode **Gerar Aprimoramentos** e **Aplicar ao Jogo** novamente para aplicar a correção em missões que você já viu.
 
 ## Feedback, Bugs e Votação de Recursos
 

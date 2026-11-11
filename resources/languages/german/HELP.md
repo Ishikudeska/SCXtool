@@ -92,7 +92,7 @@ Verwende **INI importieren** im **Konfiguration**-Tab (auch über das Menü **Me
 
 ## 11. Lokalisierungspaket exportieren
 
-Öffne das Menü **Mehr** und wähle **INI exportieren…**, um die aktuell angewendete `global.ini` in ein einzelnes Zip zu verpacken — `SmartCitizen-LocPack-{channel}-{YYYYMMDD}.zip` —, das jeder andere in seinen Ordner `StarCitizen\<Kanal>\data\Localization\english\` legen kann, um dasselbe Loc-Pack ohne Installation von SCXtool zu nutzen. Nützlich, um Voreinstellungen mit Freunden oder deiner Organisation zu teilen.
+Öffne das Menü **Mehr** und wähle **INI exportieren…**, um die aktuell angewendete `global.ini` in ein einzelnes Zip zu verpacken — `SCXtool-LocPack-{channel}-{YYYYMMDD}.zip` —, das jeder andere in seinen Ordner `StarCitizen\<Kanal>\data\Localization\english\` legen kann, um dasselbe Loc-Pack ohne Installation von SCXtool zu nutzen. Nützlich, um Voreinstellungen mit Freunden oder deiner Organisation zu teilen.
 
 ## 12. user.ini zurücksetzen
 
@@ -221,7 +221,7 @@ Manche Missionstext-Anomalien stammen aus den eigenen Daten von Star Citizen: ei
 
   Wenn CIG STARC-176797 korrigiert, kann die gesamte Patch-Datei gelöscht werden, und die nächste Neuerstellung erzeugt wieder saubere, getrennte Beschreibungen.
 
-- **Betankungsmissionen zeigen entstellte Düsennamen** (z. B. „Nozzle Fuelgiver Grin Nozzlefast“ statt „Norfield“) in der MÖGLICHE-BAUPLÄNE-Liste einer Mission. Treibstoffdüsen-Bauplan-Belohnungen verweisen in CIGs Daten nicht wie andere herstellbare Gegenstände auf einen auflösbaren Entitätsnamen zurück, daher fiel unser Erweiterungsgenerator auf eine aus dem internen Dateinamen abgeleitete Namensform statt auf den echten Produktnamen zurück. Für alle 8 bekannten Treibstoffdüsen-Varianten (Marlin, Lindstrom, Bendix, Torrez, Ezra, Norfield, Harkin, RN-7s) über eine Korrektur bekannter Namen in `scripts/generate_enhancements_ini.py` behoben; führe **Erweiterungen erstellen** und **Erweiterungen anwenden** erneut aus, um die Korrektur auch bei Missionen zu übernehmen, die du bereits gesehen hast.
+- **Betankungsmissionen zeigen entstellte Düsennamen** (z. B. „Nozzle Fuelgiver Grin Nozzlefast“ statt „Norfield“) in der MÖGLICHE-BAUPLÄNE-Liste einer Mission. Treibstoffdüsen-Bauplan-Belohnungen verweisen in CIGs Daten nicht wie andere herstellbare Gegenstände auf einen auflösbaren Entitätsnamen zurück, daher fiel unser Erweiterungsgenerator auf eine aus dem internen Dateinamen abgeleitete Namensform statt auf den echten Produktnamen zurück. Für alle 8 bekannten Treibstoffdüsen-Varianten (Marlin, Lindstrom, Bendix, Torrez, Ezra, Norfield, Harkin, RN-7s) über eine eingebaute Liste ihrer echten Namen behoben; führe **Erweiterungen erstellen** und **Erweiterungen anwenden** erneut aus, um die Korrektur auch bei Missionen zu übernehmen, die du bereits gesehen hast.
 
 ## Feedback, Fehler & Funktionsabstimmung
 

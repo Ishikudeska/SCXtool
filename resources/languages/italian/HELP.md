@@ -92,7 +92,7 @@ Usa **Importa INI** nella scheda **Configurazione** (disponibile anche nel menu 
 
 ## 11. Esportare un Loc-Pack
 
-Apri il menu **Altro** e scegli **Esporta INI…** per raggruppare il `global.ini` attualmente applicato in un unico zip — `SmartCitizen-LocPack-{channel}-{YYYYMMDD}.zip` — che chiunque altro può inserire nella propria cartella `StarCitizen\<channel>\data\Localization\english\` per usare lo stesso loc-pack senza installare SCXtool. Utile per condividere preset con amici o con la tua organizzazione.
+Apri il menu **Altro** e scegli **Esporta INI…** per raggruppare il `global.ini` attualmente applicato in un unico zip — `SCXtool-LocPack-{channel}-{YYYYMMDD}.zip` — che chiunque altro può inserire nella propria cartella `StarCitizen\<channel>\data\Localization\english\` per usare lo stesso loc-pack senza installare SCXtool. Utile per condividere preset con amici o con la tua organizzazione.
 
 ## 12. Reimpostare user.ini
 
@@ -221,7 +221,7 @@ Alcune anomalie nei testi delle missioni hanno origine nei dati stessi di Star C
 
   Quando CIG correggerà STARC-176797, l'intero file di patch potrà essere eliminato e la rigenerazione successiva produrrà di nuovo descrizioni pulite e separate.
 
-- **Missioni di rifornimento che mostrano nomi di ugelli corrotti** (es. "Nozzle Fuelgiver Grin Nozzlefast" invece di "Norfield") nella lista POTENTIAL BLUEPRINTS di una missione. Le ricompense in blueprint degli ugelli di rifornimento non rimandano a un nome di entità risolvibile nei dati di CIG come fanno gli altri oggetti fabbricabili, quindi il nostro generatore di miglioramenti ricadeva su una versione "de-slugificata" del nome di file interno invece del vero nome del prodotto. Corretto per tutte le 8 varianti note di ugelli di rifornimento (Marlin, Lindstrom, Bendix, Torrez, Ezra, Norfield, Harkin, RN-7s) tramite una correzione con nomi noti in `scripts/generate_enhancements_ini.py`; riesegui **Genera Miglioramenti** e **Applica al Gioco** per applicare la correzione alle missioni già viste.
+- **Missioni di rifornimento che mostrano nomi di ugelli corrotti** (es. "Nozzle Fuelgiver Grin Nozzlefast" invece di "Norfield") nella lista POTENTIAL BLUEPRINTS di una missione. Le ricompense in blueprint degli ugelli di rifornimento non rimandano a un nome di entità risolvibile nei dati di CIG come fanno gli altri oggetti fabbricabili, quindi il nostro generatore di miglioramenti ricadeva su una versione "de-slugificata" del nome di file interno invece del vero nome del prodotto. Corretto per tutte le 8 varianti note di ugelli di rifornimento (Marlin, Lindstrom, Bendix, Torrez, Ezra, Norfield, Harkin, RN-7s) tramite un elenco integrato dei loro veri nomi; riesegui **Genera Miglioramenti** e **Applica al Gioco** per applicare la correzione alle missioni già viste.
 
 ## Feedback, bug e voto delle funzionalità
 

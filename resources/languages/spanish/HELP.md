@@ -94,7 +94,7 @@ Usa **Importar INI** en la pestaña **Configuración** (también disponible en e
 
 ## 11. Exportar un Loc-Pack
 
-Abre el menú **Más** y elige **Exportar INI…** para empaquetar el `global.ini` actualmente aplicado en un único zip, `SmartCitizen-LocPack-{canal}-{AAAAMMDD}.zip`, que cualquiera puede soltar en su carpeta `StarCitizen\<canal>\data\Localization\english\` para usar el mismo loc-pack sin instalar SCXtool. Útil para compartir configuraciones con amigos o con tu organización.
+Abre el menú **Más** y elige **Exportar INI…** para empaquetar el `global.ini` actualmente aplicado en un único zip, `SCXtool-LocPack-{canal}-{AAAAMMDD}.zip`, que cualquiera puede soltar en su carpeta `StarCitizen\<canal>\data\Localization\english\` para usar el mismo loc-pack sin instalar SCXtool. Útil para compartir configuraciones con amigos o con tu organización.
 
 ## 12. Restablecer user.ini
 
@@ -223,7 +223,7 @@ Algunas anomalías de texto tienen su origen en los propios datos de Star Citize
 
   Cuando CIG corrija STARC-176797, el archivo de parche entero podrá borrarse y la siguiente regeneración volverá a producir descripciones limpias y separadas.
 
-- **Misiones de repostaje que muestran nombres de boquillas corruptos** (p. ej. «Nozzle Fuelgiver Grin Nozzlefast» en lugar de «Norfield») en la lista POTENTIAL BLUEPRINTS de una misión. Las recompensas de blueprint de las boquillas de combustible no remiten a un nombre de entidad resoluble en los datos de CIG como el resto de objetos fabricables, así que nuestro generador de mejoras recurría a una versión «deslugificada» del nombre de archivo interno en lugar del nombre real del producto. Corregido para las 8 variantes de boquilla conocidas (Marlin, Lindstrom, Bendix, Torrez, Ezra, Norfield, Harkin, RN-7s) mediante una corrección de nombres conocidos en `scripts/generate_enhancements_ini.py`; vuelve a ejecutar **Generar mejoras** y **Aplicar al juego** para aplicar la corrección a misiones que ya hayas visto.
+- **Misiones de repostaje que muestran nombres de boquillas corruptos** (p. ej. «Nozzle Fuelgiver Grin Nozzlefast» en lugar de «Norfield») en la lista POTENTIAL BLUEPRINTS de una misión. Las recompensas de blueprint de las boquillas de combustible no remiten a un nombre de entidad resoluble en los datos de CIG como el resto de objetos fabricables, así que nuestro generador de mejoras recurría a una versión «deslugificada» del nombre de archivo interno en lugar del nombre real del producto. Corregido para las 8 variantes de boquilla conocidas (Marlin, Lindstrom, Bendix, Torrez, Ezra, Norfield, Harkin, RN-7s) mediante una lista integrada con sus nombres reales; vuelve a ejecutar **Generar mejoras** y **Aplicar al juego** para aplicar la corrección a misiones que ya hayas visto.
 
 ## Comentarios, errores y votación de funciones
 

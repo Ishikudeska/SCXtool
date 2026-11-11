@@ -59,8 +59,10 @@ representative at an online or offline event.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the community leaders responsible for enforcement at
-.
+reported to the project maintainer, [Ishikudeska](https://github.com/Ishikudeska),
+by opening an issue in this repository. If the report shouldn't be public, open
+an issue that only asks for a private way to get in touch, and leave the details
+out of it.
 All complaints will be reviewed and investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the

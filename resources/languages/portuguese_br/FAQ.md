@@ -8,12 +8,13 @@ Facilmente, e a qualquer momento. O SCXtool nunca edita os arquivos originais do
 
 - **Barra de ferramentas → Mais → Limpar Localização** exclui o `global.ini` personalizado que o SCXtool escreveu. O jogo volta imediatamente ao seu texto original. Suas edições não são perdidas, elas continuam salvas no app e você pode reaplicá-las quando quiser.
 - Prefere voltar apenas uma versão em vez de tudo de uma vez? **Barra de ferramentas → Mais → Restaurar Backup** volta o arquivo do jogo para um backup com data e hora (o SCXtool mantém os últimos 5, e cria um novo a cada aplicação).
+- Mudou alguma coisa na aba **Game Settings**? Clique em **Backups** nessa aba para restaurar um `attributes.xml` ou `actionmaps.xml` anterior. O SCXtool faz uma cópia antes de cada salvamento e mantém os últimos 5 de cada arquivo.
 
 Suas edições pessoais ficam em `user.ini`, na sua pasta de dados do SCXtool, separada do jogo, então limpar o arquivo do jogo nunca as afeta.
 
 ## Serei banido por usar o SCXtool?
 
-O SCXtool só edita o texto de localização (as palavras que o jogo mostra), ele não mexe na lógica do jogo, não te dá nenhuma vantagem, nem se comunica com os servidores da CIG. Nossas modificações **devem** estar tranquilas.
+O SCXtool edita o texto de localização (as palavras que o jogo mostra) e, pela aba Game Settings, suas opções de jogo e seus controles. Ele não mexe na lógica do jogo, não te dá nenhuma vantagem, nem se comunica com os servidores da CIG. Nossas modificações **devem** estar tranquilas.
 
 A CIG apoiou publicamente a localização feita pela comunidade. O post deles [Community Localization Update](https://robertsspaceindustries.com/spectrum/community/SC/forum/1/thread/star-citizen-community-localization-update) explica o suporte oficial a traduções feitas por jogadores, o que entendemos como uma permissão explícita para o tipo de edição de localização que o SCXtool faz.
 
@@ -23,10 +24,13 @@ Dito isso: a forma como você usa o SCXtool é por sua conta e risco. Nossas alt
 
 ## Quais arquivos o SCXtool modifica?
 
-Só um, e apenas quando você clica em **Aplicar Aprimoramentos**:
+Só estes, e apenas quando você pede:
 
-- `StarCitizen\<canal>\data\Localization\<idioma>\global.ini` — o arquivo de localização do jogo para o canal (LIVE, PTU, etc.) e o idioma que você selecionou. O SCXtool faz backup do arquivo existente primeiro, depois grava o resultado combinado.
-- Ele também garante que `g_language` esteja definido no seu `user.cfg` para que o jogo carregue a localização certa. Nada mais na sua instalação do jogo é tocado.
+- `StarCitizen\<canal>\data\Localization\<idioma>\global.ini` — o arquivo de localização do jogo para o canal (LIVE, PTU, etc.) e o idioma que você selecionou, gravado quando você clica em **Aplicar Aprimoramentos**. O SCXtool faz backup do arquivo existente primeiro, depois grava o resultado combinado.
+- `g_language` no seu `user.cfg`, definido ao mesmo tempo para que o jogo carregue a localização certa.
+- `attributes.xml` (opções de jogo) e `actionmaps.xml` (atalhos de teclado e opções de controle) em `StarCitizen\<canal>\user\client\0\Profiles\default\`, gravados apenas quando você clica em **Save to Game** na aba **Game Settings** ou restaura um dos backups dela. O SCXtool faz backup de cada arquivo antes e não grava nada enquanto o jogo está aberto.
+
+Nada mais na sua instalação do jogo é tocado.
 
 Tudo que o SCXtool gera para uso próprio (o cache de origem, os arquivos de aprimoramentos, os backups, seu `user.ini`) fica na sua pasta de dados do SCXtool, não no jogo.
 
